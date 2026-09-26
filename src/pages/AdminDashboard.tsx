@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { Loader2, Mail, Package, RefreshCw } from 'lucide-react';
+import { Loader2, Mail, Package, RefreshCw, Search, Filter } from 'lucide-react';
 
 interface ContactLead {
   id: string;
@@ -26,6 +26,12 @@ export const AdminDashboard: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  // Search & Filter state
+  const [orderSearch, setOrderSearch] = useState('');
+  const [orderStatusFilter, setOrderStatusFilter] = useState('all');
+  const [leadSearch, setLeadSearch] = useState('');
+  const [leadStatusFilter, setLeadStatusFilter] = useState('all');
 
   const fetchData = async () => {
     setLoading(true);
@@ -78,6 +84,24 @@ export const AdminDashboard: React.FC = () => {
     setUpdatingId(null);
   };
 
+  const filteredOrders = orders.filter((o) => {
+    const matchesSearch =
+      o.customer_name.toLowerCase().includes(orderSearch.toLowerCase()) ||
+      o.customer_email.toLowerCase().includes(orderSearch.toLowerCase()) ||
+      o.package_name.toLowerCase().includes(orderSearch.toLowerCase());
+    const matchesStatus = orderStatusFilter === 'all' || (o.status || 'pending') === orderStatusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
+  const filteredLeads = leads.filter((l) => {
+    const matchesSearch =
+      l.name.toLowerCase().includes(leadSearch.toLowerCase()) ||
+      l.email.toLowerCase().includes(leadSearch.toLowerCase()) ||
+      l.message.toLowerCase().includes(leadSearch.toLowerCase());
+    const matchesStatus = leadStatusFilter === 'all' || (l.status || 'new') === leadStatusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -102,12 +126,42 @@ export const AdminDashboard: React.FC = () => {
         </button>
       </div>
 
-      {/* Orders Table */}
+      {/* Orders Section */}
       <section className="space-y-4">
-        <div className="flex items-center space-x-2 text-white font-bold text-lg">
-          <Package className="w-5 h-5 text-cyan-400" />
-          <h2>Client Orders ({orders.length})</h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center space-x-2 text-white font-bold text-lg">
+            <Package className="w-5 h-5 text-cyan-400" />
+            <h2>Client Orders ({filteredOrders.length})</h2>
+          </div>
+
+          <div className="flex items-center space-x-3 text-xs">
+            <div className="relative flex-grow sm:w-64">
+              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <input
+                type="text"
+                placeholder="Search orders..."
+                value={orderSearch}
+                onChange={(e) => setOrderSearch(e.target.value)}
+                className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-3 py-1.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+              />
+            </div>
+            <div className="flex items-center space-x-1.5 bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-slate-400">
+              <Filter className="w-3.5 h-3.5" />
+              <select
+                value={orderStatusFilter}
+                onChange={(e) => setOrderStatusFilter(e.target.value)}
+                className="bg-transparent text-slate-200 text-xs focus:outline-none"
+              >
+                <option value="all" className="bg-slate-900">All Status</option>
+                <option value="pending" className="bg-slate-900">Pending</option>
+                <option value="in_progress" className="bg-slate-900">In Progress</option>
+                <option value="completed" className="bg-slate-900">Completed</option>
+                <option value="cancelled" className="bg-slate-900">Cancelled</option>
+              </select>
+            </div>
+          </div>
         </div>
+
         <div className="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-x-auto">
           <table className="w-full text-left text-xs sm:text-sm text-slate-300">
             <thead className="bg-slate-800/50 text-slate-400 uppercase text-[10px] tracking-wider">
@@ -120,12 +174,12 @@ export const AdminDashboard: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800">
-              {orders.length === 0 ? (
+              {filteredOrders.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-6 text-center text-slate-500">No orders found.</td>
+                  <td colSpan={5} className="p-6 text-center text-slate-500">No matching orders found.</td>
                 </tr>
               ) : (
-                orders.map((o) => (
+                filteredOrders.map((o) => (
                   <tr key={o.id} className="hover:bg-slate-800/30">
                     <td className="p-4 font-medium text-white">
                       {o.customer_name}
@@ -157,12 +211,42 @@ export const AdminDashboard: React.FC = () => {
         </div>
       </section>
 
-      {/* Leads Table */}
+      {/* Leads Section */}
       <section className="space-y-4">
-        <div className="flex items-center space-x-2 text-white font-bold text-lg">
-          <Mail className="w-5 h-5 text-cyan-400" />
-          <h2>Contact Inquiries ({leads.length})</h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center space-x-2 text-white font-bold text-lg">
+            <Mail className="w-5 h-5 text-cyan-400" />
+            <h2>Contact Inquiries ({filteredLeads.length})</h2>
+          </div>
+
+          <div className="flex items-center space-x-3 text-xs">
+            <div className="relative flex-grow sm:w-64">
+              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <input
+                type="text"
+                placeholder="Search leads..."
+                value={leadSearch}
+                onChange={(e) => setLeadSearch(e.target.value)}
+                className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-3 py-1.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+              />
+            </div>
+            <div className="flex items-center space-x-1.5 bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-slate-400">
+              <Filter className="w-3.5 h-3.5" />
+              <select
+                value={leadStatusFilter}
+                onChange={(e) => setLeadStatusFilter(e.target.value)}
+                className="bg-transparent text-slate-200 text-xs focus:outline-none"
+              >
+                <option value="all" className="bg-slate-900">All Status</option>
+                <option value="new" className="bg-slate-900">New</option>
+                <option value="contacted" className="bg-slate-900">Contacted</option>
+                <option value="qualified" className="bg-slate-900">Qualified</option>
+                <option value="closed" className="bg-slate-900">Closed</option>
+              </select>
+            </div>
+          </div>
         </div>
+
         <div className="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-x-auto">
           <table className="w-full text-left text-xs sm:text-sm text-slate-300">
             <thead className="bg-slate-800/50 text-slate-400 uppercase text-[10px] tracking-wider">
@@ -174,12 +258,12 @@ export const AdminDashboard: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800">
-              {leads.length === 0 ? (
+              {filteredLeads.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="p-6 text-center text-slate-500">No leads found.</td>
+                  <td colSpan={4} className="p-6 text-center text-slate-500">No matching leads found.</td>
                 </tr>
               ) : (
-                leads.map((l) => (
+                filteredLeads.map((l) => (
                   <tr key={l.id} className="hover:bg-slate-800/30">
                     <td className="p-4 font-medium text-white">
                       {l.name}
