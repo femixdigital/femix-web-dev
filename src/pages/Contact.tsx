@@ -1,5 +1,5 @@
 import { Mail, MessageSquare, Send, CheckCircle2, AlertCircle } from 'lucide-react';
-import { useState, FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
