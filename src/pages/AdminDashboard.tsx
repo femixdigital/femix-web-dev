@@ -1,61 +1,50 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import {
-  Loader2,
-  Mail,
-  Package,
-  RefreshCw,
-  Search,
-  Filter,
-  DollarSign,
-  TrendingUp,
-  Users,
-  Download,
-} from 'lucide-react';
+import { useToast } from '../components/Toast';
+import { Download, RefreshCw, Trash2, Mail, DollarSign, Calendar, Layers } from 'lucide-react';
 
-interface ContactLead {
+interface Lead {
   id: string;
   name: string;
   email: string;
   message: string;
-  status: string;
   created_at: string;
 }
 
 interface Order {
   id: string;
-  package_name: string;
-  amount: number;
-  customer_name: string;
-  customer_email: string;
+  client_name: string;
+  client_email: string;
+  pages: number;
+  has_auth: boolean;
+  has_database: boolean;
+  has_payments: boolean;
+  estimated_total: number;
   status: string;
   created_at: string;
 }
 
 export const AdminDashboard: React.FC = () => {
-  const [leads, setLeads] = useState<ContactLead[]>([]);
+  const { showToast } = useToast();
+  const [leads, setLeads] = useState<Lead[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [updatingId, setUpdatingId] = useState<string | null>(null);
-
-  // Search & Filter state
-  const [orderSearch, setOrderSearch] = useState('');
-  const [orderStatusFilter, setOrderStatusFilter] = useState('all');
-  const [leadSearch, setLeadSearch] = useState('');
-  const [leadStatusFilter, setLeadStatusFilter] = useState('all');
 
   const fetchData = async () => {
     setLoading(true);
     try {
       const [leadsRes, ordersRes] = await Promise.all([
-        supabase.from('contact_leads').select('*').order('created_at', { ascending: false }),
+        supabase.from('leads').select('*').order('created_at', { ascending: false }),
         supabase.from('orders').select('*').order('created_at', { ascending: false }),
       ]);
 
-      if (leadsRes.data) setLeads(leadsRes.data);
-      if (ordersRes.data) setOrders(ordersRes.data);
-    } catch (err) {
-      console.error('Failed to fetch admin data:', err);
+      if (leadsRes.error) throw leadsRes.error;
+      if (ordersRes.error) throw ordersRes.error;
+
+      setLeads(leadsRes.data || []);
+      setOrders(ordersRes.data || []);
+    } catch (err: any) {
+      showToast('Fetch Error', err.message || 'Failed to load dashboard data.', 'error');
     } finally {
       setLoading(false);
     }
@@ -65,334 +54,264 @@ export const AdminDashboard: React.FC = () => {
     fetchData();
   }, []);
 
-  const updateLeadStatus = async (id: string, newStatus: string) => {
-    setUpdatingId(id);
-    const { error } = await supabase
-      .from('contact_leads')
-      .update({ status: newStatus })
-      .eq('id', id);
+  const handleManualRefresh = () => {
+    fetchData();
+    showToast('Refreshed', 'Dashboard data updated.', 'info');
+  };
 
-    if (!error) {
-      setLeads((prev) =>
-        prev.map((lead) => (lead.id === id ? { ...lead, status: newStatus } : lead))
-      );
+  const deleteLead = async (id: string) => {
+    try {
+      const { error } = await supabase.from('leads').delete().eq('id', id);
+      if (error) throw error;
+
+      setLeads((prev) => prev.filter((l) => l.id !== id));
+      showToast('Lead Deleted', 'Inquiry record has been removed.', 'info');
+    } catch (err: any) {
+      showToast('Delete Failed', err.message || 'Could not delete lead.', 'error');
     }
-    setUpdatingId(null);
   };
 
-  const updateOrderStatus = async (id: string, newStatus: string) => {
-    setUpdatingId(id);
-    const { error } = await supabase
-      .from('orders')
-      .update({ status: newStatus })
-      .eq('id', id);
+  const deleteOrder = async (id: string) => {
+    try {
+      const { error } = await supabase.from('orders').delete().eq('id', id);
+      if (error) throw error;
 
-    if (!error) {
-      setOrders((prev) =>
-        prev.map((order) => (order.id === id ? { ...order, status: newStatus } : order))
-      );
+      setOrders((prev) => prev.filter((o) => o.id !== id));
+      showToast('Order Deleted', 'Project quote order removed.', 'info');
+    } catch (err: any) {
+      showToast('Delete Failed', err.message || 'Could not delete order.', 'error');
     }
-    setUpdatingId(null);
   };
 
-  // Export functions
-  const downloadCSV = (data: Record<string, any>[], filename: string) => {
-    if (data.length === 0) return;
-    const headers = Object.keys(data[0]);
-    const csvRows = [
-      headers.join(','),
-      ...data.map((row) =>
-        headers
-          .map((field) => JSON.stringify(row[field] ?? '', (_, v) => (v === null ? '' : v)))
-          .join(',')
-      ),
-    ];
+  const exportLeadsCSV = () => {
+    if (leads.length === 0) {
+      showToast('Export Skipped', 'No lead records available to export.', 'info');
+      return;
+    }
 
-    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('href', url);
-    a.setAttribute('download', `${filename}_${new Date().toISOString().slice(0, 10)}.csv`);
-    a.click();
+    const headers = ['ID', 'Name', 'Email', 'Message', 'Created At'];
+    const rows = leads.map((l) => [
+      l.id,
+      `"${l.name.replace(/"/g, '""')}"`,
+      `"${l.email.replace(/"/g, '""')}"`,
+      `"${l.message.replace(/"/g, '""')}"`,
+      l.created_at,
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    const filename = `leads_export_${new Date().toISOString().split('T')[0]}.csv`;
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showToast('Export Downloaded', `${filename} generated with ${leads.length} leads.`, 'success');
   };
 
-  const filteredOrders = orders.filter((o) => {
-    const matchesSearch =
-      o.customer_name.toLowerCase().includes(orderSearch.toLowerCase()) ||
-      o.customer_email.toLowerCase().includes(orderSearch.toLowerCase()) ||
-      o.package_name.toLowerCase().includes(orderSearch.toLowerCase());
-    const matchesStatus = orderStatusFilter === 'all' || (o.status || 'pending') === orderStatusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  const exportOrdersCSV = () => {
+    if (orders.length === 0) {
+      showToast('Export Skipped', 'No order records available to export.', 'info');
+      return;
+    }
 
-  const filteredLeads = leads.filter((l) => {
-    const matchesSearch =
-      l.name.toLowerCase().includes(leadSearch.toLowerCase()) ||
-      l.email.toLowerCase().includes(leadSearch.toLowerCase()) ||
-      l.message.toLowerCase().includes(leadSearch.toLowerCase());
-    const matchesStatus = leadStatusFilter === 'all' || (l.status || 'new') === leadStatusFilter;
-    return matchesSearch && matchesStatus;
-  });
+    const headers = ['ID', 'Client Name', 'Client Email', 'Pages', 'Auth', 'Database', 'Payments', 'Total ($)', 'Status', 'Created At'];
+    const rows = orders.map((o) => [
+      o.id,
+      `"${o.client_name.replace(/"/g, '""')}"`,
+      `"${o.client_email.replace(/"/g, '""')}"`,
+      o.pages,
+      o.has_auth ? 'Yes' : 'No',
+      o.has_database ? 'Yes' : 'No',
+      o.has_payments ? 'Yes' : 'No',
+      o.estimated_total,
+      o.status,
+      o.created_at,
+    ]);
 
-  // KPI Calculations
-  const totalRevenue = orders.reduce((sum, o) => sum + (o.amount || 0), 0);
-  const activeLeadsCount = leads.filter((l) => l.status === 'new' || l.status === 'contacted').length;
-  const avgOrderValue = orders.length > 0 ? Math.round(totalRevenue / orders.length) : 0;
+    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    const filename = `orders_export_${new Date().toISOString().split('T')[0]}.csv`;
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
-      </div>
-    );
-  }
+    showToast('Export Downloaded', `${filename} generated with ${orders.length} orders.`, 'success');
+  };
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-10">
-      <div className="flex items-center justify-between border-b border-slate-800 pb-5">
+    <div className="container mx-auto px-4 py-8 space-y-10 max-w-6xl">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Admin Dashboard</h1>
-          <p className="text-slate-400 text-xs sm:text-sm">Metrics and operational backend management</p>
+          <h1 className="text-2xl sm:text-3xl font-black text-white">Admin Dashboard</h1>
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            Manage incoming client inquiries and custom project orders.
+          </p>
         </div>
         <button
-          onClick={fetchData}
-          className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-3 py-2 rounded-xl border border-slate-700 transition"
+          onClick={handleManualRefresh}
+          className="flex items-center space-x-2 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 text-xs px-4 py-2 rounded-xl transition"
         >
-          <RefreshCw className="w-3.5 h-3.5" />
-          <span>Refresh</span>
+          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+          <span>Refresh Data</span>
         </button>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-2">
-          <div className="flex items-center justify-between text-slate-400 text-xs">
-            <span>Total Revenue</span>
-            <DollarSign className="w-4 h-4 text-emerald-400" />
-          </div>
-          <div className="text-xl sm:text-2xl font-black text-white font-mono">
-            ${totalRevenue.toLocaleString()}
-          </div>
-          <p className="text-[11px] text-slate-500">Gross total orders</p>
-        </div>
-
-        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-2">
-          <div className="flex items-center justify-between text-slate-400 text-xs">
-            <span>Total Orders</span>
-            <Package className="w-4 h-4 text-cyan-400" />
-          </div>
-          <div className="text-xl sm:text-2xl font-black text-white font-mono">
-            {orders.length}
-          </div>
-          <p className="text-[11px] text-slate-500">Submitted packages</p>
-        </div>
-
-        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-2">
-          <div className="flex items-center justify-between text-slate-400 text-xs">
-            <span>Active Leads</span>
-            <Users className="w-4 h-4 text-indigo-400" />
-          </div>
-          <div className="text-xl sm:text-2xl font-black text-white font-mono">
-            {activeLeadsCount}
-          </div>
-          <p className="text-[11px] text-slate-500">New & contacted</p>
-        </div>
-
-        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-2">
-          <div className="flex items-center justify-between text-slate-400 text-xs">
-            <span>Avg Order Value</span>
-            <TrendingUp className="w-4 h-4 text-amber-400" />
-          </div>
-          <div className="text-xl sm:text-2xl font-black text-white font-mono">
-            ${avgOrderValue.toLocaleString()}
-          </div>
-          <p className="text-[11px] text-slate-500">Per client project</p>
-        </div>
-      </div>
-
-      {/* Orders Section */}
+      {/* Orders Table Section */}
       <section className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center space-x-2 text-white font-bold text-lg">
-            <Package className="w-5 h-5 text-cyan-400" />
-            <h2>Client Orders ({filteredOrders.length})</h2>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <DollarSign className="w-5 h-5 text-cyan-400" />
+            <h2 className="text-lg font-bold text-white">Project Quote Orders ({orders.length})</h2>
           </div>
-
-          <div className="flex flex-wrap items-center gap-3 text-xs">
-            <div className="relative flex-grow sm:w-64">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-              <input
-                type="text"
-                placeholder="Search orders..."
-                value={orderSearch}
-                onChange={(e) => setOrderSearch(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-3 py-1.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
-              />
-            </div>
-            <div className="flex items-center space-x-1.5 bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-slate-400">
-              <Filter className="w-3.5 h-3.5" />
-              <select
-                value={orderStatusFilter}
-                onChange={(e) => setOrderStatusFilter(e.target.value)}
-                className="bg-transparent text-slate-200 text-xs focus:outline-none"
-              >
-                <option value="all" className="bg-slate-900">All Status</option>
-                <option value="pending" className="bg-slate-900">Pending</option>
-                <option value="in_progress" className="bg-slate-900">In Progress</option>
-                <option value="completed" className="bg-slate-900">Completed</option>
-                <option value="cancelled" className="bg-slate-900">Cancelled</option>
-              </select>
-            </div>
-            <button
-              onClick={() => downloadCSV(filteredOrders, 'orders_export')}
-              className="flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl px-3 py-1.5 transition"
-            >
-              <Download className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Export CSV</span>
-            </button>
-          </div>
+          <button
+            onClick={exportOrdersCSV}
+            className="flex items-center space-x-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/20 text-xs px-3 py-1.5 rounded-lg transition"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Export Orders CSV</span>
+          </button>
         </div>
 
-        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-x-auto">
-          <table className="w-full text-left text-xs sm:text-sm text-slate-300">
-            <thead className="bg-slate-800/50 text-slate-400 uppercase text-[10px] tracking-wider">
-              <tr>
-                <th className="p-4">Customer</th>
-                <th className="p-4">Package</th>
-                <th className="p-4">Amount</th>
-                <th className="p-4">Status</th>
-                <th className="p-4">Date</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800">
-              {filteredOrders.length === 0 ? (
+        <div className="bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs text-slate-300">
+              <thead className="bg-slate-950 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
                 <tr>
-                  <td colSpan={5} className="p-6 text-center text-slate-500">No matching orders found.</td>
+                  <th className="p-4">Client</th>
+                  <th className="p-4">Scope</th>
+                  <th className="p-4">Estimate</th>
+                  <th className="p-4">Date</th>
+                  <th className="p-4 text-right">Actions</th>
                 </tr>
-              ) : (
-                filteredOrders.map((o) => (
-                  <tr key={o.id} className="hover:bg-slate-800/30">
-                    <td className="p-4 font-medium text-white">
-                      {o.customer_name}
-                      <div className="text-[11px] text-slate-500">{o.customer_email}</div>
-                    </td>
-                    <td className="p-4 text-cyan-400 font-semibold">{o.package_name}</td>
-                    <td className="p-4 font-mono">${o.amount}</td>
-                    <td className="p-4">
-                      <select
-                        value={o.status || 'pending'}
-                        disabled={updatingId === o.id}
-                        onChange={(e) => updateOrderStatus(o.id, e.target.value)}
-                        className="bg-slate-800 text-slate-200 text-xs border border-slate-700 rounded-lg px-2 py-1 focus:outline-none focus:border-cyan-400"
-                      >
-                        <option value="pending">Pending</option>
-                        <option value="in_progress">In Progress</option>
-                        <option value="completed">Completed</option>
-                        <option value="cancelled">Cancelled</option>
-                      </select>
-                    </td>
-                    <td className="p-4 text-slate-500 text-xs">
-                      {new Date(o.created_at).toLocaleDateString()}
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                {orders.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="p-6 text-center text-slate-500">
+                      No project orders submitted yet.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  orders.map((o) => (
+                    <tr key={o.id} className="hover:bg-slate-800/30 transition">
+                      <td className="p-4">
+                        <div className="font-semibold text-white">{o.client_name}</div>
+                        <div className="text-slate-500">{o.client_email}</div>
+                      </td>
+                      <td className="p-4 space-y-1">
+                        <div className="flex items-center space-x-1 text-slate-300">
+                          <Layers className="w-3 h-3 text-cyan-400" />
+                          <span>{o.pages} pages</span>
+                        </div>
+                        <div className="text-[10px] text-slate-500 space-x-1">
+                          {o.has_auth && <span className="bg-slate-800 px-1.5 py-0.5 rounded">Auth</span>}
+                          {o.has_database && <span className="bg-slate-800 px-1.5 py-0.5 rounded">DB</span>}
+                          {o.has_payments && <span className="bg-slate-800 px-1.5 py-0.5 rounded">Stripe</span>}
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <span className="font-bold text-cyan-400 text-sm">${o.estimated_total}</span>
+                      </td>
+                      <td className="p-4 text-slate-500">
+                        <div className="flex items-center space-x-1">
+                          <Calendar className="w-3 h-3" />
+                          <span>{new Date(o.created_at).toLocaleDateString()}</span>
+                        </div>
+                      </td>
+                      <td className="p-4 text-right">
+                        <button
+                          onClick={() => deleteOrder(o.id)}
+                          className="text-slate-500 hover:text-rose-400 transition p-1.5 rounded-lg hover:bg-rose-500/10"
+                          title="Delete Order"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
-      {/* Leads Section */}
+      {/* Leads Table Section */}
       <section className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center space-x-2 text-white font-bold text-lg">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
             <Mail className="w-5 h-5 text-cyan-400" />
-            <h2>Contact Inquiries ({filteredLeads.length})</h2>
+            <h2 className="text-lg font-bold text-white">Contact Inquiries ({leads.length})</h2>
           </div>
-
-          <div className="flex flex-wrap items-center gap-3 text-xs">
-            <div className="relative flex-grow sm:w-64">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-              <input
-                type="text"
-                placeholder="Search leads..."
-                value={leadSearch}
-                onChange={(e) => setLeadSearch(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-3 py-1.5 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500"
-              />
-            </div>
-            <div className="flex items-center space-x-1.5 bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-slate-400">
-              <Filter className="w-3.5 h-3.5" />
-              <select
-                value={leadStatusFilter}
-                onChange={(e) => setLeadStatusFilter(e.target.value)}
-                className="bg-transparent text-slate-200 text-xs focus:outline-none"
-              >
-                <option value="all" className="bg-slate-900">All Status</option>
-                <option value="new" className="bg-slate-900">New</option>
-                <option value="contacted" className="bg-slate-900">Contacted</option>
-                <option value="qualified" className="bg-slate-900">Qualified</option>
-                <option value="closed" className="bg-slate-900">Closed</option>
-              </select>
-            </div>
-            <button
-              onClick={() => downloadCSV(filteredLeads, 'leads_export')}
-              className="flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl px-3 py-1.5 transition"
-            >
-              <Download className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Export CSV</span>
-            </button>
-          </div>
+          <button
+            onClick={exportLeadsCSV}
+            className="flex items-center space-x-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/20 text-xs px-3 py-1.5 rounded-lg transition"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Export Leads CSV</span>
+          </button>
         </div>
 
-        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-x-auto">
-          <table className="w-full text-left text-xs sm:text-sm text-slate-300">
-            <thead className="bg-slate-800/50 text-slate-400 uppercase text-[10px] tracking-wider">
-              <tr>
-                <th className="p-4">Name</th>
-                <th className="p-4">Message</th>
-                <th className="p-4">Status</th>
-                <th className="p-4">Date</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-800">
-              {filteredLeads.length === 0 ? (
+        <div className="bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs text-slate-300">
+              <thead className="bg-slate-950 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
                 <tr>
-                  <td colSpan={4} className="p-6 text-center text-slate-500">No matching leads found.</td>
+                  <th className="p-4">Name</th>
+                  <th className="p-4">Message</th>
+                  <th className="p-4">Date</th>
+                  <th className="p-4 text-right">Actions</th>
                 </tr>
-              ) : (
-                filteredLeads.map((l) => (
-                  <tr key={l.id} className="hover:bg-slate-800/30">
-                    <td className="p-4 font-medium text-white">
-                      {l.name}
-                      <div className="text-[11px] text-slate-500">{l.email}</div>
-                    </td>
-                    <td className="p-4 text-slate-300 max-w-xs truncate">{l.message}</td>
-                    <td className="p-4">
-                      <select
-                        value={l.status || 'new'}
-                        disabled={updatingId === l.id}
-                        onChange={(e) => updateLeadStatus(l.id, e.target.value)}
-                        className="bg-slate-800 text-slate-200 text-xs border border-slate-700 rounded-lg px-2 py-1 focus:outline-none focus:border-cyan-400"
-                      >
-                        <option value="new">New</option>
-                        <option value="contacted">Contacted</option>
-                        <option value="qualified">Qualified</option>
-                        <option value="closed">Closed</option>
-                      </select>
-                    </td>
-                    <td className="p-4 text-slate-500 text-xs">
-                      {new Date(l.created_at).toLocaleDateString()}
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                {leads.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="p-6 text-center text-slate-500">
+                      No contact inquiries submitted yet.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  leads.map((l) => (
+                    <tr key={l.id} className="hover:bg-slate-800/30 transition">
+                      <td className="p-4">
+                        <div className="font-semibold text-white">{l.name}</div>
+                        <div className="text-slate-500">{l.email}</div>
+                      </td>
+                      <td className="p-4 max-w-xs truncate text-slate-400" title={l.message}>
+                        {l.message}
+                      </td>
+                      <td className="p-4 text-slate-500">
+                        <div className="flex items-center space-x-1">
+                          <Calendar className="w-3 h-3" />
+                          <span>{new Date(l.created_at).toLocaleDateString()}</span>
+                        </div>
+                      </td>
+                      <td className="p-4 text-right">
+                        <button
+                          onClick={() => deleteLead(l.id)}
+                          className="text-slate-500 hover:text-rose-400 transition p-1.5 rounded-lg hover:bg-rose-500/10"
+                          title="Delete Lead"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
     </div>
   );
 };
-
-export default AdminDashboard;
