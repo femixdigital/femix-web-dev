@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Lock, KeyRound } from 'lucide-react';
+import { useToast } from './Toast';
 
 interface AdminGuardProps {
   children: React.ReactNode;
@@ -9,8 +10,8 @@ export const AdminGuard: React.FC<AdminGuardProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [error, setError] = useState('');
+  const { showToast } = useToast();
 
-  // Default fallback passcode if VITE_ADMIN_PASSCODE is not set in .env
   const ADMIN_PASSCODE = import.meta.env.VITE_ADMIN_PASSCODE || 'femix2026';
 
   useEffect(() => {
@@ -26,8 +27,11 @@ export const AdminGuard: React.FC<AdminGuardProps> = ({ children }) => {
       sessionStorage.setItem('admin_authenticated', 'true');
       setIsAuthenticated(true);
       setError('');
+      showToast('Authenticated', 'Welcome back to the Admin Dashboard.', 'success');
     } else {
-      setError('Invalid passcode. Please try again.');
+      const errMsg = 'Invalid passcode. Please try again.';
+      setError(errMsg);
+      showToast('Access Denied', errMsg, 'error');
     }
   };
 
@@ -35,6 +39,7 @@ export const AdminGuard: React.FC<AdminGuardProps> = ({ children }) => {
     sessionStorage.removeItem('admin_authenticated');
     setIsAuthenticated(false);
     setPasscode('');
+    showToast('Locked', 'Admin dashboard has been locked.', 'info');
   };
 
   if (!isAuthenticated) {
