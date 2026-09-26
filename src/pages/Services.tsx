@@ -1,77 +1,71 @@
-import { Code2, Layout, Zap, Smartphone, ArrowUpRight } from 'lucide-react';
-import { Link } from 'react-router';
+import { useState } from 'react';
+import { ProjectEstimator } from '../components/ProjectEstimator';
+import { OrderModal } from '../components/OrderModal';
+import { Code, Database, Zap, Cpu } from 'lucide-react';
 
 export default function Services() {
-  const services = [
-    {
-      icon: Layout,
-      title: 'SPA Development',
-      description: 'High-speed, dynamic single-page applications engineered with modern React & Vite.',
-      badge: 'CORE ENGINE',
-    },
-    {
-      icon: Smartphone,
-      title: 'Mobile-First Architecture',
-      description: 'Ultra-responsive UI/UX designed natively for mobile viewports and desktop browsers.',
-      badge: 'RESPONSIVE',
-    },
-    {
-      icon: Zap,
-      title: 'Performance Tuning',
-      description: 'Low-latency state management and code-splitting ensuring sub-100ms routing.',
-      badge: 'OPTIMIZED',
-    },
-    {
-      icon: Code2,
-      title: 'Custom Web Apps',
-      description: 'Scalable SaaS solutions built tailored precisely to high-volume business demands.',
-      badge: 'ENTERPRISE',
-    },
-  ];
+  const [selectedPackage, setSelectedPackage] = useState<{ name: string; price: number } | null>(null);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-      <div className="mb-12">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#181e2a] border border-[#273145] mb-4">
-          <span className="w-2 h-2 rounded-full bg-[#00e599]"></span>
-          <span className="text-xs font-semibold text-slate-300 tracking-wider uppercase">CAPABILITIES</span>
+    <div className="min-h-screen pt-28 pb-20 px-4 max-w-7xl mx-auto space-y-16">
+      {/* Services Header */}
+      <div className="text-center max-w-3xl mx-auto space-y-4">
+        <div className="inline-flex items-center space-x-2 px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-xs font-mono uppercase tracking-widest">
+          <Cpu className="w-3.5 h-3.5" />
+          <span>Engineering Solutions</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white mb-3">
-          PLATFORM <span className="text-[#00e599]">SERVICES</span>
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
+          High-Conversion Web Architecture
         </h1>
-        <p className="text-slate-400 max-w-xl text-sm sm:text-base">
-          High-performance web architecture crafted with cutting-edge stack tools.
+        <p className="text-slate-400 text-base sm:text-lg">
+          We construct tailored, fast, and scalable web solutions optimized for maximum client conversion and performance.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {services.map((item, idx) => {
-          const Icon = item.icon;
-          return (
-            <div key={idx} className="crypto-card p-6 rounded-xl flex flex-col justify-between group transition-all">
-              <div>
-                <div className="flex justify-between items-center mb-6">
-                  <div className="w-12 h-12 rounded-lg bg-[#181e2a] flex items-center justify-center text-[#00e599]">
-                    <Icon className="w-6 h-6" />
-                  </div>
-                  <span className="text-[10px] font-mono tracking-widest text-[#00e599] bg-[#00e599]/10 border border-[#00e599]/30 px-2.5 py-1 rounded">
-                    {item.badge}
-                  </span>
-                </div>
-                <h2 className="text-xl font-bold text-white uppercase mb-2 group-hover:text-[#00e599] transition-colors">
-                  {item.title}
-                </h2>
-                <p className="text-slate-400 text-sm leading-relaxed mb-6">{item.description}</p>
-              </div>
+      {/* Services Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 hover:border-cyan-500/40 transition-all group">
+          <div className="p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-2xl text-cyan-400 w-fit mb-4">
+            <Code className="w-6 h-6" />
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">SPA & SaaS Platforms</h3>
+          <p className="text-slate-400 text-sm leading-relaxed">
+            Single Page Applications built with React, Vite v8 (Rolldown), and TypeScript for instant page transitions and zero layout shifts.
+          </p>
+        </div>
 
-              <Link to="/contact" className="inline-flex items-center gap-1 text-xs font-semibold uppercase text-slate-300 group-hover:text-[#00e599] transition-colors">
-                <span>Deploy Solution</span>
-                <ArrowUpRight className="w-4 h-4" />
-              </Link>
-            </div>
-          );
-        })}
+        <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 hover:border-emerald-500/40 transition-all group">
+          <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400 w-fit mb-4">
+            <Database className="w-6 h-6" />
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">Full-Stack Integration</h3>
+          <p className="text-slate-400 text-sm leading-relaxed">
+            Supabase PostgreSQL databases, REST APIs, Row Level Security (RLS), and custom serverless logic built to scale effortlessly.
+          </p>
+        </div>
+
+        <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 hover:border-cyan-500/40 transition-all group">
+          <div className="p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-2xl text-cyan-400 w-fit mb-4">
+            <Zap className="w-6 h-6" />
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">Payment Systems</h3>
+          <p className="text-slate-400 text-sm leading-relaxed">
+            Dual-currency payment integration (Paystack & Stripe) with direct email triggers, receipt logging, and webhook safety.
+          </p>
+        </div>
       </div>
+
+      {/* Interactive Estimator Section */}
+      <ProjectEstimator onSelectPackage={(name, amount) => setSelectedPackage({ name, price: amount })} />
+
+      {/* Order Modal */}
+      {selectedPackage && (
+        <OrderModal
+          packageName={selectedPackage.name}
+          amount={selectedPackage.price}
+          onClose={() => setSelectedPackage(null)}
+        />
+      )}
     </div>
   );
 }
