@@ -10,6 +10,7 @@ import {
   DollarSign,
   TrendingUp,
   Users,
+  Download,
 } from 'lucide-react';
 
 interface ContactLead {
@@ -92,6 +93,27 @@ export const AdminDashboard: React.FC = () => {
       );
     }
     setUpdatingId(null);
+  };
+
+  // Export functions
+  const downloadCSV = (data: Record<string, any>[], filename: string) => {
+    if (data.length === 0) return;
+    const headers = Object.keys(data[0]);
+    const csvRows = [
+      headers.join(','),
+      ...data.map((row) =>
+        headers
+          .map((field) => JSON.stringify(row[field] ?? '', (_, v) => (v === null ? '' : v)))
+          .join(',')
+      ),
+    ];
+
+    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', `${filename}_${new Date().toISOString().slice(0, 10)}.csv`);
+    a.click();
   };
 
   const filteredOrders = orders.filter((o) => {
@@ -196,7 +218,7 @@ export const AdminDashboard: React.FC = () => {
             <h2>Client Orders ({filteredOrders.length})</h2>
           </div>
 
-          <div className="flex items-center space-x-3 text-xs">
+          <div className="flex flex-wrap items-center gap-3 text-xs">
             <div className="relative flex-grow sm:w-64">
               <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
@@ -221,6 +243,13 @@ export const AdminDashboard: React.FC = () => {
                 <option value="cancelled" className="bg-slate-900">Cancelled</option>
               </select>
             </div>
+            <button
+              onClick={() => downloadCSV(filteredOrders, 'orders_export')}
+              className="flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl px-3 py-1.5 transition"
+            >
+              <Download className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Export CSV</span>
+            </button>
           </div>
         </div>
 
@@ -281,7 +310,7 @@ export const AdminDashboard: React.FC = () => {
             <h2>Contact Inquiries ({filteredLeads.length})</h2>
           </div>
 
-          <div className="flex items-center space-x-3 text-xs">
+          <div className="flex flex-wrap items-center gap-3 text-xs">
             <div className="relative flex-grow sm:w-64">
               <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
@@ -306,6 +335,13 @@ export const AdminDashboard: React.FC = () => {
                 <option value="closed" className="bg-slate-900">Closed</option>
               </select>
             </div>
+            <button
+              onClick={() => downloadCSV(filteredLeads, 'leads_export')}
+              className="flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl px-3 py-1.5 transition"
+            >
+              <Download className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Export CSV</span>
+            </button>
           </div>
         </div>
 
