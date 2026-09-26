@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { Loader2, Mail, Package, RefreshCw, Search, Filter } from 'lucide-react';
+import {
+  Loader2,
+  Mail,
+  Package,
+  RefreshCw,
+  Search,
+  Filter,
+  DollarSign,
+  TrendingUp,
+  Users,
+} from 'lucide-react';
 
 interface ContactLead {
   id: string;
@@ -102,6 +112,11 @@ export const AdminDashboard: React.FC = () => {
     return matchesSearch && matchesStatus;
   });
 
+  // KPI Calculations
+  const totalRevenue = orders.reduce((sum, o) => sum + (o.amount || 0), 0);
+  const activeLeadsCount = leads.filter((l) => l.status === 'new' || l.status === 'contacted').length;
+  const avgOrderValue = orders.length > 0 ? Math.round(totalRevenue / orders.length) : 0;
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -111,11 +126,11 @@ export const AdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-12">
+    <div className="container mx-auto px-4 py-8 space-y-10">
       <div className="flex items-center justify-between border-b border-slate-800 pb-5">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Admin Management</h1>
-          <p className="text-slate-400 text-xs sm:text-sm">Manage inquiries and orders stored in Supabase</p>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Admin Dashboard</h1>
+          <p className="text-slate-400 text-xs sm:text-sm">Metrics and operational backend management</p>
         </div>
         <button
           onClick={fetchData}
@@ -124,6 +139,53 @@ export const AdminDashboard: React.FC = () => {
           <RefreshCw className="w-3.5 h-3.5" />
           <span>Refresh</span>
         </button>
+      </div>
+
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-2">
+          <div className="flex items-center justify-between text-slate-400 text-xs">
+            <span>Total Revenue</span>
+            <DollarSign className="w-4 h-4 text-emerald-400" />
+          </div>
+          <div className="text-xl sm:text-2xl font-black text-white font-mono">
+            ${totalRevenue.toLocaleString()}
+          </div>
+          <p className="text-[11px] text-slate-500">Gross total orders</p>
+        </div>
+
+        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-2">
+          <div className="flex items-center justify-between text-slate-400 text-xs">
+            <span>Total Orders</span>
+            <Package className="w-4 h-4 text-cyan-400" />
+          </div>
+          <div className="text-xl sm:text-2xl font-black text-white font-mono">
+            {orders.length}
+          </div>
+          <p className="text-[11px] text-slate-500">Submitted packages</p>
+        </div>
+
+        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-2">
+          <div className="flex items-center justify-between text-slate-400 text-xs">
+            <span>Active Leads</span>
+            <Users className="w-4 h-4 text-indigo-400" />
+          </div>
+          <div className="text-xl sm:text-2xl font-black text-white font-mono">
+            {activeLeadsCount}
+          </div>
+          <p className="text-[11px] text-slate-500">New & contacted</p>
+        </div>
+
+        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-2">
+          <div className="flex items-center justify-between text-slate-400 text-xs">
+            <span>Avg Order Value</span>
+            <TrendingUp className="w-4 h-4 text-amber-400" />
+          </div>
+          <div className="text-xl sm:text-2xl font-black text-white font-mono">
+            ${avgOrderValue.toLocaleString()}
+          </div>
+          <p className="text-[11px] text-slate-500">Per client project</p>
+        </div>
       </div>
 
       {/* Orders Section */}
