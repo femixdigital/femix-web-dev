@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Pricing } from '../components/Pricing';
+import { Testimonials } from '../components/Testimonials';
+import { FAQ } from '../components/FAQ';
 import { ContactForm } from '../components/ContactForm';
 import { OrderModal } from '../components/OrderModal';
-import { Testimonials } from '../components/Testimonials';
 
 export const Home: React.FC = () => {
   const [selectedPackage, setSelectedPackage] = useState<{
@@ -18,6 +19,7 @@ export const Home: React.FC = () => {
     <div className="space-y-20 pb-16 pt-8 container mx-auto px-4">
       <Pricing onSelectPackage={handleSelectPackage} />
       <Testimonials />
+      <FAQ />
       
       <section id="contact" className="pt-10">
         <ContactForm />
