@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { X, Send } from 'lucide-react';
+import { X, Send, Loader2 } from 'lucide-react';
 import { useToast } from './Toast';
+import { supabase } from '../lib/supabase';
 
 interface OrderModalProps {
   isOpen: boolean;
@@ -28,22 +29,46 @@ export const OrderModal: React.FC<OrderModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.client_name || !formData.client_email) {
-      showToast('Validation Error', 'Please fill in required fields.', 'error');
+
+    if (!formData.client_name.trim() || !formData.client_email.trim()) {
+      showToast('Validation Error', 'Please complete all required fields.', 'error');
       return;
     }
 
     setLoading(true);
 
     try {
+      const { error } = await supabase.from('orders').insert([
+        {
+          package_name: packageName,
+          amount: amount,
+          currency: 'USD',
+          client_name: formData.client_name,
+          client_email: formData.client_email,
+          client_phone: formData.client_phone || null,
+          requirements: formData.requirements || null,
+          status: 'pending',
+        },
+      ]);
+
+      if (error) throw error;
+
       showToast(
-        'Order Received!',
-        `Your order for ${packageName} has been logged. We will reach out shortly.`,
+        'Order Placed!',
+        `Your order for ${packageName} has been successfully logged. We will contact you shortly.`,
         'success'
       );
+
+      setFormData({
+        client_name: '',
+        client_email: '',
+        client_phone: '',
+        requirements: '',
+      });
       onClose();
-    } catch (err) {
-      showToast('Submission Failed', 'An error occurred while placing your order.', 'error');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'An error occurred while submitting your order.';
+      showToast('Order Failed', message, 'error');
     } finally {
       setLoading(false);
     }
@@ -54,7 +79,8 @@ export const OrderModal: React.FC<OrderModalProps> = ({
       <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl">
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 text-slate-400 hover:text-white bg-slate-800/50 rounded-full transition-colors"
+          disabled={loading}
+          className="absolute top-5 right-5 p-2 text-slate-400 hover:text-white bg-slate-800/50 rounded-full transition-colors disabled:opacity-50"
         >
           <X className="w-5 h-5" />
         </button>
@@ -72,9 +98,10 @@ export const OrderModal: React.FC<OrderModalProps> = ({
             <input
               type="text"
               required
+              disabled={loading}
               value={formData.client_name}
               onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500 transition-colors"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
               placeholder="John Doe"
             />
           </div>
@@ -86,9 +113,10 @@ export const OrderModal: React.FC<OrderModalProps> = ({
             <input
               type="email"
               required
+              disabled={loading}
               value={formData.client_email}
               onChange={(e) => setFormData({ ...formData, client_email: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500 transition-colors"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
               placeholder="john@example.com"
             />
           </div>
@@ -99,9 +127,10 @@ export const OrderModal: React.FC<OrderModalProps> = ({
             </label>
             <input
               type="tel"
+              disabled={loading}
               value={formData.client_phone}
               onChange={(e) => setFormData({ ...formData, client_phone: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500 transition-colors"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
               placeholder="+1 (555) 000-0000"
             />
           </div>
@@ -112,9 +141,10 @@ export const OrderModal: React.FC<OrderModalProps> = ({
             </label>
             <textarea
               rows={3}
+              disabled={loading}
               value={formData.requirements}
               onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500 transition-colors resize-none"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500 transition-colors resize-none disabled:opacity-50"
               placeholder="Tell us brief details about your project..."
             />
           </div>
@@ -125,7 +155,10 @@ export const OrderModal: React.FC<OrderModalProps> = ({
             className="w-full mt-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold py-3.5 px-6 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg shadow-cyan-500/20 disabled:opacity-50"
           >
             {loading ? (
-              <span>Processing...</span>
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Submitting...</span>
+              </>
             ) : (
               <>
                 <Send className="w-4 h-4" />
