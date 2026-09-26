@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { AdminDashboard } from './pages/AdminDashboard';
+import { AdminGuard } from './components/AdminGuard';
 import { Footer } from './components/Footer';
 import { Code2, ShieldAlert } from 'lucide-react';
 
@@ -37,7 +38,14 @@ export const App: React.FC = () => {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+            <Route
+              path="/admin"
+              element={
+                <AdminGuard>
+                  <AdminDashboard />
+                </AdminGuard>
+              }
+            />
           </Routes>
         </main>
 
