@@ -1,46 +1,67 @@
-import { Link } from 'react-router';
-import { Zap, Menu, X, ArrowUpRight } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Shield, Menu, X, LayoutDashboard, Home, Zap } from 'lucide-react';
 
-export default function Navbar() {
+export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="border-b border-[#1e2638] bg-[#0b0e14]/90 backdrop-blur-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        
-        {/* Brand Logo */}
-        <Link to="/" className="flex items-center gap-2 font-black text-xl tracking-wider uppercase text-white">
-          <div className="w-8 h-8 rounded-lg bg-[#00e599] flex items-center justify-center text-[#0b0e14]">
+    <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        <Link to="/" className="flex items-center space-x-2 text-white font-bold text-lg">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-md shadow-cyan-500/20">
             <Zap className="w-5 h-5 fill-current" />
           </div>
-          <span>Femix <span className="text-[#00e599]">Web Dev</span></span>
+          <span>Femix<span className="text-cyan-400">Digital</span></span>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-semibold tracking-wide text-slate-400">
-          <Link to="/" className="hover:text-[#00e599] transition-colors">MARKETS</Link>
-          <Link to="/services" className="hover:text-[#00e599] transition-colors">SERVICES</Link>
-          <Link to="/portfolio" className="hover:text-[#00e599] transition-colors">ECOSYSTEM</Link>
-          <Link to="/about" className="hover:text-[#00e599] transition-colors">ABOUT</Link>
-          <Link to="/contact" className="hover:text-[#00e599] transition-colors">CONTACT</Link>
+        <nav className="hidden md:flex items-center space-x-6 text-sm">
+          <Link
+            to="/"
+            className={`flex items-center space-x-1.5 transition-colors ${
+              isActive('/') ? 'text-cyan-400 font-semibold' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Home className="w-4 h-4" />
+            <span>Home</span>
+          </Link>
+
+          <a
+            href="/#pricing"
+            className="text-slate-400 hover:text-white transition-colors"
+          >
+            Pricing
+          </a>
+
+          <a
+            href="/#contact"
+            className="text-slate-400 hover:text-white transition-colors"
+          >
+            Contact
+          </a>
+
+          <Link
+            to="/admin"
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border transition-all ${
+              isActive('/admin')
+                ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400 font-medium'
+                : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700 hover:text-white'
+            }`}
+          >
+            <LayoutDashboard className="w-4 h-4" />
+            <span>Admin</span>
+          </Link>
         </nav>
 
-        {/* Action Button */}
-        <div className="hidden md:flex items-center gap-4">
-          <Link 
-            to="/contact" 
-            className="glow-button px-5 py-2 rounded-md text-xs tracking-wider uppercase flex items-center gap-1 transition-all"
-          >
-            Launch App <ArrowUpRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button 
-          onClick={() => setIsOpen(!isOpen)} 
-          className="md:hidden text-slate-300 hover:text-[#00e599] p-2"
-          aria-label="Toggle Menu"
+        {/* Mobile menu toggle */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="md:hidden text-slate-400 hover:text-white p-2"
+          aria-label="Toggle navigation menu"
         >
           {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
@@ -48,22 +69,44 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <nav className="md:hidden bg-[#12161f] border-b border-[#1e2638] px-6 py-6 flex flex-col gap-4 text-slate-300 text-sm font-semibold">
-          <Link to="/" onClick={() => setIsOpen(false)} className="hover:text-[#00e599] py-1">MARKETS</Link>
-          <Link to="/services" onClick={() => setIsOpen(false)} className="hover:text-[#00e599] py-1">SERVICES</Link>
-          <Link to="/portfolio" onClick={() => setIsOpen(false)} className="hover:text-[#00e599] py-1">ECOSYSTEM</Link>
-          <Link to="/about" onClick={() => setIsOpen(false)} className="hover:text-[#00e599] py-1">ABOUT</Link>
-          <Link to="/contact" onClick={() => setIsOpen(false)} className="hover:text-[#00e599] py-1">CONTACT</Link>
-          
-          <Link 
-            to="/contact" 
+        <div className="md:hidden bg-slate-900 border-b border-slate-800 px-4 py-4 space-y-3">
+          <Link
+            to="/"
             onClick={() => setIsOpen(false)}
-            className="glow-button mt-2 py-3 rounded-md text-center text-xs tracking-wider uppercase flex items-center justify-center gap-1"
+            className={`block py-2 text-sm ${
+              isActive('/') ? 'text-cyan-400 font-semibold' : 'text-slate-300'
+            }`}
           >
-            Launch App <ArrowUpRight className="w-4 h-4" />
+            Home
           </Link>
-        </nav>
+          <a
+            href="/#pricing"
+            onClick={() => setIsOpen(false)}
+            className="block py-2 text-sm text-slate-300"
+          >
+            Pricing
+          </a>
+          <a
+            href="/#contact"
+            onClick={() => setIsOpen(false)}
+            className="block py-2 text-sm text-slate-300"
+          >
+            Contact
+          </a>
+          <Link
+            to="/admin"
+            onClick={() => setIsOpen(false)}
+            className={`flex items-center space-x-2 py-2 text-sm ${
+              isActive('/admin') ? 'text-cyan-400 font-semibold' : 'text-slate-300'
+            }`}
+          >
+            <Shield className="w-4 h-4" />
+            <span>Admin Dashboard</span>
+          </Link>
+        </div>
       )}
     </header>
   );
-}
+};
+
+export default Navbar;
