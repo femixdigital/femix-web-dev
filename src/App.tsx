@@ -1,11 +1,27 @@
 import React from 'react';
-import { Services } from './pages/Services';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ToastProvider } from './components/Toast';
+import { Home } from './pages/Home';
+import AdminDashboard from './pages/AdminDashboard';
 
 export const App: React.FC = () => {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
-      <Services />
-    </div>
+    <ToastProvider>
+      <Router>
+        <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between">
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+            </Routes>
+          </main>
+          
+          <footer className="border-t border-slate-900 py-6 text-center text-xs text-slate-500">
+            &copy; {new Date().getFullYear()} Femix Digital. All rights reserved.
+          </footer>
+        </div>
+      </Router>
+    </ToastProvider>
   );
 };
 
