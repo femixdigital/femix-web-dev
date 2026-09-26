@@ -1,5 +1,6 @@
 import { Mail, MessageSquare, Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
+import { supabase } from '../lib/supabase';
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -20,17 +21,32 @@ export default function Contact() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
     setIsSubmitting(true);
-    // Simulate high-speed SPA network payload transmission
-    setTimeout(() => {
+
+    try {
+      // Save contact inquiry to Supabase
+      if (import.meta.env.VITE_SUPABASE_URL) {
+        await supabase.from('leads').insert([
+          {
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            package_name: 'General Contact Inquiry',
+            status: 'new',
+          },
+        ]);
+      }
+    } catch (err) {
+      console.error('Error saving lead to Supabase:', err);
+    } finally {
       setIsSubmitting(false);
       setIsSent(true);
       setFormData({ name: '', email: '', message: '' });
-    }, 1000);
+    }
   };
 
   return (
@@ -54,7 +70,7 @@ export default function Contact() {
           </div>
           <h2 className="text-xl font-bold uppercase text-white">Payload Transmitted</h2>
           <p className="text-sm text-slate-400">
-            Thank you for reaching out. Your message has been logged, and we will get back to you shortly.
+            Thank you for reaching out. Your message has been logged to our database, and we will get back to you shortly.
           </p>
           <button
             onClick={() => setIsSent(false)}

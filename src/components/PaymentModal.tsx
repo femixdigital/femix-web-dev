@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { CreditCard, X, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -60,7 +61,23 @@ export default function PaymentModal({ isOpen, onClose, packageName, amount }: P
             },
           ],
         },
-        callback: function () {
+        callback: async function () {
+          // Record successful payment lead in Supabase
+          try {
+            if (import.meta.env.VITE_SUPABASE_URL) {
+              await supabase.from('leads').insert([
+                {
+                  name: name,
+                  email: email,
+                  package_name: packageName,
+                  amount: amount,
+                  status: 'paid_deposit',
+                },
+              ]);
+            }
+          } catch (err) {
+            console.error('Error logging payment to Supabase:', err);
+          }
           setPaymentSuccess(true);
         },
         onClose: function () {
