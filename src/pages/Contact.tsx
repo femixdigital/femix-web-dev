@@ -2,53 +2,58 @@ import { Mail, MessageSquare, Send } from 'lucide-react';
 
 export default function Contact() {
   return (
-    <div className="max-w-xl mx-auto px-4 py-12">
-      <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold mb-3">Get in Touch</h1>
-        <p className="text-slate-400">
-          Have a project in mind or want to learn more about our services? Let's talk.
+    <div className="max-w-xl mx-auto px-4 sm:px-6 py-12">
+      <div className="mb-8 text-center">
+        <span className="text-xs font-semibold text-[#00e599] tracking-wider uppercase mb-2 block">
+          /// Direct Channel
+        </span>
+        <h1 className="text-3xl sm:text-4xl font-black uppercase text-white tracking-tight">
+          Initialize <span className="text-[#00e599]">Contact</span>
+        </h1>
+        <p className="text-slate-400 text-sm mt-2">
+          Connect with us to start building your high-speed SPA platform.
         </p>
       </div>
 
-      <form onSubmit={(e) => e.preventDefault()} className="space-y-4 bg-slate-800/50 border border-slate-700 p-6 rounded-xl">
+      <form onSubmit={(e) => e.preventDefault()} className="space-y-4 crypto-card p-6 sm:p-8 rounded-xl">
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1">Name</label>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Name</label>
           <input 
             type="text" 
-            placeholder="Your name" 
-            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+            placeholder="Enter your name" 
+            className="w-full bg-[#0b0e14] border border-[#1e2638] rounded-lg px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#00e599] text-sm"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1">Email</label>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Email Address</label>
           <div className="relative">
-            <Mail className="w-5 h-5 text-slate-500 absolute left-3 top-3" />
+            <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
             <input 
               type="email" 
-              placeholder="you@example.com" 
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+              placeholder="you@domain.com" 
+              className="w-full bg-[#0b0e14] border border-[#1e2638] rounded-lg pl-10 pr-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#00e599] text-sm"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1">Message</label>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Message</label>
           <div className="relative">
-            <MessageSquare className="w-5 h-5 text-slate-500 absolute left-3 top-3" />
+            <MessageSquare className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
             <textarea 
               rows={4}
-              placeholder="Tell us about your project..." 
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-10 pr-4 py-2.5 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+              placeholder="Project details..." 
+              className="w-full bg-[#0b0e14] border border-[#1e2638] rounded-lg pl-10 pr-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#00e599] text-sm resize-none"
             ></textarea>
           </div>
         </div>
 
         <button 
           type="submit" 
-          className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-lg transition-colors cursor-pointer"
+          className="w-full glow-button py-3.5 rounded-lg text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all"
         >
-          <span>Send Message</span>
+          <span>Transmit Message</span>
           <Send className="w-4 h-4" />
         </button>
       </form>
