@@ -1,71 +1,95 @@
-import { useState } from 'react';
-import { ProjectEstimator } from '../components/ProjectEstimator';
+import React, { useState } from 'react';
 import { OrderModal } from '../components/OrderModal';
-import { Code, Database, Zap, Cpu } from 'lucide-react';
 
-export default function Services() {
-  const [selectedPackage, setSelectedPackage] = useState<{ name: string; price: number } | null>(null);
+interface ServicePackage {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  features: string[];
+}
+
+const packages: ServicePackage[] = [
+  {
+    id: 'starter',
+    name: 'Starter Web App',
+    price: 999,
+    description: 'Perfect for landing pages, simple SaaS MVPs, and business showcases.',
+    features: ['Responsive SPA Layout', 'Tailwind CSS Styling', 'Contact Form Integration', 'Basic SEO Setup'],
+  },
+  {
+    id: 'pro',
+    name: 'Full-Stack SaaS Platform',
+    price: 2499,
+    description: 'Complete scalable application with backend database, authentication, and payments.',
+    features: ['Custom SPA Architecture', 'Supabase Auth & Database', 'Stripe Payment Gateway', 'Toast Notifications', 'Admin Dashboard'],
+  },
+  {
+    id: 'enterprise',
+    name: 'Custom Architecture',
+    price: 4999,
+    description: 'Enterprise-grade architecture tailored to heavy workload and custom workflows.',
+    features: ['Dedicated Microservices', 'Custom API Integrations', '24/7 SLA Support', 'Performance Optimization'],
+  },
+];
+
+export const Services: React.FC = () => {
+  const [selectedPackage, setSelectedPackage] = useState<ServicePackage | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = (pkg: ServicePackage) => {
+    setSelectedPackage(pkg);
+    setIsModalOpen(true);
+  };
 
   return (
-    <div className="min-h-screen pt-28 pb-20 px-4 max-w-7xl mx-auto space-y-16">
-      {/* Services Header */}
-      <div className="text-center max-w-3xl mx-auto space-y-4">
-        <div className="inline-flex items-center space-x-2 px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-xs font-mono uppercase tracking-widest">
-          <Cpu className="w-3.5 h-3.5" />
-          <span>Engineering Solutions</span>
-        </div>
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
-          High-Conversion Web Architecture
+    <div className="min-h-screen bg-slate-950 text-slate-100 py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto text-center mb-16">
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
+          Development Packages & Pricing
         </h1>
-        <p className="text-slate-400 text-base sm:text-lg">
-          We construct tailored, fast, and scalable web solutions optimized for maximum client conversion and performance.
+        <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+          Choose the right development scope for your modern Single Page Application (SPA).
         </p>
       </div>
 
-      {/* Services Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 hover:border-cyan-500/40 transition-all group">
-          <div className="p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-2xl text-cyan-400 w-fit mb-4">
-            <Code className="w-6 h-6" />
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+        {packages.map((pkg) => (
+          <div
+            key={pkg.id}
+            className="bg-slate-900 border border-slate-800 hover:border-cyan-500/50 rounded-3xl p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/10"
+          >
+            <div>
+              <h2 className="text-2xl font-bold text-white mb-2">{pkg.name}</h2>
+              <p className="text-slate-400 text-sm mb-6">{pkg.description}</p>
+              <div className="text-3xl font-extrabold text-cyan-400 mb-6">
+                ${pkg.price} <span className="text-xs font-normal text-slate-500">USD</span>
+              </div>
+              <ul className="space-y-3 mb-8 text-left text-sm text-slate-300">
+                {pkg.features.map((feature, idx) => (
+                  <li key={idx} className="flex items-center space-x-2">
+                    <span className="text-cyan-400">✓</span>
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <button
+              onClick={() => handleOpenModal(pkg)}
+              className="w-full bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-white font-semibold py-3 rounded-xl transition-all duration-300"
+            >
+              Select Package
+            </button>
           </div>
-          <h3 className="text-xl font-bold text-white mb-2">SPA & SaaS Platforms</h3>
-          <p className="text-slate-400 text-sm leading-relaxed">
-            Single Page Applications built with React, Vite v8 (Rolldown), and TypeScript for instant page transitions and zero layout shifts.
-          </p>
-        </div>
-
-        <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 hover:border-emerald-500/40 transition-all group">
-          <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400 w-fit mb-4">
-            <Database className="w-6 h-6" />
-          </div>
-          <h3 className="text-xl font-bold text-white mb-2">Full-Stack Integration</h3>
-          <p className="text-slate-400 text-sm leading-relaxed">
-            Supabase PostgreSQL databases, REST APIs, Row Level Security (RLS), and custom serverless logic built to scale effortlessly.
-          </p>
-        </div>
-
-        <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 hover:border-cyan-500/40 transition-all group">
-          <div className="p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-2xl text-cyan-400 w-fit mb-4">
-            <Zap className="w-6 h-6" />
-          </div>
-          <h3 className="text-xl font-bold text-white mb-2">Payment Systems</h3>
-          <p className="text-slate-400 text-sm leading-relaxed">
-            Dual-currency payment integration (Paystack & Stripe) with direct email triggers, receipt logging, and webhook safety.
-          </p>
-        </div>
+        ))}
       </div>
 
-      {/* Interactive Estimator Section */}
-      <ProjectEstimator onSelectPackage={(name, amount) => setSelectedPackage({ name, price: amount })} />
-
-      {/* Order Modal */}
-      {selectedPackage && (
-        <OrderModal
-          packageName={selectedPackage.name}
-          amount={selectedPackage.price}
-          onClose={() => setSelectedPackage(null)}
-        />
-      )}
+      <OrderModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        packageName={selectedPackage?.name}
+        amount={selectedPackage?.price}
+      />
     </div>
   );
-}
+};
