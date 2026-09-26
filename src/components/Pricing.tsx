@@ -1,9 +1,12 @@
-import { Check, Rocket, Building2, Code2, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { Check, Rocket, Building2, Code2, ArrowRight, CreditCard } from 'lucide-react';
+import PaymentModal from './PaymentModal';
 
 const packages = [
   {
     name: 'Starter Website',
     price: '₦80,000',
+    amount: 80000,
     timeline: '1-2 Weeks',
     icon: Rocket,
     popular: false,
@@ -21,6 +24,7 @@ const packages = [
   {
     name: 'Business Website',
     price: '₦150,000',
+    amount: 150000,
     timeline: '2-4 Weeks',
     icon: Building2,
     popular: true,
@@ -39,6 +43,7 @@ const packages = [
   {
     name: 'Custom Web Solutions',
     price: '₦300,000+',
+    amount: 300000,
     timeline: 'Custom Quote',
     icon: Code2,
     popular: false,
@@ -57,6 +62,8 @@ const packages = [
 ];
 
 export default function Pricing() {
+  const [selectedPkg, setSelectedPkg] = useState<{ name: string; amount: number } | null>(null);
+
   const getWaLink = (message: string) => {
     return `https://wa.me/2349060708332?text=${encodeURIComponent(message)}`;
   };
@@ -118,23 +125,36 @@ export default function Pricing() {
                 </ul>
               </div>
 
-              <a
-                href={getWaLink(pkg.waMessage)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`w-full py-3.5 rounded-lg text-xs uppercase tracking-wider font-bold flex items-center justify-center gap-2 transition-all ${
-                  pkg.popular
-                    ? 'glow-button'
-                    : 'bg-[#181e2a] border border-[#273145] text-white hover:border-[#00e599] hover:text-[#00e599]'
-                }`}
-              >
-                <span>Order via WhatsApp</span>
-                <ArrowRight className="w-4 h-4" />
-              </a>
+              <div className="space-y-2">
+                <button
+                  onClick={() => setSelectedPkg({ name: pkg.name, amount: pkg.amount })}
+                  className="w-full glow-button py-3 rounded-lg text-xs uppercase tracking-wider font-bold flex items-center justify-center gap-2 cursor-pointer transition-all"
+                >
+                  <CreditCard className="w-4 h-4" />
+                  <span>Pay Online (Paystack)</span>
+                </button>
+
+                <a
+                  href={getWaLink(pkg.waMessage)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3 rounded-lg text-xs uppercase tracking-wider font-bold flex items-center justify-center gap-2 transition-all bg-[#181e2a] border border-[#273145] text-white hover:border-[#00e599] hover:text-[#00e599]"
+                >
+                  <span>Order via WhatsApp</span>
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
             </div>
           );
         })}
       </div>
+
+      <PaymentModal
+        isOpen={!!selectedPkg}
+        onClose={() => setSelectedPkg(null)}
+        packageName={selectedPkg?.name || ''}
+        amount={selectedPkg?.amount || 0}
+      />
     </section>
   );
 }
