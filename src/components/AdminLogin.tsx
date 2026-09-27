@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useToast } from './Toast';
-import { Shield, Lock, Mail, ArrowRight } from 'lucide-react';
+import { ArrowRight, Lock, Mail, ShieldCheck } from 'lucide-react';
 
 interface AdminLoginProps {
   onSuccess: () => void;
@@ -15,12 +15,14 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess }) => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!email || !password) {
       showToast('Validation Error', 'Please enter both email and password.', 'error');
       return;
     }
 
     setLoading(true);
+
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -32,66 +34,113 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess }) => {
       showToast('Login Successful', 'Welcome to the secure Admin Dashboard.', 'success');
       onSuccess();
     } catch (err: any) {
-      showToast('Authentication Failed', err.message || 'Invalid login credentials.', 'error');
+      showToast(
+        'Authentication Failed',
+        err.message || 'Invalid login credentials.',
+        'error',
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-[70vh] flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-slate-900/80 border border-slate-800 rounded-2xl p-8 shadow-2xl space-y-6">
-        <div className="text-center space-y-3">
-          <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mx-auto text-cyan-400 shadow-lg shadow-cyan-500/10">
-            <Shield className="w-6 h-6" />
-          </div>
-          <h1 className="text-2xl font-black text-white tracking-tight">Admin Authentication</h1>
-          <p className="text-xs text-slate-400">
-            Sign in with your authorized Supabase admin account to access leads and orders.
-          </p>
-        </div>
-
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-300">Admin Email</label>
-            <div className="relative">
-              <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
-              <input
-                type="email"
-                placeholder="admin@femixdigital.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500"
-                required
-              />
+    <main className="min-h-[calc(100vh-72px)] bg-[#0c0c0b] px-5 py-16 text-white sm:px-8">
+      <div className="mx-auto flex min-h-[calc(100vh-200px)] max-w-md items-center justify-center">
+        <div className="w-full">
+          <div className="mb-8 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]">
+              <ShieldCheck className="h-6 w-6 text-white/70" />
             </div>
+
+            <p className="mt-6 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/35">
+              Private workspace
+            </p>
+
+            <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-white">
+              Admin access
+            </h1>
+
+            <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-white/45">
+              Sign in with your authorized account to manage client enquiries
+              and project estimates.
+            </p>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-300">Password</label>
-            <div className="relative">
-              <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
-              <input
-                type="password"
-                placeholder="••••••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500"
-                required
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-xl transition text-xs flex items-center justify-center space-x-2 shadow-lg shadow-cyan-500/20"
+          <form
+            onSubmit={handleLogin}
+            className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8"
           >
-            <span>{loading ? 'Authenticating...' : 'Sign In to Dashboard'}</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </form>
+            <div className="space-y-5">
+              <div>
+                <label
+                  htmlFor="admin-email"
+                  className="mb-2 block text-xs font-medium text-white/60"
+                >
+                  Admin email
+                </label>
+
+                <div className="relative">
+                  <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+
+                  <input
+                    id="admin-email"
+                    type="email"
+                    placeholder="admin@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full rounded-2xl border border-white/10 bg-black/20 py-3.5 pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-white/20 focus:border-white/25 focus:bg-white/[0.04]"
+                    autoComplete="email"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="admin-password"
+                  className="mb-2 block text-xs font-medium text-white/60"
+                >
+                  Password
+                </label>
+
+                <div className="relative">
+                  <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+
+                  <input
+                    id="admin-password"
+                    type="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full rounded-2xl border border-white/10 bg-black/20 py-3.5 pl-11 pr-4 text-sm text-white outline-none transition placeholder:text-white/20 focus:border-white/25 focus:bg-white/[0.04]"
+                    autoComplete="current-password"
+                    required
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3.5 text-sm font-semibold text-[#0c0c0b] transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <span>{loading ? 'Authenticating...' : 'Sign in'}</span>
+                {!loading && (
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                )}
+              </button>
+            </div>
+
+            <div className="mt-6 border-t border-white/10 pt-5">
+              <p className="text-center text-[11px] leading-5 text-white/30">
+                Authorized access only. Your session is secured through Supabase
+                authentication.
+              </p>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </main>
   );
 };
