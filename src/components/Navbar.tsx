@@ -1,112 +1,180 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Shield, Menu, X, LayoutDashboard, Home, Zap } from 'lucide-react';
+import {
+  ArrowUpRight,
+  BriefcaseBusiness,
+  Calculator,
+  ChevronRight,
+  Home,
+  Menu,
+  MessageCircle,
+  Sparkles,
+  X,
+} from 'lucide-react';
+import { ThemeSwitcher } from './ThemeSwitcher';
+
+const navItems = [
+  { label: 'Home', href: '/', icon: Home },
+  { label: 'Portfolio', href: '/portfolio', icon: BriefcaseBusiness },
+  { label: 'Estimator', href: '/estimator', icon: Calculator },
+  { label: 'Contact', href: '/contact', icon: MessageCircle },
+];
 
 export const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const isActive = (path: string) => location.pathname === path;
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname, location.hash]);
+
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
+
+  const isActive = (href: string) => {
+    if (href === '/') return location.pathname === '/';
+    return location.pathname.startsWith(href);
+  };
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center space-x-2 text-white font-bold text-lg">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white shadow-md shadow-cyan-500/20">
-            <Zap className="w-5 h-5 fill-current" />
-          </div>
-          <span>Femix<span className="text-cyan-400">Digital</span></span>
+    <header className="sticky top-0 z-50 border-b border-[var(--app-border)] bg-[color:var(--app-bg)]/90 backdrop-blur-xl">
+      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
+        <Link
+          to="/"
+          className="group flex min-w-0 items-center gap-3"
+          aria-label="Femix Web Dev home"
+        >
+          <span className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-slate-950 text-white shadow-lg shadow-violet-500/10 dark:bg-white dark:text-slate-950">
+            <span className="absolute -right-2 -top-2 h-6 w-6 rounded-full bg-violet-500" />
+            <span className="absolute -bottom-3 -left-2 h-7 w-7 rounded-full bg-emerald-400" />
+            <span className="relative text-sm font-black tracking-[-0.08em]">
+              FW
+            </span>
+          </span>
+
+          <span className="min-w-0">
+            <span className="block truncate text-[17px] font-extrabold tracking-[-0.035em] text-[var(--app-text)] sm:text-[19px]">
+              Femix Web Dev
+            </span>
+            <span className="hidden text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--app-muted)] sm:block">
+              Design · Code · Digital Products
+            </span>
+          </span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6 text-sm">
-          <Link
-            to="/"
-            className={`flex items-center space-x-1.5 transition-colors ${
-              isActive('/') ? 'text-cyan-400 font-semibold' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Home className="w-4 h-4" />
-            <span>Home</span>
-          </Link>
+        <nav className="hidden items-center gap-1 lg:flex">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item.href);
 
-          <a
-            href="/#pricing"
-            className="text-slate-400 hover:text-white transition-colors"
-          >
-            Pricing
-          </a>
-
-          <a
-            href="/#contact"
-            className="text-slate-400 hover:text-white transition-colors"
-          >
-            Contact
-          </a>
-
-          <Link
-            to="/admin"
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border transition-all ${
-              isActive('/admin')
-                ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400 font-medium'
-                : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700 hover:text-white'
-            }`}
-          >
-            <LayoutDashboard className="w-4 h-4" />
-            <span>Admin</span>
-          </Link>
+            return (
+              <Link
+                key={item.href}
+                to={item.href}
+                className={`group relative flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition ${
+                  active
+                    ? 'bg-[var(--app-surface)] text-[var(--app-text)] shadow-sm'
+                    : 'text-[var(--app-muted)] hover:bg-[var(--app-surface)] hover:text-[var(--app-text)]'
+                }`}
+              >
+                <Icon
+                  className={`h-4 w-4 ${
+                    active
+                      ? 'text-violet-500'
+                      : 'text-[var(--app-muted)] group-hover:text-violet-500'
+                  }`}
+                />
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* Mobile menu toggle */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-slate-400 hover:text-white p-2"
-          aria-label="Toggle navigation menu"
-        >
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        <div className="hidden items-center gap-2 lg:flex">
+          <ThemeSwitcher />
+
+          <Link
+            to="/estimator"
+            className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-violet-600/20 transition hover:bg-violet-700"
+          >
+            Start a project
+            <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeSwitcher />
+
+          <button
+            type="button"
+            onClick={() => setMobileOpen((value) => !value)}
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileOpen}
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] text-[var(--app-text)]"
+          >
+            {mobileOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Drawer */}
-      {isOpen && (
-        <div className="md:hidden bg-slate-900 border-b border-slate-800 px-4 py-4 space-y-3">
-          <Link
-            to="/"
-            onClick={() => setIsOpen(false)}
-            className={`block py-2 text-sm ${
-              isActive('/') ? 'text-cyan-400 font-semibold' : 'text-slate-300'
-            }`}
-          >
-            Home
-          </Link>
-          <a
-            href="/#pricing"
-            onClick={() => setIsOpen(false)}
-            className="block py-2 text-sm text-slate-300"
-          >
-            Pricing
-          </a>
-          <a
-            href="/#contact"
-            onClick={() => setIsOpen(false)}
-            className="block py-2 text-sm text-slate-300"
-          >
-            Contact
-          </a>
-          <Link
-            to="/admin"
-            onClick={() => setIsOpen(false)}
-            className={`flex items-center space-x-2 py-2 text-sm ${
-              isActive('/admin') ? 'text-cyan-400 font-semibold' : 'text-slate-300'
-            }`}
-          >
-            <Shield className="w-4 h-4" />
-            <span>Admin Dashboard</span>
-          </Link>
+      {mobileOpen && (
+        <div className="border-t border-[var(--app-border)] bg-[var(--app-bg)] lg:hidden">
+          <nav className="mx-auto max-w-7xl space-y-1 px-5 py-4 sm:px-8">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.href);
+
+              return (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={`flex items-center justify-between rounded-2xl px-4 py-3.5 text-sm font-semibold ${
+                    active
+                      ? 'bg-[var(--app-surface)] text-[var(--app-text)]'
+                      : 'text-[var(--app-muted)]'
+                  }`}
+                >
+                  <span className="flex items-center gap-3">
+                    <Icon
+                      className={`h-4 w-4 ${
+                        active ? 'text-violet-500' : ''
+                      }`}
+                    />
+                    {item.label}
+                  </span>
+
+                  <ChevronRight className="h-4 w-4" />
+                </Link>
+              );
+            })}
+
+            <Link
+              to="/estimator"
+              className="mt-3 flex items-center justify-between rounded-2xl bg-violet-600 px-4 py-3.5 text-sm font-bold text-white"
+            >
+              <span className="flex items-center gap-3">
+                <Sparkles className="h-4 w-4" />
+                Start a project
+              </span>
+
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </nav>
         </div>
       )}
     </header>
   );
 };
-
-export default Navbar;
