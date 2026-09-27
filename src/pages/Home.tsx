@@ -1,185 +1,258 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Calculator, CheckCircle2, Code2, Cpu, Database, Globe, Layers, ShieldCheck, Zap } from 'lucide-react';
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Calculator,
+  Check,
+  Code2,
+  Database,
+  Globe,
+  Layers3,
+  MessageCircle,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react';
+
+const services = [
+  {
+    number: '01',
+    icon: Globe,
+    title: 'Business Websites',
+    description:
+      'Professional websites designed to make your business look credible, communicate clearly, and turn visitors into enquiries.',
+    features: ['Mobile-first design', 'Fast performance'],
+  },
+  {
+    number: '02',
+    icon: Layers3,
+    title: 'Web Apps & SaaS',
+    description:
+      'Custom web applications built around the way your business actually works, from internal tools to complete SaaS products.',
+    features: ['Custom workflows', 'Scalable architecture'],
+  },
+  {
+    number: '03',
+    icon: Database,
+    title: 'Dashboards & Systems',
+    description:
+      'Clean, practical dashboards that connect your data, simplify operations, and give you a clearer view of your business.',
+    features: ['Secure data systems', 'Real-time interfaces'],
+  },
+];
+
+const technologies = [
+  { label: 'React', icon: Code2 },
+  { label: 'TypeScript', icon: Globe },
+  { label: 'Supabase', icon: Database },
+  { label: 'Tailwind CSS', icon: Layers3 },
+];
 
 export const Home: React.FC = () => {
   return (
-    <div className="space-y-20 pb-20">
-      {/* Hero Section */}
-      <section className="relative pt-16 pb-20 overflow-hidden">
-        {/* Background glow effects */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute top-1/3 left-1/4 w-[300px] h-[300px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
+    <div className="overflow-hidden bg-[#0c0c0b] text-white">
+      {/* Hero */}
+      <section className="relative border-b border-white/10">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute left-1/2 top-0 h-[520px] w-[760px] -translate-x-1/2 rounded-full bg-white/[0.035] blur-3xl" />
+          <div className="absolute -right-40 top-32 h-80 w-80 rounded-full bg-amber-100/[0.025] blur-3xl" />
+        </div>
 
-        <div className="container mx-auto px-4 relative z-10 max-w-5xl text-center space-y-8">
-          <div className="inline-flex items-center space-x-2 bg-slate-900/80 border border-slate-800 px-4 py-1.5 rounded-full text-slate-300 text-xs font-semibold shadow-inner">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-            <span>Modern Single Page Applications & SaaS Development</span>
+        <div className="relative mx-auto max-w-7xl px-5 pb-24 pt-20 sm:px-8 sm:pb-28 sm:pt-28 lg:pb-32 lg:pt-32">
+          <div className="max-w-5xl">
+            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.035] px-3.5 py-2 text-[11px] font-medium uppercase tracking-[0.16em] text-white/55">
+              <Sparkles className="h-3.5 w-3.5 text-white/80" />
+              Web design & development studio
+            </div>
+
+            <h1 className="max-w-5xl text-5xl font-semibold leading-[0.98] tracking-[-0.055em] text-white sm:text-7xl lg:text-[88px]">
+              Digital products
+              <span className="block text-white/40">built to move</span>
+              your business forward.
+            </h1>
+
+            <div className="mt-10 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+              <p className="max-w-xl text-base leading-7 text-white/50 sm:text-lg">
+                Femix Web Dev creates polished websites, web applications, dashboards,
+                and digital systems for businesses that want to work smarter and look
+                professional online.
+              </p>
+
+              <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+                <Link
+                  to="/estimator"
+                  className="group flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-[#0c0c0b] transition-transform hover:scale-[1.02]"
+                >
+                  Calculate your project
+                  <Calculator className="h-4 w-4" />
+                </Link>
+
+                <Link
+                  to="/portfolio"
+                  className="flex items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-3.5 text-sm font-medium text-white transition-colors hover:border-white/30 hover:bg-white/5"
+                >
+                  View our work
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl font-black text-white tracking-tight leading-tight">
-            High-Performance Web Apps <br />
-            <span className="bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 bg-clip-text text-transparent">
-              Built for Scale & Speed
-            </span>
-          </h1>
-
-          <p className="max-w-2xl mx-auto text-slate-400 text-base sm:text-lg leading-relaxed">
-            We engineer lightning-fast SPAs, robust SaaS platforms, and custom digital experiences using cutting-edge frontend and backend architectures.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <Link
-              to="/estimator"
-              className="w-full sm:w-auto flex items-center justify-center space-x-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-8 py-3.5 rounded-xl transition shadow-lg shadow-cyan-500/20 text-sm"
-            >
-              <Calculator className="w-4 h-4" />
-              <span>Calculate Project Estimate</span>
-              <ArrowRight className="w-4 h-4 ml-1" />
-            </Link>
-
-            <Link
-              to="/contact"
-              className="w-full sm:w-auto flex items-center justify-center space-x-2 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 font-semibold px-8 py-3.5 rounded-xl transition text-sm"
-            >
-              <span>Get in Touch</span>
-            </Link>
-          </div>
-
-          {/* Tech Stack Bar */}
-          <div className="pt-10 border-t border-slate-800/60 mt-16 max-w-4xl mx-auto">
-            <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-6">
-              Powered by Industry-Standard Modern Tech
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-slate-400 text-xs font-bold">
-              <span className="flex items-center space-x-1.5">
-                <Code2 className="w-4 h-4 text-cyan-400" />
-                <span>React / Vite</span>
-              </span>
-              <span className="flex items-center space-x-1.5">
-                <Globe className="w-4 h-4 text-sky-400" />
-                <span>TypeScript</span>
-              </span>
-              <span className="flex items-center space-x-1.5">
-                <Database className="w-4 h-4 text-emerald-400" />
-                <span>Supabase & PostgreSQL</span>
-              </span>
-              <span className="flex items-center space-x-1.5">
-                <Cpu className="w-4 h-4 text-indigo-400" />
-                <span>Tailwind CSS</span>
-              </span>
+          <div className="mt-20 grid border-y border-white/10 sm:grid-cols-3">
+            <div className="border-b border-white/10 py-6 sm:border-b-0 sm:border-r sm:pr-8">
+              <p className="text-2xl font-semibold tracking-tight">01</p>
+              <p className="mt-1 text-xs uppercase tracking-[0.15em] text-white/35">
+                Understand
+              </p>
+            </div>
+            <div className="border-b border-white/10 py-6 sm:border-b-0 sm:px-8 sm:border-r">
+              <p className="text-2xl font-semibold tracking-tight">02</p>
+              <p className="mt-1 text-xs uppercase tracking-[0.15em] text-white/35">
+                Design
+              </p>
+            </div>
+            <div className="py-6 sm:pl-8">
+              <p className="text-2xl font-semibold tracking-tight">03</p>
+              <p className="mt-1 text-xs uppercase tracking-[0.15em] text-white/35">
+                Build
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Services Overview Section */}
-      <section className="container mx-auto px-4 max-w-6xl space-y-12">
-        <div className="text-center max-w-xl mx-auto space-y-3">
-          <span className="text-xs font-bold uppercase tracking-widest text-cyan-400 bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20">
-            Core Capabilities
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-white">
-            Everything You Need to Launch & Scale
-          </h2>
-          <p className="text-slate-400 text-xs sm:text-sm">
-            From intuitive single-page interfaces to secure relational backends, we deliver complete end-to-end digital solutions.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1 */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-cyan-500/40 transition group">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500/20 transition">
-              <Zap className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-white">Single Page Apps (SPAs)</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Lightning-fast client-side routing, optimized component structures, and state management designed for seamless user experiences.
+      {/* Services */}
+      <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-28 lg:py-32">
+        <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/35">
+              What we build
             </p>
-            <ul className="space-y-2 pt-2 text-[11px] text-slate-300">
-              <li className="flex items-center space-x-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Vite-powered rapid builds</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Responsive mobile-first layouts</span>
-              </li>
-            </ul>
+            <h2 className="mt-5 max-w-md text-3xl font-semibold leading-tight tracking-[-0.035em] sm:text-4xl">
+              From your first idea to a working digital product.
+            </h2>
+            <p className="mt-5 max-w-md text-sm leading-6 text-white/45">
+              Whether you need a website that represents your business or a system
+              that runs part of it, we focus on useful design and dependable
+              technology.
+            </p>
+
+            <Link
+              to="/contact"
+              className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-white/65"
+            >
+              Tell us about your project
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
 
-          {/* Card 2 */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-cyan-500/40 transition group">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500/20 transition">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-white">Secure SaaS Backends</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Robust data architectures featuring JWT user authentication, role-based access control, and scalable PostgreSQL storage.
-            </p>
-            <ul className="space-y-2 pt-2 text-[11px] text-slate-300">
-              <li className="flex items-center space-x-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Row Level Security (RLS)</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Stripe payment integrations</span>
-              </li>
-            </ul>
-          </div>
+          <div className="divide-y divide-white/10 border-y border-white/10">
+            {services.map(({ number, icon: Icon, title, description, features }) => (
+              <div
+                key={number}
+                className="group grid gap-6 py-8 sm:grid-cols-[52px_1fr_auto] sm:items-start sm:gap-6"
+              >
+                <span className="text-xs font-medium text-white/25">{number}</span>
 
-          {/* Card 3 */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-4 hover:border-cyan-500/40 transition group">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-500/20 transition">
-              <Layers className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-white">Interactive Dashboards</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Custom admin panels equipped with real-time data tables, CSV exports, and instant notification feedback systems.
-            </p>
-            <ul className="space-y-2 pt-2 text-[11px] text-slate-300">
-              <li className="flex items-center space-x-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Live data synchronization</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Toast feedback alerts</span>
-              </li>
-            </ul>
+                <div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-white/70">
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
+                  </div>
+
+                  <p className="mt-4 max-w-xl text-sm leading-6 text-white/45">
+                    {description}
+                  </p>
+
+                  <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2">
+                    {features.map((feature) => (
+                      <span
+                        key={feature}
+                        className="flex items-center gap-1.5 text-xs text-white/45"
+                      >
+                        <Check className="h-3.5 w-3.5 text-white/60" />
+                        {feature}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <ArrowUpRight className="hidden h-5 w-5 text-white/20 transition-all group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-white sm:block" />
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Banner Section */}
-      <section className="container mx-auto px-4 max-w-5xl">
-        <div className="bg-gradient-to-r from-slate-900 via-cyan-950/40 to-slate-900 border border-cyan-500/30 rounded-3xl p-8 sm:p-12 text-center space-y-6 shadow-2xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-500/10 via-transparent to-transparent pointer-events-none" />
-          
-          <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight relative z-10">
-            Ready to Build Your Next Project?
-          </h2>
-          <p className="max-w-xl mx-auto text-slate-300 text-xs sm:text-sm relative z-10">
-            Use our interactive estimator to calculate a precise quote instantly, or reach out to discuss your technical requirements.
-          </p>
+      {/* Technology */}
+      <section className="border-y border-white/10 bg-white/[0.02]">
+        <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/30">
+                Built with modern technology
+              </p>
+              <p className="mt-2 text-sm text-white/45">
+                A dependable stack for fast, maintainable digital products.
+              </p>
+            </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2 relative z-10">
-            <Link
-              to="/estimator"
-              className="w-full sm:w-auto bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-8 py-3.5 rounded-xl transition shadow-lg shadow-cyan-500/20 text-xs flex items-center justify-center space-x-2"
-            >
-              <Calculator className="w-4 h-4" />
-              <span>Launch Cost Estimator</span>
-            </Link>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {technologies.map(({ label, icon: Icon }) => (
+                <div
+                  key={label}
+                  className="flex min-w-[130px] items-center gap-2.5 rounded-xl border border-white/10 bg-[#0c0c0b] px-4 py-3 text-xs font-medium text-white/55"
+                >
+                  <Icon className="h-4 w-4 text-white/65" />
+                  {label}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
-            <Link
-              to="/contact"
-              className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white border border-slate-700 font-semibold px-8 py-3.5 rounded-xl transition text-xs flex items-center justify-center space-x-2"
-            >
-              <span>Contact Us</span>
-            </Link>
+      {/* Trust / CTA */}
+      <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-28 lg:py-32">
+        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#151514] p-8 sm:p-12 lg:p-16">
+          <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/[0.035] blur-3xl" />
+
+          <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
+            <div>
+              <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
+                <ShieldCheck className="h-5 w-5 text-white/70" />
+              </div>
+
+              <h2 className="max-w-2xl text-3xl font-semibold leading-tight tracking-[-0.04em] sm:text-5xl">
+                Have a project in mind?
+                <span className="block text-white/40">Let's turn it into something real.</span>
+              </h2>
+
+              <p className="mt-5 max-w-xl text-sm leading-6 text-white/45 sm:text-base">
+                Get an initial estimate, show us what you need, and we'll help you
+                work out the right way to build it.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+              <Link
+                to="/estimator"
+                className="flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-[#0c0c0b] transition-transform hover:scale-[1.02]"
+              >
+                Start with an estimate
+                <Calculator className="h-4 w-4" />
+              </Link>
+
+              <Link
+                to="/contact"
+                className="flex items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-3.5 text-sm font-medium text-white hover:bg-white/5"
+              >
+                Contact Femix
+                <MessageCircle className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
