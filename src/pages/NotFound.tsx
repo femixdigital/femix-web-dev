@@ -1,48 +1,59 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Compass, ArrowLeft, Terminal } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Compass } from 'lucide-react';
 
 export const NotFound: React.FC = () => {
   return (
-    <div className="min-h-screen pt-32 pb-20 flex items-center justify-center px-4 text-center">
-      <div className="max-w-md w-full bg-slate-900/60 border border-slate-800 rounded-3xl p-8 backdrop-blur-xl shadow-2xl relative overflow-hidden">
-        {/* Glow effect */}
-        <div className="absolute -top-24 -left-24 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+    <main className="min-h-[calc(100vh-72px)] bg-[#0c0c0b] px-5 py-16 text-white sm:px-8 lg:px-10">
+      <div className="mx-auto flex min-h-[calc(100vh-200px)] max-w-4xl items-center justify-center">
+        <div className="w-full rounded-3xl border border-white/10 bg-white/[0.03] p-8 sm:p-12">
+          <div className="flex flex-col gap-10 sm:flex-row sm:items-center sm:justify-between">
+            <div className="max-w-xl">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-white/50">
+                <Compass className="h-3.5 w-3.5" />
+                Error 404
+              </div>
 
-        <div className="inline-flex items-center justify-center p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-2xl text-cyan-400 mb-6">
-          <Compass className="w-10 h-10 animate-spin-slow" />
-        </div>
+              <p className="text-7xl font-semibold tracking-[-0.06em] text-white/10 sm:text-8xl">
+                404
+              </p>
 
-        <div className="font-mono text-xs uppercase tracking-widest text-cyan-400 mb-2 flex items-center justify-center gap-1.5">
-          <Terminal className="w-3.5 h-3.5" />
-          <span>Error 404 // Route Not Found</span>
-        </div>
+              <h1 className="-mt-3 text-3xl font-semibold tracking-[-0.03em] text-white sm:text-4xl">
+                This page doesn&apos;t exist.
+              </h1>
 
-        <h1 className="text-4xl font-extrabold text-white tracking-tight mb-3">
-          Signal Lost
-        </h1>
+              <p className="mt-4 max-w-lg text-sm leading-6 text-white/45 sm:text-base">
+                The page you&apos;re looking for may have moved, been removed,
+                or the address may be incorrect.
+              </p>
+            </div>
 
-        <p className="text-slate-400 text-sm leading-relaxed mb-8">
-          The node or page you are requesting does not exist or has been relocated across the network.
-        </p>
+            <div className="shrink-0">
+              <div className="flex h-24 w-24 items-center justify-center rounded-3xl border border-white/10 bg-black/20">
+                <Compass className="h-10 w-10 text-white/30" />
+              </div>
+            </div>
+          </div>
 
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Link
-            to="/"
-            className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-bold rounded-xl transition-all shadow-lg shadow-cyan-500/20 text-sm"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Return to Terminal</span>
-          </Link>
-          <Link
-            to="/contact"
-            className="px-5 py-3 bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white font-medium rounded-xl transition-all text-sm"
-          >
-            Support
-          </Link>
+          <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-8 sm:flex-row">
+            <Link
+              to="/"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-white/90"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to home
+            </Link>
+
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 px-5 py-3 text-sm font-medium text-white/65 transition hover:border-white/20 hover:text-white"
+            >
+              Contact us
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
