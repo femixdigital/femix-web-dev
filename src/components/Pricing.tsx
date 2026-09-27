@@ -1,117 +1,179 @@
 import React from 'react';
-import { Check, Zap } from 'lucide-react';
+import {
+  ArrowUpRight,
+  BriefcaseBusiness,
+  Building2,
+  Globe,
+  LayoutDashboard,
+  ShoppingBag,
+  Sparkles,
+} from 'lucide-react';
 
 interface PricingProps {
   onSelectPackage?: (packageName: string, price: number) => void;
 }
 
-const plans = [
+const categories = [
   {
-    name: 'Starter SPA',
-    price: 1500,
-    description: 'Perfect for startups and small businesses needing a high-performance web presence.',
-    features: [
-      'Single Page Application Architecture',
-      'Responsive React + Tailwind CSS',
-      'Supabase Database Integration',
-      'Contact / Lead Capture Form',
-      'Basic SEO & Meta Optimization',
-    ],
-    popular: false,
+    icon: Globe,
+    label: 'Essential',
+    name: 'Business Website',
+    price: '₦80,000+',
+    amount: 80000,
+    description:
+      'A clean, mobile-friendly website for businesses that need a credible presence online.',
+    features: ['3–5 pages', 'Mobile responsive', 'WhatsApp / contact CTA', 'Basic SEO'],
   },
   {
-    name: 'Pro SaaS App',
-    price: 3500,
-    description: 'Full-featured web application with authentication, payment workflows, and live data.',
-    features: [
-      'Complete React / TypeScript SPA',
-      'Supabase Auth & Row Level Security',
-      'Live Order & Lead Management',
-      'Stripe Payment Gateway Integration',
-      'Custom Admin Dashboard',
-      'Priority 24/7 Technical Support',
-    ],
-    popular: true,
+    icon: BriefcaseBusiness,
+    label: 'Professional',
+    name: 'Professional Website',
+    price: '₦150,000+',
+    amount: 150000,
+    description:
+      'A more complete business website with stronger presentation and lead-generation features.',
+    features: ['Custom design', 'Multiple business pages', 'Lead / contact forms', 'Gallery or portfolio'],
   },
   {
-    name: 'Enterprise Custom',
-    price: 7500,
-    description: 'Tailored architecture with dedicated backend endpoints and custom web hooks.',
-    features: [
-      'Microservices / Custom API Backend',
-      'Real-time Data Sync & WebSockets',
-      'Advanced Security Audit & RLS Policies',
-      'Performance Optimization & CDN Setup',
-      'Dedicated Maintenance & SLAs',
-    ],
-    popular: false,
+    icon: Sparkles,
+    label: 'Advanced',
+    name: 'Advanced Website',
+    price: '₦200,000+',
+    amount: 200000,
+    description:
+      'For businesses that need more functionality than a standard company website.',
+    features: ['Advanced sections', 'Custom forms', 'Bookings or enquiries', 'Third-party integrations'],
+  },
+  {
+    icon: ShoppingBag,
+    label: 'Commerce',
+    name: 'E-commerce Website',
+    price: '₦300,000+',
+    amount: 300000,
+    description:
+      'A complete online storefront for displaying products, accepting orders and growing online sales.',
+    features: ['Product catalogue', 'Cart & checkout', 'Payment integration', 'Order management'],
+  },
+  {
+    icon: LayoutDashboard,
+    label: 'Application',
+    name: 'Web App / Dashboard',
+    price: '₦450,000+',
+    amount: 450000,
+    description:
+      'Interactive systems for businesses that need accounts, data, dashboards and custom workflows.',
+    features: ['User accounts', 'Database integration', 'Admin dashboard', 'Custom workflows'],
+  },
+  {
+    icon: Building2,
+    label: 'Custom',
+    name: 'Custom Web Application',
+    price: '₦500,000+',
+    amount: 500000,
+    description:
+      'A tailored application built around a specific business process, platform or operational need.',
+    features: ['Custom architecture', 'APIs & integrations', 'Advanced business logic', 'Scalable foundation'],
   },
 ];
 
 export const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
+  const handleSelect = (name: string, amount: number) => {
+    onSelectPackage?.(name, amount);
+  };
+
   return (
-    <section id="pricing" className="py-12">
-      <div className="text-center max-w-3xl mx-auto mb-16">
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
-          Transparent, Scalable Pricing
-        </h2>
-        <p className="text-slate-400 text-lg">
-          Choose the right tier for your application. No hidden fees.
-        </p>
-      </div>
+    <section
+      id="pricing"
+      className="border-y border-white/10 bg-white/[0.015]"
+    >
+      <div className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-28 lg:py-32">
+        <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/35">
+              Investment
+            </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        {plans.map((plan) => (
-          <div
-            key={plan.name}
-            className={`relative rounded-3xl p-8 flex flex-col justify-between transition-all duration-300 ${
-              plan.popular
-                ? 'bg-slate-900 border-2 border-cyan-500 shadow-2xl shadow-cyan-500/10 scale-105'
-                : 'bg-slate-900/60 border border-slate-800 hover:border-slate-700'
-            }`}
-          >
-            {plan.popular && (
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full shadow-md flex items-center space-x-1">
-                <Zap className="w-3.5 h-3.5 fill-current" />
-                <span>Most Popular</span>
-              </div>
-            )}
+            <h2 className="mt-5 max-w-md text-3xl font-semibold leading-tight tracking-[-0.04em] sm:text-4xl">
+              The right build for what your business needs.
+            </h2>
 
-            <div>
-              <h3 className="text-xl font-bold text-white mb-2">{plan.name}</h3>
-              <p className="text-slate-400 text-xs mb-6 min-h-[36px]">
-                {plan.description}
+            <p className="mt-5 max-w-md text-sm leading-6 text-white/45 sm:text-base">
+              Website development starts from ₦80,000. More advanced projects
+              are priced according to the features, integrations and workflows
+              your business actually needs.
+            </p>
+
+            <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.025] p-5">
+              <p className="text-xs font-medium uppercase tracking-[0.16em] text-white/35">
+                Good to know
               </p>
-
-              <div className="flex items-baseline space-x-1 mb-6">
-                <span className="text-4xl font-extrabold text-white">
-                  ${plan.price.toLocaleString()}
-                </span>
-                <span className="text-slate-400 text-xs font-medium">/ project</span>
-              </div>
-
-              <ul className="space-y-3 mb-8">
-                {plan.features.map((feature, i) => (
-                  <li key={i} className="flex items-start space-x-3 text-xs text-slate-300">
-                    <Check className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
+              <p className="mt-3 text-sm leading-6 text-white/55">
+                These are starting prices, not one-size-fits-all packages.
+                You'll receive a clear quote before development begins.
+              </p>
             </div>
-
-            <button
-              onClick={() => onSelectPackage?.(plan.name, plan.price)}
-              className={`w-full py-3.5 px-6 rounded-xl font-semibold text-sm transition-all duration-200 ${
-                plan.popular
-                  ? 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/25'
-                  : 'bg-slate-800 hover:bg-slate-700 text-white'
-              }`}
-            >
-              Get Started
-            </button>
           </div>
-        ))}
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            {categories.map(
+              ({ icon: Icon, label, name, price, amount, description, features }) => (
+                <article
+                  key={name}
+                  className="group flex flex-col rounded-2xl border border-white/10 bg-[#111110] p-6 transition-colors hover:border-white/20 sm:p-7"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.035] text-white/65">
+                      <Icon className="h-4 w-4" />
+                    </div>
+
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/30">
+                      {label}
+                    </span>
+                  </div>
+
+                  <div className="mt-7">
+                    <h3 className="text-lg font-semibold tracking-tight text-white">
+                      {name}
+                    </h3>
+
+                    <p className="mt-3 min-h-[72px] text-sm leading-6 text-white/45">
+                      {description}
+                    </p>
+
+                    <p className="mt-6 text-2xl font-semibold tracking-[-0.03em] text-white">
+                      {price}
+                    </p>
+
+                    <p className="mt-1 text-[11px] text-white/30">
+                      Starting investment
+                    </p>
+                  </div>
+
+                  <ul className="mt-6 space-y-2.5 border-t border-white/10 pt-5">
+                    {features.map((feature) => (
+                      <li
+                        key={feature}
+                        className="flex items-center gap-2.5 text-xs text-white/50"
+                      >
+                        <span className="h-1 w-1 rounded-full bg-white/40" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <button
+                    type="button"
+                    onClick={() => handleSelect(name, amount)}
+                    className="mt-7 flex items-center justify-between border-t border-white/10 pt-5 text-sm font-medium text-white/65 transition-colors hover:text-white"
+                  >
+                    <span>Discuss this project</span>
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </button>
+                </article>
+              ),
+            )}
+          </div>
+        </div>
       </div>
     </section>
   );

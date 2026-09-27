@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Pricing from '../components/Pricing';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -185,6 +186,8 @@ export const Home: React.FC = () => {
           </div>
         </div>
       </section>
+
+      <Pricing />
 
       {/* Technology */}
       <section className="border-y border-white/10 bg-white/[0.02]">
