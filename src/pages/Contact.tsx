@@ -1,34 +1,55 @@
-import { Mail, MessageSquare, Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
+import {
+  AlertCircle,
+  ArrowRight,
+  CheckCircle2,
+  Mail,
+  MessageSquare,
+  Send,
+  Sparkles,
+} from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 export default function Contact() {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
 
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!formData.name.trim()) newErrors.name = 'Name is required';
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Enter a valid email address';
     }
-    if (!formData.message.trim()) newErrors.message = 'Message cannot be empty';
+
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message cannot be empty';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
     if (!validate()) return;
 
     setIsSubmitting(true);
 
     try {
-      // Save contact inquiry to Supabase
       if (import.meta.env.VITE_SUPABASE_URL) {
         await supabase.from('leads').insert([
           {
@@ -49,102 +70,204 @@ export default function Contact() {
     }
   };
 
+  const updateField = (field: 'name' | 'email' | 'message', value: string) => {
+    setFormData((current) => ({ ...current, [field]: value }));
+
+    if (errors[field]) {
+      setErrors((current) => ({ ...current, [field]: '' }));
+    }
+  };
+
   return (
-    <div className="max-w-xl mx-auto px-4 sm:px-6 py-12">
-      <div className="mb-8 text-center">
-        <span className="text-xs font-semibold text-[#00e599] tracking-wider uppercase mb-2 block">
-          /// Direct Channel
-        </span>
-        <h1 className="text-3xl sm:text-4xl font-black uppercase text-white tracking-tight">
-          Initialize <span className="text-[#00e599]">Contact</span>
-        </h1>
-        <p className="text-slate-400 text-sm mt-2">
-          Connect with us to start building your high-speed SPA platform.
-        </p>
-      </div>
+    <main className="min-h-[calc(100vh-72px)] bg-[#0c0c0b] text-white">
+      <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:px-10 lg:py-24">
+        <div className="grid gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+          <div>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-white/60">
+              <Sparkles className="h-3.5 w-3.5" />
+              Start a conversation
+            </div>
 
-      {isSent ? (
-        <div className="crypto-card p-8 rounded-xl text-center space-y-4">
-          <div className="w-12 h-12 rounded-full bg-[#00e599]/10 border border-[#00e599] flex items-center justify-center text-[#00e599] mx-auto">
-            <CheckCircle2 className="w-6 h-6" />
+            <h1 className="max-w-xl text-4xl font-semibold tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">
+              Tell us what you&apos;re building.
+            </h1>
+
+            <p className="mt-6 max-w-lg text-base leading-7 text-white/55 sm:text-lg">
+              Have a website, web app, dashboard, or digital product in mind?
+              Share the details and we&apos;ll help turn the idea into a clear
+              next step.
+            </p>
+
+            <div className="mt-10 space-y-5 border-t border-white/10 pt-8">
+              <div className="flex gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
+                  <MessageSquare className="h-4 w-4 text-white/70" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-white">Project details</p>
+                  <p className="mt-1 text-sm leading-6 text-white/45">
+                    Tell us what you need, what you already have, and what you
+                    want the finished product to achieve.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
+                  <Mail className="h-4 w-4 text-white/70" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-white">Direct response</p>
+                  <p className="mt-1 text-sm leading-6 text-white/45">
+                    We&apos;ll review your message and get back to you with the
+                    next steps.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-          <h2 className="text-xl font-bold uppercase text-white">Payload Transmitted</h2>
-          <p className="text-sm text-slate-400">
-            Thank you for reaching out. Your message has been logged to our database, and we will get back to you shortly.
-          </p>
-          <button
-            onClick={() => setIsSent(false)}
-            className="glow-button px-6 py-2.5 rounded-lg text-xs uppercase tracking-wider mt-4 cursor-pointer"
-          >
-            Send Another Message
-          </button>
+
+          <div>
+            {isSent ? (
+              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 sm:p-10">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full border border-emerald-400/20 bg-emerald-400/10 text-emerald-300">
+                  <CheckCircle2 className="h-6 w-6" />
+                </div>
+
+                <h2 className="mt-6 text-2xl font-semibold tracking-tight text-white">
+                  Message received.
+                </h2>
+
+                <p className="mt-3 max-w-md text-sm leading-6 text-white/50">
+                  Thanks for reaching out. Your project details have been
+                  received and we&apos;ll get back to you shortly.
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() => setIsSent(false)}
+                  className="mt-8 inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/15 bg-white px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-white/90"
+                >
+                  Send another message
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            ) : (
+              <form
+                onSubmit={handleSubmit}
+                className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 sm:p-8"
+              >
+                <div className="mb-8">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/40">
+                    Project inquiry
+                  </p>
+                  <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white">
+                    Let&apos;s discuss your project.
+                  </h2>
+                </div>
+
+                <div className="space-y-5">
+                  <div>
+                    <label
+                      htmlFor="contact-name"
+                      className="mb-2 block text-sm font-medium text-white/75"
+                    >
+                      Name
+                    </label>
+                    <input
+                      id="contact-name"
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => updateField('name', e.target.value)}
+                      placeholder="Your name"
+                      className={`w-full rounded-xl border ${
+                        errors.name ? 'border-red-400/60' : 'border-white/10'
+                      } bg-black/20 px-4 py-3.5 text-sm text-white outline-none placeholder:text-white/25 transition focus:border-white/30`}
+                    />
+                    {errors.name && (
+                      <span className="mt-2 flex items-center gap-1.5 text-xs text-red-300">
+                        <AlertCircle className="h-3.5 w-3.5" />
+                        {errors.name}
+                      </span>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="contact-email"
+                      className="mb-2 block text-sm font-medium text-white/75"
+                    >
+                      Email address
+                    </label>
+                    <div className="relative">
+                      <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+                      <input
+                        id="contact-email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => updateField('email', e.target.value)}
+                        placeholder="you@domain.com"
+                        className={`w-full rounded-xl border ${
+                          errors.email ? 'border-red-400/60' : 'border-white/10'
+                        } bg-black/20 py-3.5 pl-11 pr-4 text-sm text-white outline-none placeholder:text-white/25 transition focus:border-white/30`}
+                      />
+                    </div>
+                    {errors.email && (
+                      <span className="mt-2 flex items-center gap-1.5 text-xs text-red-300">
+                        <AlertCircle className="h-3.5 w-3.5" />
+                        {errors.email}
+                      </span>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="contact-message"
+                      className="mb-2 block text-sm font-medium text-white/75"
+                    >
+                      Project details
+                    </label>
+                    <div className="relative">
+                      <MessageSquare className="absolute left-4 top-4 h-4 w-4 text-white/30" />
+                      <textarea
+                        id="contact-message"
+                        rows={6}
+                        value={formData.message}
+                        onChange={(e) => updateField('message', e.target.value)}
+                        placeholder="Tell us about your project, goals, features, or timeline..."
+                        className={`w-full resize-none rounded-xl border ${
+                          errors.message
+                            ? 'border-red-400/60'
+                            : 'border-white/10'
+                        } bg-black/20 py-3.5 pl-11 pr-4 text-sm leading-6 text-white outline-none placeholder:text-white/25 transition focus:border-white/30`}
+                      />
+                    </div>
+                    {errors.message && (
+                      <span className="mt-2 flex items-center gap-1.5 text-xs text-red-300">
+                        <AlertCircle className="h-3.5 w-3.5" />
+                        {errors.message}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="mt-7 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-white px-5 py-3.5 text-sm font-semibold text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isSubmitting ? 'Sending...' : 'Send project inquiry'}
+                  <Send className="h-4 w-4" />
+                </button>
+
+                <p className="mt-4 text-center text-xs leading-5 text-white/30">
+                  Your message is securely submitted for review.
+                </p>
+              </form>
+            )}
+          </div>
         </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-4 crypto-card p-6 sm:p-8 rounded-xl">
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Name</label>
-            <input 
-              type="text" 
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="Enter your name" 
-              className={`w-full bg-[#0b0e14] border ${errors.name ? 'border-red-500' : 'border-[#1e2638]'} rounded-lg px-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#00e599] text-sm`}
-            />
-            {errors.name && (
-              <span className="text-xs text-red-400 flex items-center gap-1 mt-1 font-medium">
-                <AlertCircle className="w-3 h-3" /> {errors.name}
-              </span>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Email Address</label>
-            <div className="relative">
-              <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
-              <input 
-                type="text" 
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="you@domain.com" 
-                className={`w-full bg-[#0b0e14] border ${errors.email ? 'border-red-500' : 'border-[#1e2638]'} rounded-lg pl-10 pr-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#00e599] text-sm`}
-              />
-            </div>
-            {errors.email && (
-              <span className="text-xs text-red-400 flex items-center gap-1 mt-1 font-medium">
-                <AlertCircle className="w-3 h-3" /> {errors.email}
-              </span>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Message</label>
-            <div className="relative">
-              <MessageSquare className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
-              <textarea 
-                rows={4}
-                value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                placeholder="Project details..." 
-                className={`w-full bg-[#0b0e14] border ${errors.message ? 'border-red-500' : 'border-[#1e2638]'} rounded-lg pl-10 pr-4 py-3 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-[#00e599] text-sm resize-none`}
-              ></textarea>
-            </div>
-            {errors.message && (
-              <span className="text-xs text-red-400 flex items-center gap-1 mt-1 font-medium">
-                <AlertCircle className="w-3 h-3" /> {errors.message}
-              </span>
-            )}
-          </div>
-
-          <button 
-            type="submit" 
-            disabled={isSubmitting}
-            className="w-full glow-button py-3.5 rounded-lg text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50"
-          >
-            <span>{isSubmitting ? 'Transmitting...' : 'Transmit Message'}</span>
-            <Send className="w-4 h-4" />
-          </button>
-        </form>
-      )}
-    </div>
+      </section>
+    </main>
   );
 }
