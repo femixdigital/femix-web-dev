@@ -5,7 +5,6 @@ import { Estimator } from './pages/Estimator';
 import Contact from './pages/Contact';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { Portfolio } from './pages/Portfolio';
-import { ToastProvider } from './components/Toast';
 import { Code2, Shield, Calculator, Mail, FolderGit2 } from 'lucide-react';
 
 const Navbar: React.FC = () => {
@@ -98,8 +97,7 @@ const Navbar: React.FC = () => {
 
 export function App() {
   return (
-    <ToastProvider>
-      <Router>
+    <Router>
         <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-slate-950">
           <Navbar />
           <main className="flex-1">
@@ -118,8 +116,7 @@ export function App() {
             </div>
           </footer>
         </div>
-      </Router>
-    </ToastProvider>
+    </Router>
   );
 }
 
