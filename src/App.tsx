@@ -14,6 +14,7 @@ import { Estimator } from './pages/Estimator';
 import Contact from './pages/Contact';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { Portfolio } from './pages/Portfolio';
+import { NotFound } from './pages/NotFound';
 
 const navItems = [
   { label: 'Home', path: '/' },
@@ -183,6 +184,7 @@ export function App() {
             <Route path="/estimator" element={<Estimator />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
 
