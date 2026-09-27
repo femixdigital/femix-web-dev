@@ -2,9 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../components/Toast';
 import { AdminLogin } from '../components/AdminLogin';
-import { 
-  Shield, Users, ShoppingBag, Download, RefreshCw, Trash2, 
-  Mail, Layers, Clock, LogOut 
+import {
+  Shield,
+  Users,
+  ShoppingBag,
+  Download,
+  RefreshCw,
+  Trash2,
+  Mail,
+  Layers,
+  Clock,
+  LogOut,
+  ArrowUpRight,
+  Database,
+  FileText,
 } from 'lucide-react';
 
 interface ContactMessage {
@@ -34,13 +45,11 @@ export const AdminDashboard: React.FC = () => {
   const { showToast } = useToast();
   const [session, setSession] = useState<any>(null);
   const [authLoading, setAuthLoading] = useState<boolean>(true);
-
   const [activeTab, setActiveTab] = useState<'contacts' | 'orders'>('contacts');
   const [contacts, setContacts] = useState<ContactMessage[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingData, setLoadingData] = useState<boolean>(false);
 
-  // Check active Supabase session on mount
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -56,14 +65,21 @@ export const AdminDashboard: React.FC = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Fetch data when authenticated
   const fetchData = async () => {
     if (!session) return;
+
     setLoadingData(true);
+
     try {
       const [contactsRes, ordersRes] = await Promise.all([
-        supabase.from('contacts').select('*').order('created_at', { ascending: false }),
-        supabase.from('orders').select('*').order('created_at', { ascending: false }),
+        supabase
+          .from('contacts')
+          .select('*')
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('orders')
+          .select('*')
+          .order('created_at', { ascending: false }),
       ]);
 
       if (contactsRes.error) throw contactsRes.error;
@@ -71,9 +87,18 @@ export const AdminDashboard: React.FC = () => {
 
       setContacts(contactsRes.data || []);
       setOrders(ordersRes.data || []);
-      showToast('Data Refreshed', 'Successfully synchronized latest records.', 'success');
+
+      showToast(
+        'Data Refreshed',
+        'Successfully synchronized latest records.',
+        'success',
+      );
     } catch (err: any) {
-      showToast('Sync Error', err.message || 'Failed to fetch admin data.', 'error');
+      showToast(
+        'Sync Error',
+        err.message || 'Failed to fetch admin data.',
+        'error',
+      );
     } finally {
       setLoadingData(false);
     }
@@ -88,78 +113,213 @@ export const AdminDashboard: React.FC = () => {
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     setSession(null);
-    showToast('Logged Out', 'You have been safely signed out of the admin panel.', 'success');
+    showToast(
+      'Logged Out',
+      'You have been safely signed out of the admin panel.',
+      'success',
+    );
   };
 
   const deleteContact = async (id: string) => {
-    if (!window.confirm('Are you sure you want to delete this contact message?')) return;
+    if (
+      !window.confirm(
+        'Are you sure you want to delete this contact message?',
+      )
+    ) {
+      return;
+    }
+
     try {
-      const { error } = await supabase.from('contacts').delete().eq('id', id);
+      const { error } = await supabase
+        .from('contacts')
+        .delete()
+        .eq('id', id);
+
       if (error) throw error;
-      setContacts(contacts.filter(c => c.id !== id));
-      showToast('Record Deleted', 'Contact message removed.', 'success');
+
+      setContacts(contacts.filter((c) => c.id !== id));
+
+      showToast(
+        'Record Deleted',
+        'Contact message removed.',
+        'success',
+      );
     } catch (err: any) {
-      showToast('Delete Failed', err.message, 'error');
+      showToast(
+        'Delete Failed',
+        err.message,
+        'error',
+      );
     }
   };
 
   const deleteOrder = async (id: string) => {
-    if (!window.confirm('Are you sure you want to delete this quote order?')) return;
+    if (
+      !window.confirm(
+        'Are you sure you want to delete this quote order?',
+      )
+    ) {
+      return;
+    }
+
     try {
-      const { error } = await supabase.from('orders').delete().eq('id', id);
+      const { error } = await supabase
+        .from('orders')
+        .delete()
+        .eq('id', id);
+
       if (error) throw error;
-      setOrders(orders.filter(o => o.id !== id));
-      showToast('Record Deleted', 'Quote order removed.', 'success');
+
+      setOrders(orders.filter((o) => o.id !== id));
+
+      showToast(
+        'Record Deleted',
+        'Quote order removed.',
+        'success',
+      );
     } catch (err: any) {
-      showToast('Delete Failed', err.message, 'error');
+      showToast(
+        'Delete Failed',
+        err.message,
+        'error',
+      );
     }
   };
 
   const exportContactsCSV = () => {
     if (contacts.length === 0) {
-      showToast('Export Error', 'No contact records available to export.', 'error');
+      showToast(
+        'Export Error',
+        'No contact records available to export.',
+        'error',
+      );
       return;
     }
-    const headers = ['ID', 'Name', 'Email', 'Project Type', 'Budget', 'Message', 'Date'];
-    const rows = contacts.map(c => [c.id, c.name, c.email, c.project_type, c.budget, `"${c.message}"`, c.created_at]);
-    const csvContent = [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-    
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    const headers = [
+      'ID',
+      'Name',
+      'Email',
+      'Project Type',
+      'Budget',
+      'Message',
+      'Date',
+    ];
+
+    const rows = contacts.map((c) => [
+      c.id,
+      c.name,
+      c.email,
+      c.project_type,
+      c.budget,
+      `"${c.message}"`,
+      c.created_at,
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map((e) => e.join(',')),
+    ].join('\n');
+
+    const blob = new Blob([csvContent], {
+      type: 'text/csv;charset=utf-8;',
+    });
+
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
+
     link.setAttribute('href', url);
-    link.setAttribute('download', `contacts_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute(
+      'download',
+      `contacts_export_${new Date().toISOString().slice(0, 10)}.csv`,
+    );
+
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    showToast('CSV Exported', `Successfully exported ${contacts.length} contact records.`, 'success');
+
+    showToast(
+      'CSV Exported',
+      `Successfully exported ${contacts.length} contact records.`,
+      'success',
+    );
   };
 
   const exportOrdersCSV = () => {
     if (orders.length === 0) {
-      showToast('Export Error', 'No order records available to export.', 'error');
+      showToast(
+        'Export Error',
+        'No order records available to export.',
+        'error',
+      );
       return;
     }
-    const headers = ['ID', 'Client Name', 'Email', 'Pages', 'Auth', 'Database', 'Payments', 'Total', 'Status', 'Date'];
-    const rows = orders.map(o => [o.id, o.client_name, o.client_email, o.pages, o.has_auth, o.has_database, o.has_payments, o.estimated_total, o.status, o.created_at]);
-    const csvContent = [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-    
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    const headers = [
+      'ID',
+      'Client Name',
+      'Email',
+      'Pages',
+      'Auth',
+      'Database',
+      'Payments',
+      'Total',
+      'Status',
+      'Date',
+    ];
+
+    const rows = orders.map((o) => [
+      o.id,
+      o.client_name,
+      o.client_email,
+      o.pages,
+      o.has_auth,
+      o.has_database,
+      o.has_payments,
+      o.estimated_total,
+      o.status,
+      o.created_at,
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map((e) => e.join(',')),
+    ].join('\n');
+
+    const blob = new Blob([csvContent], {
+      type: 'text/csv;charset=utf-8;',
+    });
+
     const url = URL.createObjectURL(blob);
     const downloadLink = document.createElement('a');
+
     downloadLink.setAttribute('href', url);
-    downloadLink.setAttribute('download', `orders_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    downloadLink.setAttribute(
+      'download',
+      `orders_export_${new Date().toISOString().slice(0, 10)}.csv`,
+    );
+
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-    showToast('CSV Exported', `Successfully exported ${orders.length} order records.`, 'success');
+
+    showToast(
+      'CSV Exported',
+      `Successfully exported ${orders.length} order records.`,
+      'success',
+    );
   };
 
   if (authLoading) {
     return (
-      <div className="min-h-[70vh] flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-cyan-400 border-t-transparent animate-spin" />
-      </div>
+      <main className="min-h-[calc(100vh-72px)] bg-[#0c0c0b] px-5 py-16 text-white sm:px-8">
+        <div className="flex min-h-[60vh] items-center justify-center">
+          <div className="flex items-center gap-3 text-sm text-white/45">
+            <RefreshCw className="h-4 w-4 animate-spin" />
+            <span>Checking secure session...</span>
+          </div>
+        </div>
+      </main>
     );
   }
 
@@ -167,209 +327,398 @@ export const AdminDashboard: React.FC = () => {
     return <AdminLogin onSuccess={() => {}} />;
   }
 
+  const activeCount =
+    activeTab === 'contacts' ? contacts.length : orders.length;
+
   return (
-    <div className="container mx-auto px-4 py-10 max-w-7xl space-y-8">
-      {/* Admin Top Bar */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
-            <Shield className="w-5 h-5" />
-          </div>
-          <div>
-            <h1 className="text-lg font-black text-white">Secure Admin Dashboard</h1>
-            <p className="text-xs text-slate-400">Signed in as {session.user?.email}</p>
-          </div>
-        </div>
+    <main className="min-h-[calc(100vh-72px)] bg-[#0c0c0b] px-5 py-10 text-white sm:px-8 sm:py-14">
+      <div className="mx-auto max-w-7xl">
+        <section className="border-b border-white/10 pb-8">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/35">
+                <Shield className="h-3.5 w-3.5" />
+                Private workspace
+              </div>
 
-        <div className="flex items-center space-x-3 w-full sm:w-auto">
-          <button
-            onClick={fetchData}
-            disabled={loadingData}
-            className="flex-1 sm:flex-none bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold px-4 py-2 rounded-xl text-xs flex items-center justify-center space-x-2 transition"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${loadingData ? 'animate-spin' : ''}`} />
-            <span>Sync Data</span>
-          </button>
+              <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-white sm:text-4xl">
+                Admin dashboard
+              </h1>
 
-          <button
-            onClick={handleSignOut}
-            className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 font-semibold px-4 py-2 rounded-xl text-xs flex items-center justify-center space-x-2 transition"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-            <span>Sign Out</span>
-          </button>
-        </div>
-      </div>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-white/45">
+                Manage incoming enquiries and project estimates from one
+                secure workspace.
+              </p>
 
-      {/* Tabs & Export Controls */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div className="flex bg-slate-900/60 p-1.5 rounded-2xl border border-slate-800 w-full sm:w-auto">
-          <button
-            onClick={() => setActiveTab('contacts')}
-            className={`flex-1 sm:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 ${
-              activeTab === 'contacts'
-                ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Users className="w-4 h-4" />
-            <span>Contact Leads ({contacts.length})</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('orders')}
-            className={`flex-1 sm:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 ${
-              activeTab === 'orders'
-                ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <ShoppingBag className="w-4 h-4" />
-            <span>Estimator Quotes ({orders.length})</span>
-          </button>
-        </div>
-
-        <div>
-          {activeTab === 'contacts' ? (
-            <button
-              onClick={exportContactsCSV}
-              className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-cyan-500/30 px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition shadow-sm"
-            >
-              <Download className="w-4 h-4" />
-              <span>Export Contacts CSV</span>
-            </button>
-          ) : (
-            <button
-              onClick={exportOrdersCSV}
-              className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-cyan-400 border border-cyan-500/30 px-4 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition shadow-sm"
-            >
-              <Download className="w-4 h-4" />
-              <span>Export Orders CSV</span>
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Content Area */}
-      {activeTab === 'contacts' ? (
-        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-          <div className="p-4 border-b border-slate-800 bg-slate-950/40 text-xs font-bold text-slate-400 uppercase tracking-wider">
-            Incoming Client Contact Submissions
-          </div>
-          {contacts.length === 0 ? (
-            <div className="p-12 text-center text-slate-500 text-xs">No contact submissions found.</div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-950/80 text-slate-400 uppercase font-semibold border-b border-slate-800">
-                  <tr>
-                    <th className="p-4">Client Name</th>
-                    <th className="p-4">Email</th>
-                    <th className="p-4">Project Type</th>
-                    <th className="p-4">Budget</th>
-                    <th className="p-4">Message</th>
-                    <th className="p-4">Date</th>
-                    <th className="p-4 text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/80 text-slate-300">
-                  {contacts.map((c) => (
-                    <tr key={c.id} className="hover:bg-slate-800/30 transition">
-                      <td className="p-4 font-bold text-white">{c.name}</td>
-                      <td className="p-4 font-mono text-cyan-400 flex items-center space-x-1.5 pt-4.5">
-                        <Mail className="w-3.5 h-3.5 shrink-0" />
-                        <span>{c.email}</span>
-                      </td>
-                      <td className="p-4">
-                        <span className="bg-slate-950 border border-slate-800 px-2.5 py-1 rounded-lg text-slate-300">
-                          {c.project_type}
-                        </span>
-                      </td>
-                      <td className="p-4 font-semibold text-emerald-400">{c.budget}</td>
-                      <td className="p-4 max-w-xs truncate text-slate-400">{c.message}</td>
-                      <td className="p-4 text-slate-500">{new Date(c.created_at).toLocaleDateString()}</td>
-                      <td className="p-4 text-right">
-                        <button
-                          onClick={() => deleteContact(c.id)}
-                          className="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 transition"
-                          title="Delete Contact"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div className="mt-4 flex items-center gap-2 text-xs text-white/35">
+                <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
+                <span>{session.user?.email}</span>
+              </div>
             </div>
-          )}
-        </div>
-      ) : (
-        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
-          <div className="p-4 border-b border-slate-800 bg-slate-950/40 text-xs font-bold text-slate-400 uppercase tracking-wider">
-            Cost Estimator Quotes & Orders
-          </div>
-          {orders.length === 0 ? (
-            <div className="p-12 text-center text-slate-500 text-xs">No estimator quote submissions found.</div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-slate-950/80 text-slate-400 uppercase font-semibold border-b border-slate-800">
-                  <tr>
-                    <th className="p-4">Client Name</th>
-                    <th className="p-4">Email</th>
-                    <th className="p-4">Pages & Add-ons</th>
-                    <th className="p-4">Total Estimate</th>
-                    <th className="p-4">Status</th>
-                    <th className="p-4">Date</th>
-                    <th className="p-4 text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/80 text-slate-300">
-                  {orders.map((o) => (
-                    <tr key={o.id} className="hover:bg-slate-800/30 transition">
-                      <td className="p-4 font-bold text-white">{o.client_name}</td>
-                      <td className="p-4 font-mono text-cyan-400 flex items-center space-x-1.5 pt-4.5">
-                        <Mail className="w-3.5 h-3.5 shrink-0" />
-                        <span>{o.client_email}</span>
-                      </td>
-                      <td className="p-4 space-y-1">
-                        <div className="font-semibold text-white flex items-center space-x-1">
-                          <Layers className="w-3.5 h-3.5 text-cyan-400" />
-                          <span>{o.pages} Custom Pages</span>
-                        </div>
-                        <div className="flex flex-wrap gap-1 pt-1">
-                          {o.has_auth && <span className="bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-[10px] text-slate-400">Auth</span>}
-                          {o.has_database && <span className="bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-[10px] text-slate-400">DB</span>}
-                          {o.has_payments && <span className="bg-slate-950 border border-slate-800 px-1.5 py-0.5 rounded text-[10px] text-slate-400">Stripe</span>}
-                        </div>
-                      </td>
-                      <td className="p-4 font-black text-emerald-400 text-sm">${o.estimated_total}</td>
-                      <td className="p-4">
-                        <span className="inline-flex items-center space-x-1 bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2.5 py-1 rounded-lg text-[10px] font-semibold uppercase">
-                          <Clock className="w-3 h-3" />
-                          <span>{o.status}</span>
-                        </span>
-                      </td>
-                      <td className="p-4 text-slate-500">{new Date(o.created_at).toLocaleDateString()}</td>
-                      <td className="p-4 text-right">
-                        <button
-                          onClick={() => deleteOrder(o.id)}
-                          className="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 transition"
-                          title="Delete Order"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+              <button
+                onClick={fetchData}
+                disabled={loadingData}
+                className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-xs font-semibold text-white/70 transition hover:bg-white/[0.08] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <RefreshCw
+                  className={`h-3.5 w-3.5 ${
+                    loadingData ? 'animate-spin' : ''
+                  }`}
+                />
+                <span>{loadingData ? 'Syncing...' : 'Sync data'}</span>
+              </button>
+
+              <button
+                onClick={handleSignOut}
+                className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-transparent px-4 py-2.5 text-xs font-semibold text-white/45 transition hover:border-white/20 hover:bg-white/[0.04] hover:text-white"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                <span>Sign out</span>
+              </button>
             </div>
-          )}
-        </div>
-      )}
-    </div>
+          </div>
+        </section>
+
+        <section className="grid gap-3 py-8 sm:grid-cols-3">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-white/40">
+                Contact leads
+              </span>
+              <Users className="h-4 w-4 text-white/30" />
+            </div>
+            <p className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-white">
+              {contacts.length}
+            </p>
+            <p className="mt-1 text-xs text-white/30">
+              Client enquiries received
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-white/40">
+                Estimator quotes
+              </span>
+              <ShoppingBag className="h-4 w-4 text-white/30" />
+            </div>
+            <p className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-white">
+              {orders.length}
+            </p>
+            <p className="mt-1 text-xs text-white/30">
+              Project estimates submitted
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-white/40">
+                Current view
+              </span>
+              <Database className="h-4 w-4 text-white/30" />
+            </div>
+            <p className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-white">
+              {activeCount}
+            </p>
+            <p className="mt-1 text-xs capitalize text-white/30">
+              {activeTab} records displayed
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <div className="flex flex-col gap-4 border-b border-white/10 pb-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex w-full rounded-xl border border-white/10 bg-white/[0.02] p-1 sm:w-auto">
+              <button
+                onClick={() => setActiveTab('contacts')}
+                className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-xs font-semibold transition sm:flex-none ${
+                  activeTab === 'contacts'
+                    ? 'bg-white text-[#0c0c0b]'
+                    : 'text-white/45 hover:text-white'
+                }`}
+              >
+                <Users className="h-3.5 w-3.5" />
+                <span>Contact leads</span>
+                <span
+                  className={`rounded-full px-1.5 py-0.5 text-[10px] ${
+                    activeTab === 'contacts'
+                      ? 'bg-black/10 text-black/60'
+                      : 'bg-white/10 text-white/45'
+                  }`}
+                >
+                  {contacts.length}
+                </span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('orders')}
+                className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-xs font-semibold transition sm:flex-none ${
+                  activeTab === 'orders'
+                    ? 'bg-white text-[#0c0c0b]'
+                    : 'text-white/45 hover:text-white'
+                }`}
+              >
+                <ShoppingBag className="h-3.5 w-3.5" />
+                <span>Estimator quotes</span>
+                <span
+                  className={`rounded-full px-1.5 py-0.5 text-[10px] ${
+                    activeTab === 'orders'
+                      ? 'bg-black/10 text-black/60'
+                      : 'bg-white/10 text-white/45'
+                  }`}
+                >
+                  {orders.length}
+                </span>
+              </button>
+            </div>
+
+            <button
+              onClick={
+                activeTab === 'contacts'
+                  ? exportContactsCSV
+                  : exportOrdersCSV
+              }
+              className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-white/60 transition hover:bg-white/[0.07] hover:text-white"
+            >
+              <Download className="h-3.5 w-3.5" />
+              <span>
+                {activeTab === 'contacts'
+                  ? 'Export contacts'
+                  : 'Export orders'}
+              </span>
+              <ArrowUpRight className="h-3 w-3 text-white/30" />
+            </button>
+          </div>
+
+          <div className="pt-5">
+            {activeTab === 'contacts' ? (
+              <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
+                <div className="border-b border-white/10 px-5 py-5 sm:px-6">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
+                      <FileText className="h-4 w-4 text-white/60" />
+                    </div>
+                    <div>
+                      <h2 className="text-sm font-semibold text-white">
+                        Incoming enquiries
+                      </h2>
+                      <p className="mt-1 text-xs text-white/35">
+                        Contact submissions from potential clients.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {contacts.length === 0 ? (
+                  <div className="px-6 py-20 text-center">
+                    <Users className="mx-auto h-7 w-7 text-white/20" />
+                    <p className="mt-4 text-sm font-medium text-white/50">
+                      No contact submissions yet.
+                    </p>
+                    <p className="mt-1 text-xs text-white/25">
+                      New enquiries will appear here.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[900px] text-left text-xs">
+                      <thead className="border-b border-white/10 bg-white/[0.02] text-[10px] font-semibold uppercase tracking-[0.14em] text-white/30">
+                        <tr>
+                          <th className="px-5 py-4">Client</th>
+                          <th className="px-5 py-4">Email</th>
+                          <th className="px-5 py-4">Project</th>
+                          <th className="px-5 py-4">Budget</th>
+                          <th className="px-5 py-4">Message</th>
+                          <th className="px-5 py-4">Date</th>
+                          <th className="px-5 py-4 text-right">Action</th>
+                        </tr>
+                      </thead>
+
+                      <tbody className="divide-y divide-white/[0.07]">
+                        {contacts.map((c) => (
+                          <tr
+                            key={c.id}
+                            className="transition hover:bg-white/[0.025]"
+                          >
+                            <td className="px-5 py-5">
+                              <span className="font-semibold text-white">
+                                {c.name}
+                              </span>
+                            </td>
+
+                            <td className="px-5 py-5">
+                              <div className="flex items-center gap-2 text-white/50">
+                                <Mail className="h-3.5 w-3.5 shrink-0 text-white/25" />
+                                <span>{c.email}</span>
+                              </div>
+                            </td>
+
+                            <td className="px-5 py-5">
+                              <span className="inline-flex rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1 text-white/50">
+                                {c.project_type}
+                              </span>
+                            </td>
+
+                            <td className="px-5 py-5 font-medium text-white/70">
+                              {c.budget}
+                            </td>
+
+                            <td className="max-w-xs px-5 py-5">
+                              <p className="truncate text-white/40">
+                                {c.message}
+                              </p>
+                            </td>
+
+                            <td className="whitespace-nowrap px-5 py-5 text-white/30">
+                              {new Date(c.created_at).toLocaleDateString()}
+                            </td>
+
+                            <td className="px-5 py-5 text-right">
+                              <button
+                                onClick={() => deleteContact(c.id)}
+                                className="rounded-lg border border-white/10 bg-white/[0.03] p-2 text-white/35 transition hover:border-red-400/20 hover:bg-red-400/10 hover:text-red-300"
+                                title="Delete Contact"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
+                <div className="border-b border-white/10 px-5 py-5 sm:px-6">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
+                      <ShoppingBag className="h-4 w-4 text-white/60" />
+                    </div>
+                    <div>
+                      <h2 className="text-sm font-semibold text-white">
+                        Estimator quotes
+                      </h2>
+                      <p className="mt-1 text-xs text-white/35">
+                        Project estimates submitted through the calculator.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {orders.length === 0 ? (
+                  <div className="px-6 py-20 text-center">
+                    <ShoppingBag className="mx-auto h-7 w-7 text-white/20" />
+                    <p className="mt-4 text-sm font-medium text-white/50">
+                      No estimator quotes yet.
+                    </p>
+                    <p className="mt-1 text-xs text-white/25">
+                      New project estimates will appear here.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[900px] text-left text-xs">
+                      <thead className="border-b border-white/10 bg-white/[0.02] text-[10px] font-semibold uppercase tracking-[0.14em] text-white/30">
+                        <tr>
+                          <th className="px-5 py-4">Client</th>
+                          <th className="px-5 py-4">Email</th>
+                          <th className="px-5 py-4">Build</th>
+                          <th className="px-5 py-4">Estimate</th>
+                          <th className="px-5 py-4">Status</th>
+                          <th className="px-5 py-4">Date</th>
+                          <th className="px-5 py-4 text-right">Action</th>
+                        </tr>
+                      </thead>
+
+                      <tbody className="divide-y divide-white/[0.07]">
+                        {orders.map((o) => (
+                          <tr
+                            key={o.id}
+                            className="transition hover:bg-white/[0.025]"
+                          >
+                            <td className="px-5 py-5">
+                              <span className="font-semibold text-white">
+                                {o.client_name}
+                              </span>
+                            </td>
+
+                            <td className="px-5 py-5">
+                              <div className="flex items-center gap-2 text-white/50">
+                                <Mail className="h-3.5 w-3.5 shrink-0 text-white/25" />
+                                <span>{o.client_email}</span>
+                              </div>
+                            </td>
+
+                            <td className="px-5 py-5">
+                              <div className="flex items-center gap-2 text-white/70">
+                                <Layers className="h-3.5 w-3.5 text-white/30" />
+                                <span>{o.pages} custom pages</span>
+                              </div>
+
+                              <div className="mt-2 flex flex-wrap gap-1.5">
+                                {o.has_auth && (
+                                  <span className="rounded-md border border-white/10 bg-white/[0.03] px-1.5 py-0.5 text-[10px] text-white/40">
+                                    Auth
+                                  </span>
+                                )}
+
+                                {o.has_database && (
+                                  <span className="rounded-md border border-white/10 bg-white/[0.03] px-1.5 py-0.5 text-[10px] text-white/40">
+                                    Database
+                                  </span>
+                                )}
+
+                                {o.has_payments && (
+                                  <span className="rounded-md border border-white/10 bg-white/[0.03] px-1.5 py-0.5 text-[10px] text-white/40">
+                                    Payments
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+
+                            <td className="px-5 py-5">
+                              <span className="text-base font-semibold tracking-[-0.02em] text-white">
+                                ${o.estimated_total}
+                              </span>
+                            </td>
+
+                            <td className="px-5 py-5">
+                              <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white/45">
+                                <Clock className="h-3 w-3" />
+                                {o.status}
+                              </span>
+                            </td>
+
+                            <td className="whitespace-nowrap px-5 py-5 text-white/30">
+                              {new Date(o.created_at).toLocaleDateString()}
+                            </td>
+
+                            <td className="px-5 py-5 text-right">
+                              <button
+                                onClick={() => deleteOrder(o.id)}
+                                className="rounded-lg border border-white/10 bg-white/[0.03] p-2 text-white/35 transition hover:border-red-400/20 hover:bg-red-400/10 hover:text-red-300"
+                                title="Delete Order"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </section>
+      </div>
+    </main>
   );
 };
+
 export default AdminDashboard;
