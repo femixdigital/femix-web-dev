@@ -7,7 +7,7 @@ import {
   Mail,
   MessageSquare,
   Send,
-  Sparkles,
+  ShieldCheck,
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
@@ -17,7 +17,11 @@ export default function Contact() {
   const selectedPrice = searchParams.get('price')?.trim() || '';
 
   const initialMessage = selectedPackage
-    ? `I'm interested in the ${selectedPackage}${selectedPrice ? ` (starting from ₦${Number(selectedPrice).toLocaleString()})` : ''}.\n\nProject details:\n`
+    ? `I'm interested in the ${selectedPackage}${
+        selectedPrice
+          ? ` (starting from ₦${Number(selectedPrice).toLocaleString()})`
+          : ''
+      }.\n\nProject details:\n`
     : '';
 
   const [formData, setFormData] = useState({
@@ -99,18 +103,17 @@ export default function Contact() {
 
   return (
     <main className="min-h-[calc(100vh-72px)] bg-[var(--app-bg)] text-[var(--app-text)]">
-      <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-28">
-        <div className="grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-20 lg:items-start">
-          {/* Intro */}
+      <section className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-18 lg:px-10 lg:py-24">
+        <div className="grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-start lg:gap-20">
           <div className="lg:sticky lg:top-28">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-violet-500/20 bg-violet-500/8 px-3.5 py-2 text-xs font-bold uppercase tracking-[0.16em] text-violet-600 dark:text-violet-300">
-              <Sparkles className="h-3.5 w-3.5" />
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--app-border)] bg-[var(--app-surface)] px-3.5 py-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--app-brand)]">
+              <MessageSquare className="h-3.5 w-3.5" />
               Start a conversation
             </div>
 
-            <h1 className="max-w-xl text-4xl font-extrabold leading-[1.02] tracking-[-0.05em] sm:text-5xl lg:text-6xl">
+            <h1 className="max-w-xl text-4xl font-extrabold leading-[1.04] tracking-[-0.05em] sm:text-5xl lg:text-6xl">
               Tell us what you&apos;re building.
-              <span className="mt-2 block bg-gradient-to-r from-violet-600 via-blue-600 to-emerald-500 bg-clip-text text-transparent">
+              <span className="mt-2 block text-[var(--app-brand)]">
                 We&apos;ll help shape the next step.
               </span>
             </h1>
@@ -121,48 +124,47 @@ export default function Contact() {
               next step.
             </p>
 
-            <div className="mt-10 space-y-5 border-t border-[var(--app-border)] pt-8">
-              <div className="flex gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-600 dark:text-violet-300">
-                  <MessageSquare className="h-5 w-5" />
+            <div className="mt-10 border-t border-[var(--app-border)] pt-8">
+              <div className="space-y-6">
+                <div className="flex gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] text-[var(--app-brand)]">
+                    <MessageSquare className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-extrabold">Project details</p>
+                    <p className="mt-1 max-w-sm text-sm leading-6 text-[var(--app-muted)]">
+                      Tell us what you need, what you already have, and what
+                      you want the finished product to achieve.
+                    </p>
+                  </div>
                 </div>
 
-                <div>
-                  <p className="text-sm font-extrabold">Project details</p>
-                  <p className="mt-1 text-sm leading-6 text-[var(--app-muted)]">
-                    Tell us what you need, what you already have, and what you
-                    want the finished product to achieve.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-300">
-                  <Mail className="h-5 w-5" />
-                </div>
-
-                <div>
-                  <p className="text-sm font-extrabold">Direct response</p>
-                  <p className="mt-1 text-sm leading-6 text-[var(--app-muted)]">
-                    We&apos;ll review your message and get back to you with the
-                    next steps.
-                  </p>
+                <div className="flex gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] text-[var(--app-brand)]">
+                    <Mail className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-extrabold">Direct response</p>
+                    <p className="mt-1 max-w-sm text-sm leading-6 text-[var(--app-muted)]">
+                      We&apos;ll review your message and get back to you with
+                      the next steps.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-10 rounded-3xl border border-[var(--app-border)] bg-[var(--app-surface-2)] p-5">
+            <div className="mt-10 border-t border-[var(--app-border)] pt-6">
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--app-muted)]">
                 Prefer an estimate?
               </p>
-
-              <p className="mt-2 text-sm leading-6 text-[var(--app-muted)]">
+              <p className="mt-2 max-w-sm text-sm leading-6 text-[var(--app-muted)]">
                 Get a starting project estimate before sending your enquiry.
               </p>
 
               <Link
                 to="/estimator"
-                className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[var(--app-text)] transition hover:text-violet-600 dark:hover:text-violet-300"
+                className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[var(--app-text)] transition-colors hover:text-[var(--app-brand)]"
               >
                 Open project estimator
                 <ArrowRight className="h-4 w-4" />
@@ -170,49 +172,44 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Form */}
           <div>
             {isSent ? (
-              <div className="relative overflow-hidden rounded-[2rem] border border-emerald-500/20 bg-[var(--app-surface)] p-8 shadow-xl shadow-emerald-500/5 sm:p-10">
-                <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl" />
-
-                <div className="relative">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-500">
-                    <CheckCircle2 className="h-7 w-7" />
-                  </div>
-
-                  <h2 className="mt-7 text-2xl font-extrabold tracking-tight sm:text-3xl">
-                    Message received.
-                  </h2>
-
-                  <p className="mt-3 max-w-md text-sm leading-6 text-[var(--app-muted)]">
-                    Thanks for reaching out. Your project details have been
-                    received and we&apos;ll get back to you shortly.
-                  </p>
-
-                  <button
-                    type="button"
-                    onClick={() => setIsSent(false)}
-                    className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-[var(--app-brand)] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-violet-500/15 transition hover:-translate-y-0.5"
-                  >
-                    Send another message
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
+              <div className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-7 sm:p-10">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[var(--app-border)] bg-[var(--app-brand-soft)] text-[var(--app-brand)]">
+                  <CheckCircle2 className="h-6 w-6" />
                 </div>
+
+                <h2 className="mt-7 text-2xl font-extrabold tracking-tight sm:text-3xl">
+                  Message received.
+                </h2>
+
+                <p className="mt-3 max-w-md text-sm leading-6 text-[var(--app-muted)]">
+                  Thanks for reaching out. Your project details have been
+                  received and we&apos;ll get back to you shortly.
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() => setIsSent(false)}
+                  className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[var(--app-brand)] px-5 py-3 text-sm font-bold text-[var(--app-brand-contrast)] transition hover:bg-[var(--app-brand-hover)]"
+                >
+                  Send another message
+                  <ArrowRight className="h-4 w-4" />
+                </button>
               </div>
             ) : (
               <form
                 onSubmit={handleSubmit}
-                className="rounded-[2rem] border border-[var(--app-border)] bg-[var(--app-surface)] p-6 shadow-xl shadow-slate-900/5 sm:p-8 lg:p-10"
+                className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-6 sm:p-8 lg:p-10"
               >
                 <div className="mb-8 border-b border-[var(--app-border)] pb-6">
-                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600 dark:text-violet-300">
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--app-brand)]">
                     Project inquiry
                   </p>
 
                   {selectedPackage && (
-                    <div className="mt-4 rounded-2xl border border-violet-500/20 bg-violet-500/5 px-4 py-3">
-                      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-violet-600 dark:text-violet-300">
+                    <div className="mt-4 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] px-4 py-3">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--app-muted)]">
                         Selected package
                       </p>
                       <p className="mt-1 text-sm font-extrabold text-[var(--app-text)]">
@@ -251,11 +248,11 @@ export default function Contact() {
                       value={formData.name}
                       onChange={(e) => updateField('name', e.target.value)}
                       placeholder="Your name"
-                      className={`w-full rounded-2xl border ${
+                      className={`w-full rounded-xl border ${
                         errors.name
                           ? 'border-rose-400/70'
                           : 'border-[var(--app-border)]'
-                      } bg-[var(--app-surface-2)] px-4 py-3.5 text-sm text-[var(--app-text)] outline-none placeholder:text-[var(--app-muted)] transition focus:border-violet-400/60 focus:ring-4 focus:ring-violet-500/8`}
+                      } bg-[var(--app-surface-2)] px-4 py-3.5 text-sm text-[var(--app-text)] outline-none placeholder:text-[var(--app-muted)] transition focus:border-[var(--app-brand)] focus:ring-4 focus:ring-[var(--app-brand)]/10`}
                     />
 
                     {errors.name && (
@@ -283,11 +280,11 @@ export default function Contact() {
                         value={formData.email}
                         onChange={(e) => updateField('email', e.target.value)}
                         placeholder="you@domain.com"
-                        className={`w-full rounded-2xl border ${
+                        className={`w-full rounded-xl border ${
                           errors.email
                             ? 'border-rose-400/70'
                             : 'border-[var(--app-border)]'
-                        } bg-[var(--app-surface-2)] py-3.5 pl-11 pr-4 text-sm text-[var(--app-text)] outline-none placeholder:text-[var(--app-muted)] transition focus:border-violet-400/60 focus:ring-4 focus:ring-violet-500/8`}
+                        } bg-[var(--app-surface-2)] py-3.5 pl-11 pr-4 text-sm text-[var(--app-text)] outline-none placeholder:text-[var(--app-muted)] transition focus:border-[var(--app-brand)] focus:ring-4 focus:ring-[var(--app-brand)]/10`}
                       />
                     </div>
 
@@ -318,11 +315,11 @@ export default function Contact() {
                           updateField('message', e.target.value)
                         }
                         placeholder="Tell us about your project, goals, features, or timeline..."
-                        className={`w-full resize-none rounded-2xl border ${
+                        className={`w-full resize-none rounded-xl border ${
                           errors.message
                             ? 'border-rose-400/70'
                             : 'border-[var(--app-border)]'
-                        } bg-[var(--app-surface-2)] py-3.5 pl-11 pr-4 text-sm leading-6 text-[var(--app-text)] outline-none placeholder:text-[var(--app-muted)] transition focus:border-violet-400/60 focus:ring-4 focus:ring-violet-500/8`}
+                        } bg-[var(--app-surface-2)] py-3.5 pl-11 pr-4 text-sm leading-6 text-[var(--app-text)] outline-none placeholder:text-[var(--app-muted)] transition focus:border-[var(--app-brand)] focus:ring-4 focus:ring-[var(--app-brand)]/10`}
                       />
                     </div>
 
@@ -338,15 +335,19 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[var(--app-brand)] px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-violet-500/15 transition hover:-translate-y-0.5 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+                  className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--app-brand)] px-5 py-3.5 text-sm font-bold text-[var(--app-brand-contrast)] transition hover:bg-[var(--app-brand-hover)] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {isSubmitting ? 'Sending...' : 'Send project inquiry'}
                   <Send className="h-4 w-4" />
                 </button>
 
-                <p className="mt-4 text-center text-xs leading-5 text-[var(--app-muted)]">
-                  Your message is securely submitted for review.
-                </p>
+                <div className="mt-5 flex items-start gap-3 border-t border-[var(--app-border)] pt-5">
+                  <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[var(--app-brand)]" />
+                  <p className="text-xs leading-5 text-[var(--app-muted)]">
+                    Your message is securely submitted for review. We only use
+                    the information you provide to respond to your enquiry.
+                  </p>
+                </div>
               </form>
             )}
           </div>
