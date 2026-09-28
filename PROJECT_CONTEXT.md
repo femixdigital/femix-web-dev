@@ -357,20 +357,25 @@ CURRENT VERIFIED CHECKPOINT:
 
 - Repository: femixdigital/femix-web-dev
 - Branch: main
-- Latest verified commit before current milestone: c6aaa14
-- Commit message: style: refine admin platform workspace
+- Latest verified commit: 83f5541
+- Commit message: feat: redesign Femix homepage
 - Tailwind CSS v4 configured
 - @tailwindcss/vite configured
 - Existing Vite build optimization preserved
 - Supabase Edge Function send-lead-email exists
 - npm run build successfully completed
 - PROJECT_CONTEXT.md is now part of the project handoff system
-- Current frontend milestone: premium platform UI redesign
+- Current frontend milestone: redesign the frontend into a real nested SPA/product-platform experience inspired by the visual confidence and interaction density of Bitget, while keeping Femix branding and original implementation.
+- New design direction: minimal-copy, technology-first interface; premium dark foundation; strong typography; one distinctive Femix accent; purposeful 3D/WebGL visuals; dimensional icons/cards; subtle depth and motion; persistent application shell; mobile-first full-screen navigation.
+- New information architecture: Home as a focused entry experience; nested Services and service-detail routes; visual Work/Portfolio and project-detail routes; interactive Estimator; guided Start Project intake; concise About and Contact experiences.
+- 3D direction: use the best practical performant technology for high-quality 3D/WebGL visuals rather than limiting the design to simple CSS effects. Preserve smooth performance and responsive behavior on the Samsung Galaxy S10+.
+- UX direction: avoid long-scrolling agency pages, generic SaaS dashboards, excessive text, repetitive cards, excessive gradients/glows, and unnecessary animation. Use visual communication, short labels, interactive cards, 3D objects, icons, and typography instead.
+- Backend preservation: existing Supabase schema, lead submission flow, admin functionality, estimator logic, routing foundations, and other working business functionality should be preserved unless a frontend requirement genuinely requires a change.
 - Completed in current milestone: focused Home page redesign with premium responsive layout, preserved routing and existing business functionality
 - Home production verification: npm run build passed successfully
-- Current working change awaiting commit: src/pages/Home.tsx
+- Current working change: PROJECT_CONTEXT.md updated with the new nested-SPA/product-platform design direction
 - Preserved untracked .before-* backup files remain intentionally untouched
-- Next frontend milestone: continue refining the persistent application shell/navigation and then review the routed platform pages for visual consistency
+- Next frontend milestone: establish the new premium visual foundation and persistent nested-SPA shell, then rebuild the Home experience around the new 3D/product-platform direction.
 
 WHEN RESUMING:
 
