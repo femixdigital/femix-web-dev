@@ -118,40 +118,87 @@ The current `App.tsx` contains routing for:
 - `/contact`
 - `/admin`
 
-The application currently has an older dark cyan/blue visual design.
+The application has recently been redesigned toward a premium theme-aware interface, but the current Home/Navbar implementation is still a long-scroll marketing layout with a purple/blue/green accent system. This implementation is now scheduled for a structural redesign into the new nested SPA/product-platform direction described above.
 
 ## Design Direction
-The final Femix Web Dev interface should be:
 
+The user has now defined a new product direction for the Femix Web Dev interface.
+
+The final website should be a **premium, properly nested SPA/product-platform experience**, inspired by the structural clarity and application UX of platforms such as Bitget, but with completely original Femix branding, content, visuals, and implementation.
+
+### Core UX direction
+
+- Do NOT make the Home page a long-scroll website containing every major section.
+- Home should be a focused entry experience.
+- Home, Services, Portfolio, About, Estimator, Contact, and Start a Project should behave as distinct SPA experiences/routes.
+- Maintain a persistent premium application shell/navigation while the main view changes between routes.
+- Navigation should feel like a polished digital product rather than a conventional one-page agency template.
+- Important actions should be immediately discoverable.
+- Start a Project should be treated as a primary conversion action.
+- Pages may contain their own internal sections where useful, but the overall website must not depend on one giant continuous homepage scroll.
+- Keep the experience responsive and polished on mobile as well as desktop.
+
+### Visual direction
+
+The previous purple/blue/green mixed-accent direction is no longer desired.
+
+The new visual system should use:
+- Modern premium colors
+- A restrained, coherent brand palette
+- Strong neutral foundations
+- A distinctive Femix accent system rather than many unrelated accent colors
+- Excellent contrast and readability
+- Premium typography and spacing
+- Subtle depth and interaction states rather than excessive decorative effects
+
+Do NOT make purple the dominant brand color.
+
+The visual goal is to communicate:
+
+**Femix Web Dev = serious engineering + premium digital product capability + business results.**
+
+The website should make a prospective customer feel confident that Femix can handle sophisticated, professional websites and web applications.
+
+### Brand and presentation
+
+The website should feel:
 - Premium
+- Confident
 - Modern
-- Professional
-- Clean
-- Responsive
-- Mobile-first
-- Accessible
-- Visually consistent
-- Easy to navigate
-- Suitable for a professional web-development service
-
-Do NOT lock the project into the old cyan/blue color scheme.
-
-Choose the final color palette based on:
-- Premium visual quality
-- Professional brand perception
-- Readability
-- Accessibility and contrast
-- Good UI/UX
-- Consistency across the entire application
+- Technical without being intimidating
+- Convincing to business owners
+- Original rather than template-like
+- Visually memorable
+- Clean and structured
+- Conversion-focused
 
 Avoid:
-- Generic AI-generated website appearance
+- Generic AI-generated agency aesthetics
+- Dominant purple branding
+- Randomly mixed accent colors
 - Excessive gradients
 - Excessive animations
 - Excessive glassmorphism
-- Unnecessary visual effects
-- Overly complicated layouts
+- Decorative glow effects everywhere
+- Huge repetitive cards
+- One-page marketing-template structure
 - Unnecessary technical jargon for normal clients
+
+Use Bitget only as inspiration for **application structure, navigation discipline, density, responsiveness, and product-like UX**. Do not copy Bitget's branding, proprietary visual identity, content, or exact interface.
+
+### Existing functionality
+
+Preserve useful existing functionality while redesigning the presentation:
+- React Router SPA navigation
+- Supabase integration
+- Contact/lead submission
+- Estimator functionality
+- Admin authentication and dashboard
+- Portfolio functionality
+- Theme switching
+- Toast notifications
+
+Do not unnecessarily change Supabase schema, RLS, authentication, or backend functionality during the visual redesign.
 
 ## Existing Design To Review
 `src/pages/Home.tsx` currently contains the old hero, service cards, technology section, and CTA sections.
@@ -211,10 +258,10 @@ Fields include:
 
 Do not change database security policies casually. Inspect the existing setup and user intent before modifying RLS.
 
-## Known Cleanup Item
-`ToastProvider` is currently mounted in both `src/main.tsx` and `src/App.tsx`.
+## Completed Cleanup
+`ToastProvider` duplication was resolved. It is mounted from `src/main.tsx`, while the duplicate wrapper was removed from `src/App.tsx`.
 
-This should be reviewed before finalizing the application shell so that the provider is not unnecessarily duplicated.
+Verified in commit `d151f71`.
 
 ## Important Working Principle
 The actual source code and Git history are the final authority.
@@ -231,13 +278,19 @@ When continuing this project:
 7. Continue to the next milestone.
 
 ## Current Stage
-Foundation and Tailwind configuration are complete.
+
+The technical foundation and core SPA functionality are working.
 
 The next major stage is:
 
-**Design and rebuild the user-facing Femix Web Dev interface while preserving useful existing functionality.**
+**Redesign the user-facing Femix Web Dev experience into a premium nested SPA/product-platform interface.**
 
-Start with the application shell/navigation and homepage rather than rebuilding backend functionality unnecessarily.
+The first redesign milestone is:
+1. Rework the persistent application shell/navigation.
+2. Replace the current long-scroll Home page with a focused Home experience.
+3. Establish the new restrained premium visual system without dominant purple.
+4. Keep Services, Portfolio, About, Estimator, Contact, and Start a Project as distinct SPA experiences.
+5. Preserve working Supabase and business functionality.
 
 ## Handoff Instructions
 If another ChatGPT account continues this project, it should read this file first and inspect the repository before making changes.
