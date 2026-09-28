@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ArrowUpRight,
-  Database,
+  BarChart3,
+  CheckCircle2,
   Download,
-  FileText,
   LogOut,
   Mail,
   RefreshCw,
   Shield,
   ShoppingBag,
   Trash2,
+  TrendingUp,
   Users,
+  XCircle,
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../components/Toast';
@@ -55,7 +57,6 @@ export const AdminDashboard: React.FC = () => {
   const [authLoading, setAuthLoading] = useState(true);
   const [adminLoading, setAdminLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
-
   const [activeTab, setActiveTab] = useState<Tab>('leads');
   const [leads, setLeads] = useState<Lead[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -66,15 +67,15 @@ export const AdminDashboard: React.FC = () => {
 
     const initialiseAuth = async () => {
       const {
-        data: { session },
+        data: { session: currentSession },
       } = await supabase.auth.getSession();
 
       if (!mounted) return;
 
-      setSession(session);
+      setSession(currentSession);
       setAuthLoading(false);
 
-      if (!session?.user) {
+      if (!currentSession?.user) {
         setAdminLoading(false);
         return;
       }
@@ -82,7 +83,7 @@ export const AdminDashboard: React.FC = () => {
       const { data, error } = await supabase
         .from('admin_users')
         .select('user_id')
-        .eq('user_id', session.user.id)
+        .eq('user_id', currentSession.user.id)
         .maybeSingle();
 
       if (!mounted) return;
@@ -123,7 +124,6 @@ export const AdminDashboard: React.FC = () => {
           .from('leads')
           .select('*')
           .order('created_at', { ascending: false }),
-
         supabase
           .from('orders')
           .select('*')
@@ -137,7 +137,7 @@ export const AdminDashboard: React.FC = () => {
       setOrders((ordersRes.data || []) as Order[]);
 
       showToast(
-        'Data Refreshed',
+        'Data refreshed',
         'Latest leads and orders have been synchronized.',
         'success',
       );
@@ -145,7 +145,7 @@ export const AdminDashboard: React.FC = () => {
       const message =
         err instanceof Error ? err.message : 'Failed to fetch admin data.';
 
-      showToast('Sync Error', message, 'error');
+      showToast('Sync error', message, 'error');
     } finally {
       setLoadingData(false);
     }
@@ -163,7 +163,7 @@ export const AdminDashboard: React.FC = () => {
     setIsAdmin(false);
 
     showToast(
-      'Logged Out',
+      'Logged out',
       'You have been safely signed out of the admin panel.',
       'success',
     );
@@ -180,7 +180,7 @@ export const AdminDashboard: React.FC = () => {
       setLeads((current) => current.filter((lead) => lead.id !== id));
 
       showToast(
-        'Lead Deleted',
+        'Lead deleted',
         'The lead was removed successfully.',
         'success',
       );
@@ -188,7 +188,7 @@ export const AdminDashboard: React.FC = () => {
       const message =
         err instanceof Error ? err.message : 'Failed to delete lead.';
 
-      showToast('Delete Failed', message, 'error');
+      showToast('Delete failed', message, 'error');
     }
   };
 
@@ -203,7 +203,7 @@ export const AdminDashboard: React.FC = () => {
       setOrders((current) => current.filter((order) => order.id !== id));
 
       showToast(
-        'Order Deleted',
+        'Order deleted',
         'The order was removed successfully.',
         'success',
       );
@@ -211,111 +211,26 @@ export const AdminDashboard: React.FC = () => {
       const message =
         err instanceof Error ? err.message : 'Failed to delete order.';
 
-      showToast('Delete Failed', message, 'error');
+      showToast('Delete failed', message, 'error');
     }
   };
 
-  const exportLeadsCSV = () => {
-    if (leads.length === 0) {
-      showToast('Export Error', 'No lead records available.', 'error');
-      return;
-    }
-
-    const headers = [
-      'ID',
-      'Full Name',
-      'Email',
-      'Phone',
-      'Service',
-      'Budget',
-      'Notes',
-      'Status',
-      'Source',
-      'Date',
-    ];
-
-    const rows = leads.map((lead) => [
-      lead.id,
-      lead.full_name,
-      lead.email,
-      lead.phone || '',
-      lead.service_type || '',
-      lead.budget || '',
-      lead.notes || '',
-      lead.status || '',
-      lead.source,
-      lead.created_at,
-    ]);
-
-    downloadCSV(
-      headers,
-      rows,
-      `leads_export_${new Date().toISOString().slice(0, 10)}.csv`,
-    );
-
-    showToast(
-      'CSV Exported',
-      `Successfully exported ${leads.length} lead records.`,
-      'success',
-    );
-  };
-
-  const exportOrdersCSV = () => {
-    if (orders.length === 0) {
-      showToast('Export Error', 'No order records available.', 'error');
-      return;
-    }
-
-    const headers = [
-      'ID',
-      'Client Name',
-      'Email',
-      'Phone',
-      'Package',
-      'Amount',
-      'Currency',
-      'Status',
-      'Payment Reference',
-      'Requirements',
-      'Date',
-    ];
-
-    const rows = orders.map((order) => [
-      order.id,
-      order.client_name,
-      order.client_email,
-      order.client_phone || '',
-      order.package_name,
-      order.amount ?? '',
-      order.currency,
-      order.status,
-      order.payment_reference || '',
-      order.requirements || '',
-      order.created_at,
-    ]);
-
-    downloadCSV(
-      headers,
-      rows,
-      `orders_export_${new Date().toISOString().slice(0, 10)}.csv`,
-    );
-
-    showToast(
-      'CSV Exported',
-      `Successfully exported ${orders.length} order records.`,
-      'success',
-    );
-  };
-
-  const downloadCSV = (
+  const exportCSV = (
+    type: 'leads' | 'orders',
     headers: string[],
     rows: (string | number)[][],
-    filename: string,
   ) => {
-    const escapeCSV = (value: string | number) => {
-      const stringValue = String(value);
-      return `"${stringValue.replace(/"/g, '""')}"`;
-    };
+    if (rows.length === 0) {
+      showToast(
+        'Nothing to export',
+        `No ${type} records are currently available.`,
+        'error',
+      );
+      return;
+    }
+
+    const escapeCSV = (value: string | number) =>
+      `"${String(value).replace(/"/g, '""')}"`;
 
     const csvContent = [
       headers.map(escapeCSV).join(','),
@@ -330,22 +245,109 @@ export const AdminDashboard: React.FC = () => {
     const link = document.createElement('a');
 
     link.href = url;
-    link.download = filename;
+    link.download = `${type}_export_${new Date()
+      .toISOString()
+      .slice(0, 10)}.csv`;
 
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-
     URL.revokeObjectURL(url);
+
+    showToast(
+      'CSV exported',
+      `Successfully exported ${rows.length} ${type} records.`,
+      'success',
+    );
   };
+
+  const exportLeadsCSV = () =>
+    exportCSV(
+      'leads',
+      [
+        'ID',
+        'Full Name',
+        'Email',
+        'Phone',
+        'Service',
+        'Budget',
+        'Notes',
+        'Status',
+        'Source',
+        'Date',
+      ],
+      leads.map((lead) => [
+        lead.id,
+        lead.full_name,
+        lead.email,
+        lead.phone || '',
+        lead.service_type || '',
+        lead.budget || '',
+        lead.notes || '',
+        lead.status || '',
+        lead.source,
+        lead.created_at,
+      ]),
+    );
+
+  const exportOrdersCSV = () =>
+    exportCSV(
+      'orders',
+      [
+        'ID',
+        'Client Name',
+        'Email',
+        'Phone',
+        'Package',
+        'Amount',
+        'Currency',
+        'Status',
+        'Payment Reference',
+        'Requirements',
+        'Date',
+      ],
+      orders.map((order) => [
+        order.id,
+        order.client_name,
+        order.client_email,
+        order.client_phone || '',
+        order.package_name,
+        order.amount ?? '',
+        order.currency,
+        order.status,
+        order.payment_reference || '',
+        order.requirements || '',
+        order.created_at,
+      ]),
+    );
+
+  const totalOrderValue = useMemo(
+    () =>
+      orders.reduce(
+        (total, order) =>
+          total + (order.currency === 'NGN' ? Number(order.amount || 0) : 0),
+        0,
+      ),
+    [orders],
+  );
+
+  const pendingOrders = orders.filter((order) =>
+    ['pending', 'new', 'quote'].includes(order.status.toLowerCase()),
+  ).length;
+
+  const paidOrders = orders.filter((order) =>
+    ['paid', 'completed', 'success'].includes(order.status.toLowerCase()),
+  ).length;
+
+  const activeCount = activeTab === 'leads' ? leads.length : orders.length;
 
   if (authLoading || adminLoading) {
     return (
-      <main className="min-h-[calc(100vh-72px)] bg-[#0c0c0b] px-5 py-16 text-white sm:px-8">
+      <main className="min-h-[calc(100vh-72px)] bg-[var(--app-bg)] px-5 py-16 text-[var(--app-text)] sm:px-8">
         <div className="flex min-h-[60vh] items-center justify-center">
-          <div className="flex items-center gap-3 text-sm text-white/45">
-            <RefreshCw className="h-4 w-4 animate-spin" />
-            <span>Checking secure admin access...</span>
+          <div className="flex items-center gap-3 text-sm text-[var(--app-muted)]">
+            <RefreshCw className="h-4 w-4 animate-spin text-violet-500" />
+            Checking secure admin access...
           </div>
         </div>
       </main>
@@ -358,27 +360,27 @@ export const AdminDashboard: React.FC = () => {
 
   if (!isAdmin) {
     return (
-      <main className="min-h-[calc(100vh-72px)] bg-[#0c0c0b] px-5 py-16 text-white sm:px-8">
+      <main className="min-h-[calc(100vh-72px)] bg-[var(--app-bg)] px-5 py-16 text-[var(--app-text)] sm:px-8">
         <div className="mx-auto flex min-h-[60vh] max-w-xl items-center justify-center">
-          <section className="w-full rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-center shadow-2xl">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]">
-              <Shield className="h-5 w-5 text-white/60" />
+          <section className="w-full rounded-[2rem] border border-[var(--app-border)] bg-[var(--app-surface)] p-8 text-center shadow-xl sm:p-10">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-500/10 text-rose-500">
+              <Shield className="h-6 w-6" />
             </div>
 
-            <h1 className="mt-5 text-2xl font-semibold tracking-[-0.03em]">
+            <h1 className="mt-6 text-2xl font-extrabold tracking-tight sm:text-3xl">
               Admin access required
             </h1>
 
-            <p className="mt-3 text-sm leading-6 text-white/45">
+            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[var(--app-muted)]">
               Your Supabase account is authenticated, but it has not been
               granted administrator access.
             </p>
 
             <button
               onClick={handleSignOut}
-              className="mt-7 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-3 text-xs font-semibold text-white/70 transition hover:bg-white/[0.08] hover:text-white"
+              className="mt-7 inline-flex items-center gap-2 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-2)] px-5 py-3 text-sm font-bold transition hover:border-violet-400/40 hover:text-violet-600 dark:hover:text-violet-300"
             >
-              <LogOut className="h-3.5 w-3.5" />
+              <LogOut className="h-4 w-4" />
               Sign out
             </button>
           </section>
@@ -387,372 +389,144 @@ export const AdminDashboard: React.FC = () => {
     );
   }
 
-  const activeCount = activeTab === 'leads' ? leads.length : orders.length;
-
   return (
-    <main className="min-h-[calc(100vh-72px)] bg-[#0c0c0b] px-5 py-10 text-white sm:px-8 sm:py-14">
+    <main className="min-h-[calc(100vh-72px)] bg-[var(--app-bg)] px-5 py-8 text-[var(--app-text)] sm:px-8 sm:py-12">
       <div className="mx-auto max-w-7xl">
-        <section className="border-b border-white/10 pb-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <section className="relative overflow-hidden rounded-[2rem] border border-[var(--app-border)] bg-[var(--app-surface)] p-6 shadow-xl shadow-slate-900/5 sm:p-8 lg:p-10">
+          <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-violet-500/10 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-emerald-500/8 blur-3xl" />
+
+          <div className="relative flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/35">
-                <Shield className="h-3.5 w-3.5" />
+              <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/20 bg-violet-500/8 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-violet-600 dark:text-violet-300">
+                <Shield className="h-3 w-3" />
                 Private workspace
               </div>
 
-              <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-white sm:text-4xl">
-                Admin dashboard
+              <h1 className="mt-5 text-3xl font-extrabold tracking-[-0.045em] sm:text-4xl lg:text-5xl">
+                Admin workspace
               </h1>
 
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-white/45">
-                Manage client enquiries and project orders from one secure
-                workspace.
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--app-muted)]">
+                Manage website enquiries, project orders and business activity
+                from one secure workspace.
               </p>
 
-              <div className="mt-4 flex items-center gap-2 text-xs text-white/35">
-                <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
-                <span>{session.user?.email}</span>
+              <div className="mt-5 flex items-center gap-2 text-xs text-[var(--app-muted)]">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                {session.user?.email}
               </div>
             </div>
 
-            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+            <div className="flex flex-col gap-2 sm:flex-row">
               <button
                 onClick={fetchData}
                 disabled={loadingData}
-                className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-2.5 text-xs font-semibold text-white/70 transition hover:bg-white/[0.08] hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-2)] px-4 py-3 text-sm font-bold transition hover:border-violet-400/40 hover:text-violet-600 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:text-violet-300"
               >
                 <RefreshCw
-                  className={`h-3.5 w-3.5 ${
-                    loadingData ? 'animate-spin' : ''
-                  }`}
+                  className={`h-4 w-4 ${loadingData ? 'animate-spin' : ''}`}
                 />
-                <span>{loadingData ? 'Syncing...' : 'Sync data'}</span>
+                {loadingData ? 'Syncing...' : 'Sync data'}
               </button>
 
               <button
                 onClick={handleSignOut}
-                className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-transparent px-4 py-2.5 text-xs font-semibold text-white/45 transition hover:border-white/20 hover:bg-white/[0.04] hover:text-white"
+                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[var(--app-border)] px-4 py-3 text-sm font-bold text-[var(--app-muted)] transition hover:border-rose-400/30 hover:text-rose-500"
               >
-                <LogOut className="h-3.5 w-3.5" />
-                <span>Sign out</span>
+                <LogOut className="h-4 w-4" />
+                Sign out
               </button>
             </div>
           </div>
         </section>
 
-        <section className="grid gap-3 py-8 sm:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-white/40">
-                Client leads
-              </span>
-              <Users className="h-4 w-4 text-white/30" />
-            </div>
+        <section className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <MetricCard
+            label="Client leads"
+            value={leads.length}
+            caption="Website enquiries"
+            icon={<Users className="h-5 w-5" />}
+            tone="violet"
+          />
 
-            <p className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-white">
-              {leads.length}
-            </p>
+          <MetricCard
+            label="Project orders"
+            value={orders.length}
+            caption={`${pendingOrders} currently pending`}
+            icon={<ShoppingBag className="h-5 w-5" />}
+            tone="blue"
+          />
 
-            <p className="mt-1 text-xs text-white/30">
-              Website enquiries received
-            </p>
-          </div>
+          <MetricCard
+            label="Paid / completed"
+            value={paidOrders}
+            caption="Recorded successful orders"
+            icon={<CheckCircle2 className="h-5 w-5" />}
+            tone="emerald"
+          />
 
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-white/40">
-                Project orders
-              </span>
-              <ShoppingBag className="h-4 w-4 text-white/30" />
-            </div>
-
-            <p className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-white">
-              {orders.length}
-            </p>
-
-            <p className="mt-1 text-xs text-white/30">
-              Orders currently recorded
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-white/40">
-                Current view
-              </span>
-              <Database className="h-4 w-4 text-white/30" />
-            </div>
-
-            <p className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-white">
-              {activeCount}
-            </p>
-
-            <p className="mt-1 text-xs capitalize text-white/30">
-              {activeTab} records displayed
-            </p>
-          </div>
+          <MetricCard
+            label="Order value"
+            value={formatMoney(totalOrderValue, 'NGN')}
+            caption="NGN orders only"
+            icon={<TrendingUp className="h-5 w-5" />}
+            tone="amber"
+          />
         </section>
 
-        <section>
-          <div className="flex flex-col gap-4 border-b border-white/10 pb-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex w-full rounded-xl border border-white/10 bg-white/[0.02] p-1 sm:w-auto">
-              <button
-                onClick={() => setActiveTab('leads')}
-                className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-xs font-semibold transition sm:flex-none ${
-                  activeTab === 'leads'
-                    ? 'bg-white text-[#0c0c0b]'
-                    : 'text-white/45 hover:text-white'
-                }`}
-              >
-                <Users className="h-3.5 w-3.5" />
-                <span>Leads</span>
-                <span
-                  className={`rounded-full px-1.5 py-0.5 text-[10px] ${
-                    activeTab === 'leads'
-                      ? 'bg-black/10 text-black/60'
-                      : 'bg-white/10 text-white/45'
-                  }`}
-                >
-                  {leads.length}
-                </span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab('orders')}
-                className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-xs font-semibold transition sm:flex-none ${
-                  activeTab === 'orders'
-                    ? 'bg-white text-[#0c0c0b]'
-                    : 'text-white/45 hover:text-white'
-                }`}
-              >
-                <ShoppingBag className="h-3.5 w-3.5" />
-                <span>Orders</span>
-                <span
-                  className={`rounded-full px-1.5 py-0.5 text-[10px] ${
-                    activeTab === 'orders'
-                      ? 'bg-black/10 text-black/60'
-                      : 'bg-white/10 text-white/45'
-                  }`}
-                >
-                  {orders.length}
-                </span>
-              </button>
+        <section className="mt-6 overflow-hidden rounded-[2rem] border border-[var(--app-border)] bg-[var(--app-surface)] shadow-xl shadow-slate-900/5">
+          <div className="flex flex-col gap-4 border-b border-[var(--app-border)] p-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <div>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-violet-600 dark:text-violet-300">
+                Records
+              </p>
+              <h2 className="mt-1 text-lg font-extrabold">
+                Business activity
+              </h2>
             </div>
 
-            <button
-              onClick={
-                activeTab === 'leads' ? exportLeadsCSV : exportOrdersCSV
-              }
-              className="flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold text-white/60 transition hover:bg-white/[0.07] hover:text-white"
-            >
-              <Download className="h-3.5 w-3.5" />
-              <span>
-                {activeTab === 'leads' ? 'Export leads' : 'Export orders'}
-              </span>
-              <ArrowUpRight className="h-3 w-3 text-white/30" />
-            </button>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <div className="flex rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-2)] p-1">
+                <TabButton
+                  active={activeTab === 'leads'}
+                  onClick={() => setActiveTab('leads')}
+                  icon={<Users className="h-3.5 w-3.5" />}
+                  label="Leads"
+                  count={leads.length}
+                />
+
+                <TabButton
+                  active={activeTab === 'orders'}
+                  onClick={() => setActiveTab('orders')}
+                  icon={<ShoppingBag className="h-3.5 w-3.5" />}
+                  label="Orders"
+                  count={orders.length}
+                />
+              </div>
+
+              <button
+                onClick={
+                  activeTab === 'leads' ? exportLeadsCSV : exportOrdersCSV
+                }
+                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[var(--app-border)] px-4 py-2.5 text-xs font-bold transition hover:border-violet-400/40 hover:text-violet-600 dark:hover:text-violet-300"
+              >
+                <Download className="h-3.5 w-3.5" />
+                Export {activeTab}
+                <ArrowUpRight className="h-3 w-3" />
+              </button>
+            </div>
           </div>
 
-          <div className="pt-5">
-            {activeTab === 'leads' ? (
-              <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
-                <div className="border-b border-white/10 px-5 py-5 sm:px-6">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
-                      <FileText className="h-4 w-4 text-white/60" />
-                    </div>
+          {activeTab === 'leads' ? (
+            <LeadTable leads={leads} onDelete={deleteLead} />
+          ) : (
+            <OrderTable orders={orders} onDelete={deleteOrder} />
+          )}
 
-                    <div>
-                      <h2 className="text-sm font-semibold text-white">
-                        Incoming enquiries
-                      </h2>
-                      <p className="mt-1 text-xs text-white/35">
-                        Client submissions from the website contact form.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {leads.length === 0 ? (
-                  <EmptyState
-                    icon={<Users className="h-7 w-7 text-white/20" />}
-                    title="No leads yet."
-                    description="New website enquiries will appear here."
-                  />
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full min-w-[1100px] text-left text-xs">
-                      <thead className="border-b border-white/10 bg-white/[0.02] text-[10px] font-semibold uppercase tracking-[0.14em] text-white/30">
-                        <tr>
-                          <th className="px-5 py-4">Client</th>
-                          <th className="px-5 py-4">Email</th>
-                          <th className="px-5 py-4">Service</th>
-                          <th className="px-5 py-4">Budget</th>
-                          <th className="px-5 py-4">Status</th>
-                          <th className="px-5 py-4">Date</th>
-                          <th className="px-5 py-4 text-right">Action</th>
-                        </tr>
-                      </thead>
-
-                      <tbody className="divide-y divide-white/[0.07]">
-                        {leads.map((lead) => (
-                          <tr
-                            key={lead.id}
-                            className="transition hover:bg-white/[0.025]"
-                          >
-                            <td className="px-5 py-5">
-                              <div>
-                                <span className="font-semibold text-white">
-                                  {lead.full_name}
-                                </span>
-
-                                {lead.phone && (
-                                  <p className="mt-1 text-[11px] text-white/30">
-                                    {lead.phone}
-                                  </p>
-                                )}
-                              </div>
-                            </td>
-
-                            <td className="px-5 py-5">
-                              <div className="flex items-center gap-2 text-white/50">
-                                <Mail className="h-3.5 w-3.5 shrink-0 text-white/25" />
-                                <span>{lead.email}</span>
-                              </div>
-                            </td>
-
-                            <td className="px-5 py-5">
-                              <span className="inline-flex rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1 text-white/50">
-                                {lead.service_type || 'Not specified'}
-                              </span>
-                            </td>
-
-                            <td className="px-5 py-5 text-white/50">
-                              {lead.budget || 'Not specified'}
-                            </td>
-
-                            <td className="px-5 py-5">
-                              <span className="inline-flex rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-semibold capitalize text-white/55">
-                                {lead.status || 'new'}
-                              </span>
-                            </td>
-
-                            <td className="px-5 py-5 text-white/35">
-                              {formatDate(lead.created_at)}
-                            </td>
-
-                            <td className="px-5 py-5 text-right">
-                              <button
-                                onClick={() => deleteLead(lead.id)}
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-2.5 py-1.5 text-[10px] font-semibold text-white/40 transition hover:border-red-400/30 hover:bg-red-400/10 hover:text-red-300"
-                              >
-                                <Trash2 className="h-3 w-3" />
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
-                <div className="border-b border-white/10 px-5 py-5 sm:px-6">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
-                      <ShoppingBag className="h-4 w-4 text-white/60" />
-                    </div>
-
-                    <div>
-                      <h2 className="text-sm font-semibold text-white">
-                        Project orders
-                      </h2>
-                      <p className="mt-1 text-xs text-white/35">
-                        Orders and approved project records.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {orders.length === 0 ? (
-                  <EmptyState
-                    icon={<ShoppingBag className="h-7 w-7 text-white/20" />}
-                    title="No orders yet."
-                    description="Project orders will appear here when submitted."
-                  />
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full min-w-[1050px] text-left text-xs">
-                      <thead className="border-b border-white/10 bg-white/[0.02] text-[10px] font-semibold uppercase tracking-[0.14em] text-white/30">
-                        <tr>
-                          <th className="px-5 py-4">Client</th>
-                          <th className="px-5 py-4">Package</th>
-                          <th className="px-5 py-4">Amount</th>
-                          <th className="px-5 py-4">Status</th>
-                          <th className="px-5 py-4">Payment Ref.</th>
-                          <th className="px-5 py-4">Date</th>
-                          <th className="px-5 py-4 text-right">Action</th>
-                        </tr>
-                      </thead>
-
-                      <tbody className="divide-y divide-white/[0.07]">
-                        {orders.map((order) => (
-                          <tr
-                            key={order.id}
-                            className="transition hover:bg-white/[0.025]"
-                          >
-                            <td className="px-5 py-5">
-                              <div>
-                                <span className="font-semibold text-white">
-                                  {order.client_name}
-                                </span>
-                                <p className="mt-1 text-[11px] text-white/30">
-                                  {order.client_email}
-                                </p>
-                              </div>
-                            </td>
-
-                            <td className="px-5 py-5 text-white/55">
-                              {order.package_name}
-                            </td>
-
-                            <td className="px-5 py-5 font-medium text-white/70">
-                              {formatMoney(order.amount, order.currency)}
-                            </td>
-
-                            <td className="px-5 py-5">
-                              <span className="inline-flex rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] font-semibold capitalize text-white/55">
-                                {order.status}
-                              </span>
-                            </td>
-
-                            <td className="px-5 py-5 text-white/35">
-                              {order.payment_reference || 'Not paid'}
-                            </td>
-
-                            <td className="px-5 py-5 text-white/35">
-                              {formatDate(order.created_at)}
-                            </td>
-
-                            <td className="px-5 py-5 text-right">
-                              <button
-                                onClick={() => deleteOrder(order.id)}
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 px-2.5 py-1.5 text-[10px] font-semibold text-white/40 transition hover:border-red-400/30 hover:bg-red-400/10 hover:text-red-300"
-                              >
-                                <Trash2 className="h-3 w-3" />
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </div>
-            )}
+          <div className="border-t border-[var(--app-border)] px-5 py-4 text-xs text-[var(--app-muted)] sm:px-6">
+            Showing {activeCount} {activeTab} record
+            {activeCount === 1 ? '' : 's'}.
           </div>
         </section>
       </div>
@@ -760,15 +534,272 @@ export const AdminDashboard: React.FC = () => {
   );
 };
 
+const MetricCard: React.FC<{
+  label: string;
+  value: string | number;
+  caption: string;
+  icon: React.ReactNode;
+  tone: 'violet' | 'blue' | 'emerald' | 'amber';
+}> = ({ label, value, caption, icon, tone }) => {
+  const toneClasses = {
+    violet: 'bg-violet-500/10 text-violet-600 dark:text-violet-300',
+    blue: 'bg-blue-500/10 text-blue-600 dark:text-blue-300',
+    emerald: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-300',
+    amber: 'bg-amber-500/10 text-amber-600 dark:text-amber-300',
+  };
+
+  return (
+    <div className="rounded-[1.5rem] border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-sm">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-bold text-[var(--app-muted)]">{label}</p>
+          <p className="mt-3 break-words text-2xl font-extrabold tracking-[-0.04em]">
+            {value}
+          </p>
+        </div>
+
+        <div className={`rounded-2xl p-3 ${toneClasses[tone]}`}>{icon}</div>
+      </div>
+
+      <p className="mt-3 text-xs text-[var(--app-muted)]">{caption}</p>
+    </div>
+  );
+};
+
+const TabButton: React.FC<{
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+  count: number;
+}> = ({ active, onClick, icon, label, count }) => (
+  <button
+    onClick={onClick}
+    className={`inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition ${
+      active
+        ? 'bg-[var(--app-brand)] text-white shadow-sm'
+        : 'text-[var(--app-muted)] hover:text-[var(--app-text)]'
+    }`}
+  >
+    {icon}
+    {label}
+    <span
+      className={`rounded-full px-1.5 py-0.5 text-[10px] ${
+        active
+          ? 'bg-white/15 text-white'
+          : 'bg-[var(--app-bg)] text-[var(--app-muted)]'
+      }`}
+    >
+      {count}
+    </span>
+  </button>
+);
+
+const LeadTable: React.FC<{
+  leads: Lead[];
+  onDelete: (id: string) => void;
+}> = ({ leads, onDelete }) => {
+  if (leads.length === 0) {
+    return (
+      <EmptyState
+        icon={<Users className="h-7 w-7" />}
+        title="No leads yet"
+        description="New website enquiries will appear here."
+      />
+    );
+  }
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[1050px] text-left text-xs">
+        <thead className="border-b border-[var(--app-border)] bg-[var(--app-surface-2)] text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--app-muted)]">
+          <tr>
+            <th className="px-6 py-4">Client</th>
+            <th className="px-6 py-4">Email</th>
+            <th className="px-6 py-4">Service</th>
+            <th className="px-6 py-4">Budget</th>
+            <th className="px-6 py-4">Status</th>
+            <th className="px-6 py-4">Date</th>
+            <th className="px-6 py-4 text-right">Action</th>
+          </tr>
+        </thead>
+
+        <tbody className="divide-y divide-[var(--app-border)]">
+          {leads.map((lead) => (
+            <tr
+              key={lead.id}
+              className="transition hover:bg-[var(--app-surface-2)]"
+            >
+              <td className="px-6 py-5">
+                <p className="font-extrabold">{lead.full_name}</p>
+                {lead.phone && (
+                  <p className="mt-1 text-[11px] text-[var(--app-muted)]">
+                    {lead.phone}
+                  </p>
+                )}
+              </td>
+
+              <td className="px-6 py-5">
+                <span className="flex items-center gap-2 text-[var(--app-muted)]">
+                  <Mail className="h-3.5 w-3.5 shrink-0" />
+                  {lead.email}
+                </span>
+              </td>
+
+              <td className="px-6 py-5">
+                <span className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] px-2.5 py-1 text-[var(--app-muted)]">
+                  {lead.service_type || 'Not specified'}
+                </span>
+              </td>
+
+              <td className="px-6 py-5 text-[var(--app-muted)]">
+                {lead.budget || 'Not specified'}
+              </td>
+
+              <td className="px-6 py-5">
+                <StatusBadge status={lead.status || 'new'} />
+              </td>
+
+              <td className="px-6 py-5 text-[var(--app-muted)]">
+                {formatDate(lead.created_at)}
+              </td>
+
+              <td className="px-6 py-5 text-right">
+                <DeleteButton onClick={() => onDelete(lead.id)} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const OrderTable: React.FC<{
+  orders: Order[];
+  onDelete: (id: string) => void;
+}> = ({ orders, onDelete }) => {
+  if (orders.length === 0) {
+    return (
+      <EmptyState
+        icon={<ShoppingBag className="h-7 w-7" />}
+        title="No orders yet"
+        description="Project orders will appear here when submitted."
+      />
+    );
+  }
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[1050px] text-left text-xs">
+        <thead className="border-b border-[var(--app-border)] bg-[var(--app-surface-2)] text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--app-muted)]">
+          <tr>
+            <th className="px-6 py-4">Client</th>
+            <th className="px-6 py-4">Package</th>
+            <th className="px-6 py-4">Amount</th>
+            <th className="px-6 py-4">Status</th>
+            <th className="px-6 py-4">Payment ref.</th>
+            <th className="px-6 py-4">Date</th>
+            <th className="px-6 py-4 text-right">Action</th>
+          </tr>
+        </thead>
+
+        <tbody className="divide-y divide-[var(--app-border)]">
+          {orders.map((order) => (
+            <tr
+              key={order.id}
+              className="transition hover:bg-[var(--app-surface-2)]"
+            >
+              <td className="px-6 py-5">
+                <p className="font-extrabold">{order.client_name}</p>
+                <p className="mt-1 text-[11px] text-[var(--app-muted)]">
+                  {order.client_email}
+                </p>
+              </td>
+
+              <td className="px-6 py-5 text-[var(--app-muted)]">
+                {order.package_name}
+              </td>
+
+              <td className="px-6 py-5 font-extrabold">
+                {formatMoney(order.amount, order.currency)}
+              </td>
+
+              <td className="px-6 py-5">
+                <StatusBadge status={order.status} />
+              </td>
+
+              <td className="max-w-[180px] truncate px-6 py-5 text-[var(--app-muted)]">
+                {order.payment_reference || 'Not paid'}
+              </td>
+
+              <td className="px-6 py-5 text-[var(--app-muted)]">
+                {formatDate(order.created_at)}
+              </td>
+
+              <td className="px-6 py-5 text-right">
+                <DeleteButton onClick={() => onDelete(order.id)} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
+  const normalized = status.toLowerCase();
+
+  const success = ['paid', 'completed', 'success', 'approved'].includes(
+    normalized,
+  );
+
+  const danger = ['cancelled', 'canceled', 'failed', 'rejected'].includes(
+    normalized,
+  );
+
+  const classes = success
+    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
+    : danger
+      ? 'bg-rose-500/10 text-rose-600 dark:text-rose-300'
+      : 'bg-amber-500/10 text-amber-600 dark:text-amber-300';
+
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-extrabold capitalize ${classes}`}
+    >
+      {success ? (
+        <CheckCircle2 className="h-3 w-3" />
+      ) : danger ? (
+        <XCircle className="h-3 w-3" />
+      ) : (
+        <BarChart3 className="h-3 w-3" />
+      )}
+      {status || 'new'}
+    </span>
+  );
+};
+
+const DeleteButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
+  <button
+    onClick={onClick}
+    className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--app-border)] px-2.5 py-1.5 text-[10px] font-extrabold text-[var(--app-muted)] transition hover:border-rose-400/30 hover:bg-rose-500/10 hover:text-rose-500"
+  >
+    <Trash2 className="h-3 w-3" />
+    Delete
+  </button>
+);
+
 const EmptyState: React.FC<{
   icon: React.ReactNode;
   title: string;
   description: string;
 }> = ({ icon, title, description }) => (
-  <div className="px-6 py-20 text-center">
+  <div className="px-6 py-20 text-center text-[var(--app-muted)]">
     <div className="flex justify-center">{icon}</div>
-    <p className="mt-4 text-sm font-medium text-white/50">{title}</p>
-    <p className="mt-1 text-xs text-white/25">{description}</p>
+    <p className="mt-4 text-sm font-extrabold">{title}</p>
+    <p className="mt-1 text-xs">{description}</p>
   </div>
 );
 
