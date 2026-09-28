@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { ThemeProvider } from './components/ThemeProvider';
 import { Home } from './pages/Home';
@@ -24,33 +24,33 @@ const Footer: React.FC = () => (
       </div>
 
       <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-xs font-medium text-[var(--app-muted)]">
-        <a
-          href="/#services"
+        <Link
+          to="/services"
           className="transition-colors hover:text-violet-500"
         >
           Services
-        </a>
+        </Link>
 
-        <a
-          href="/#pricing"
+        <Link
+          to="/#pricing"
           className="transition-colors hover:text-violet-500"
         >
           Pricing
-        </a>
+        </Link>
 
-        <a
-          href="/#portfolio"
+        <Link
+          to="/portfolio"
           className="transition-colors hover:text-violet-500"
         >
           Portfolio
-        </a>
+        </Link>
 
-        <a
-          href="/#contact"
+        <Link
+          to="/contact"
           className="transition-colors hover:text-violet-500"
         >
           Contact
-        </a>
+        </Link>
 
         <span>
           © {new Date().getFullYear()} Femix Web Dev
