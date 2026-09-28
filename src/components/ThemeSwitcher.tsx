@@ -47,9 +47,9 @@ export const ThemeSwitcher: React.FC = () => {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={`Theme: ${current.label}`}
-        className="flex h-10 items-center gap-2 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] px-3 text-sm font-semibold text-[var(--app-text)] transition hover:border-violet-400/60"
+        className="flex h-10 items-center gap-2 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] px-3 text-sm font-semibold text-[var(--app-text)] transition hover:border-[var(--app-brand)]"
       >
-        <CurrentIcon className="h-4 w-4 text-violet-500" />
+        <CurrentIcon className="h-4 w-4 text-[var(--app-brand)]" />
         <span className="hidden sm:inline">{current.label}</span>
         <ChevronDown
           className={`h-3.5 w-3.5 text-[var(--app-muted)] transition-transform ${
@@ -78,7 +78,7 @@ export const ThemeSwitcher: React.FC = () => {
                 }}
                 className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition ${
                   selected
-                    ? 'bg-violet-50 text-violet-700 dark:bg-violet-500/10 dark:text-violet-300'
+                    ? 'bg-[var(--app-brand-soft)] text-[var(--app-brand)]'
                     : 'text-[var(--app-text)] hover:bg-[var(--app-surface-2)]'
                 }`}
               >
