@@ -8,14 +8,19 @@ import {
   Home,
   Menu,
   MessageCircle,
+  Settings2,
   Sparkles,
+  Users,
+
   X,
 } from 'lucide-react';
 import { ThemeSwitcher } from './ThemeSwitcher';
 
 const navItems = [
   { label: 'Home', href: '/', icon: Home },
+  { label: 'Services', href: '/services', icon: Settings2 },
   { label: 'Portfolio', href: '/portfolio', icon: BriefcaseBusiness },
+  { label: 'About', href: '/about', icon: Users },
   { label: 'Estimator', href: '/estimator', icon: Calculator },
   { label: 'Contact', href: '/contact', icon: MessageCircle },
 ];
