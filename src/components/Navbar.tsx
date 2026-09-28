@@ -100,7 +100,7 @@ export const Navbar: React.FC = () => {
           <ThemeSwitcher />
 
           <Link
-            to="/estimator"
+            to="/start-project"
             className="flex items-center gap-2 rounded-lg bg-[var(--app-brand)] px-4 py-2.5 text-[13px] font-bold text-[var(--app-brand-contrast)] shadow-sm transition hover:bg-[var(--app-brand-hover)]"
           >
             Start a project
@@ -155,7 +155,7 @@ export const Navbar: React.FC = () => {
             })}
 
             <Link
-              to="/estimator"
+              to="/start-project"
               className="mt-3 flex items-center justify-between rounded-lg bg-[var(--app-brand)] px-4 py-3.5 text-sm font-bold text-[var(--app-brand-contrast)]"
             >
               <span className="flex items-center gap-3">

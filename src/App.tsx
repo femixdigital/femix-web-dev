@@ -10,6 +10,7 @@ import { Portfolio } from './pages/Portfolio';
 import About from './pages/About';
 import Services from './pages/Services';
 import { NotFound } from './pages/NotFound';
+import StartProject from './pages/StartProject';
 
 const Footer: React.FC = () => (
   <footer className="border-t border-[var(--app-border)] bg-[var(--app-surface)]">
@@ -26,28 +27,28 @@ const Footer: React.FC = () => (
       <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-xs font-medium text-[var(--app-muted)]">
         <Link
           to="/services"
-          className="transition-colors hover:text-violet-500"
+          className="transition-colors hover:text-[var(--app-brand)]"
         >
           Services
         </Link>
 
         <Link
-          to="/#pricing"
-          className="transition-colors hover:text-violet-500"
+          to="/start-project"
+          className="transition-colors hover:text-[var(--app-brand)]"
         >
-          Pricing
+          Start a project
         </Link>
 
         <Link
           to="/portfolio"
-          className="transition-colors hover:text-violet-500"
+          className="transition-colors hover:text-[var(--app-brand)]"
         >
           Portfolio
         </Link>
 
         <Link
           to="/contact"
-          className="transition-colors hover:text-violet-500"
+          className="transition-colors hover:text-[var(--app-brand)]"
         >
           Contact
         </Link>
@@ -74,6 +75,7 @@ export function App() {
               <Route path="/services" element={<Services />} />
               <Route path="/about" element={<About />} />
               <Route path="/estimator" element={<Estimator />} />
+              <Route path="/start-project" element={<StartProject />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="*" element={<NotFound />} />
