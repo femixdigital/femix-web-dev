@@ -346,7 +346,7 @@ export const AdminDashboard: React.FC = () => {
       <main className="min-h-[calc(100vh-72px)] bg-[var(--app-bg)] px-5 py-16 text-[var(--app-text)] sm:px-8">
         <div className="flex min-h-[60vh] items-center justify-center">
           <div className="flex items-center gap-3 text-sm text-[var(--app-muted)]">
-            <RefreshCw className="h-4 w-4 animate-spin text-violet-500" />
+            <RefreshCw className="h-4 w-4 animate-spin text-[var(--app-brand)]" />
             Checking secure admin access...
           </div>
         </div>
@@ -408,7 +408,7 @@ export const AdminDashboard: React.FC = () => {
 
             <button
               onClick={handleSignOut}
-              className="mt-7 inline-flex items-center gap-2 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-2)] px-5 py-3 text-sm font-bold transition hover:border-violet-400/40 hover:text-violet-600 dark:hover:text-violet-300"
+              className="mt-7 inline-flex items-center gap-2 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-2)] px-5 py-3 text-sm font-bold transition hover:border-[var(--app-brand)] hover:text-[var(--app-brand)]"
             >
               <LogOut className="h-4 w-4" />
               Sign out
@@ -422,13 +422,13 @@ export const AdminDashboard: React.FC = () => {
   return (
     <main className="min-h-[calc(100vh-72px)] bg-[var(--app-bg)] px-5 py-8 text-[var(--app-text)] sm:px-8 sm:py-12">
       <div className="mx-auto max-w-7xl">
-        <section className="relative overflow-hidden rounded-[2rem] border border-[var(--app-border)] bg-[var(--app-surface)] p-6 shadow-xl shadow-slate-900/5 sm:p-8 lg:p-10">
-          <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-violet-500/10 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-emerald-500/8 blur-3xl" />
+        <section className="relative overflow-hidden rounded-[2rem] border border-[var(--app-border)] bg-[var(--app-surface)] p-6 shadow-sm sm:p-8 lg:p-10">
+          <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[var(--app-brand-soft)] blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-[var(--app-brand)]/8 blur-3xl" />
 
           <div className="relative flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/20 bg-violet-500/8 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-violet-600 dark:text-violet-300">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--app-brand)]">
                 <Shield className="h-3 w-3" />
                 Private workspace
               </div>
@@ -443,7 +443,7 @@ export const AdminDashboard: React.FC = () => {
               </p>
 
               <div className="mt-5 flex items-center gap-2 text-xs text-[var(--app-muted)]">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                <span className="h-2 w-2 rounded-full bg-[var(--app-brand)]" />
                 {session.user?.email}
               </div>
             </div>
@@ -452,7 +452,7 @@ export const AdminDashboard: React.FC = () => {
               <button
                 onClick={fetchData}
                 disabled={loadingData}
-                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-2)] px-4 py-3 text-sm font-bold transition hover:border-violet-400/40 hover:text-violet-600 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:text-violet-300"
+                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-2)] px-4 py-3 text-sm font-bold transition hover:border-[var(--app-brand)] hover:text-[var(--app-brand)] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <RefreshCw
                   className={`h-4 w-4 ${loadingData ? 'animate-spin' : ''}`}
@@ -477,7 +477,7 @@ export const AdminDashboard: React.FC = () => {
             value={leads.length}
             caption="Website enquiries"
             icon={<Users className="h-5 w-5" />}
-            tone="violet"
+            tone="brand"
           />
 
           <MetricCard
@@ -485,7 +485,7 @@ export const AdminDashboard: React.FC = () => {
             value={orders.length}
             caption={`${pendingOrders} currently pending`}
             icon={<ShoppingBag className="h-5 w-5" />}
-            tone="blue"
+            tone="neutral"
           />
 
           <MetricCard
@@ -493,7 +493,7 @@ export const AdminDashboard: React.FC = () => {
             value={paidOrders}
             caption="Recorded successful orders"
             icon={<CheckCircle2 className="h-5 w-5" />}
-            tone="emerald"
+            tone="brand"
           />
 
           <MetricCard
@@ -501,14 +501,14 @@ export const AdminDashboard: React.FC = () => {
             value={formatMoney(totalOrderValue, 'NGN')}
             caption="NGN orders only"
             icon={<TrendingUp className="h-5 w-5" />}
-            tone="amber"
+            tone="neutral"
           />
         </section>
 
-        <section className="mt-6 overflow-hidden rounded-[2rem] border border-[var(--app-border)] bg-[var(--app-surface)] shadow-xl shadow-slate-900/5">
+        <section className="mt-6 overflow-hidden rounded-[2rem] border border-[var(--app-border)] bg-[var(--app-surface)] shadow-sm">
           <div className="flex flex-col gap-4 border-b border-[var(--app-border)] p-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-violet-600 dark:text-violet-300">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--app-brand)]">
                 Records
               </p>
               <h2 className="mt-1 text-lg font-extrabold">
@@ -539,7 +539,7 @@ export const AdminDashboard: React.FC = () => {
                 onClick={
                   activeTab === 'leads' ? exportLeadsCSV : exportOrdersCSV
                 }
-                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[var(--app-border)] px-4 py-2.5 text-xs font-bold transition hover:border-violet-400/40 hover:text-violet-600 dark:hover:text-violet-300"
+                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[var(--app-border)] px-4 py-2.5 text-xs font-bold transition hover:border-[var(--app-brand)] hover:text-[var(--app-brand)]"
               >
                 <Download className="h-3.5 w-3.5" />
                 Export {activeTab}
@@ -569,13 +569,11 @@ const MetricCard: React.FC<{
   value: string | number;
   caption: string;
   icon: React.ReactNode;
-  tone: 'violet' | 'blue' | 'emerald' | 'amber';
+  tone: 'brand' | 'neutral';
 }> = ({ label, value, caption, icon, tone }) => {
   const toneClasses = {
-    violet: 'bg-violet-500/10 text-violet-600 dark:text-violet-300',
-    blue: 'bg-blue-500/10 text-blue-600 dark:text-blue-300',
-    emerald: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-300',
-    amber: 'bg-amber-500/10 text-amber-600 dark:text-amber-300',
+    brand: 'bg-[var(--app-brand-soft)] text-[var(--app-brand)]',
+    neutral: 'bg-[var(--app-surface-3)] text-[var(--app-text)]',
   };
 
   return (
@@ -790,10 +788,10 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
   );
 
   const classes = success
-    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
+    ? 'bg-[var(--app-brand-soft)] text-[var(--app-brand)]'
     : danger
       ? 'bg-rose-500/10 text-rose-600 dark:text-rose-300'
-      : 'bg-amber-500/10 text-amber-600 dark:text-amber-300';
+      : 'bg-[var(--app-surface-3)] text-[var(--app-text)]';
 
   return (
     <span
