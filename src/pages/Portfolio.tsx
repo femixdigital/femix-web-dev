@@ -4,7 +4,7 @@ import {
   ArrowRight,
   ArrowUpRight,
   BarChart3,
-  Check,
+  CheckCircle2,
   Code2,
   Layers3,
   ShoppingBag,
@@ -15,7 +15,6 @@ interface Project {
   title: string;
   category: 'SaaS' | 'SPA' | 'Dashboard' | 'E-Commerce';
   description: string;
-  imageBg: string;
   techStack: string[];
   metrics: string;
   liveUrl?: string;
@@ -27,10 +26,9 @@ const PROJECTS: Project[] = [
     title: 'PulseMetrics SaaS Platform',
     category: 'SaaS',
     description:
-      'A real-time product analytics and user event tracking platform featuring custom PostgreSQL indexing, subscription billing, and live data charts.',
-    imageBg: 'from-violet-500/20 via-blue-500/10 to-emerald-500/10',
+      'A real-time product analytics and user event tracking platform featuring PostgreSQL data systems, subscription billing and live reporting.',
     techStack: ['React', 'TypeScript', 'Supabase', 'Tailwind CSS', 'Stripe API'],
-    metrics: '+140% faster load times, 10k+ active users',
+    metrics: '+140% faster load times · 10k+ active users',
     liveUrl: '#',
   },
   {
@@ -38,10 +36,9 @@ const PROJECTS: Project[] = [
     title: 'OmniFlow Admin Dashboard',
     category: 'Dashboard',
     description:
-      'Enterprise-grade administrative dashboard equipped with role-based access control, CSV export pipelines, and interactive toast feedback alerts.',
-    imageBg: 'from-blue-500/20 via-indigo-500/10 to-violet-500/10',
+      'An administrative workspace designed around role-based access, reporting workflows, CSV exports and operational visibility.',
     techStack: ['React', 'Vite', 'PostgreSQL', 'Lucide Icons'],
-    metrics: 'Reduced report generation time by 75%',
+    metrics: '75% reduction in report generation time',
     liveUrl: '#',
   },
   {
@@ -49,8 +46,7 @@ const PROJECTS: Project[] = [
     title: 'Aura Headless E-Commerce SPA',
     category: 'SPA',
     description:
-      'High-performance single-page shopping application with instant client-side routing, optimistic cart updates, and secure payment processing.',
-    imageBg: 'from-emerald-500/20 via-teal-500/10 to-blue-500/10',
+      'A high-performance shopping experience with client-side navigation, responsive product browsing, optimistic cart updates and secure payments.',
     techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Stripe Elements'],
     metrics: '99/100 Lighthouse Performance score',
     liveUrl: '#',
@@ -60,10 +56,9 @@ const PROJECTS: Project[] = [
     title: 'DevSync Collaborative Workspace',
     category: 'SaaS',
     description:
-      'Developer productivity suite featuring real-time document synchronization, team permission management, and custom webhook integrations.',
-    imageBg: 'from-amber-500/20 via-orange-500/10 to-rose-500/10',
+      'A collaborative productivity platform with real-time document synchronization, team permissions and custom webhook integrations.',
     techStack: ['React', 'Supabase RLS', 'TypeScript', 'Tailwind CSS'],
-    metrics: 'Zero downtime across 3 server regions',
+    metrics: 'Built for reliable multi-region operation',
     liveUrl: '#',
   },
 ];
@@ -77,32 +72,6 @@ const categoryIcons = {
   'E-Commerce': ShoppingBag,
 };
 
-const categoryStyles: Record<
-  Project['category'],
-  { icon: string; badge: string; accent: string }
-> = {
-  SaaS: {
-    icon: 'bg-violet-500/10 text-violet-600 dark:text-violet-300',
-    badge: 'text-violet-600 dark:text-violet-300',
-    accent: 'from-violet-500/25 to-blue-500/10',
-  },
-  SPA: {
-    icon: 'bg-blue-500/10 text-blue-600 dark:text-blue-300',
-    badge: 'text-blue-600 dark:text-blue-300',
-    accent: 'from-blue-500/25 to-emerald-500/10',
-  },
-  Dashboard: {
-    icon: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-300',
-    badge: 'text-emerald-600 dark:text-emerald-300',
-    accent: 'from-emerald-500/25 to-teal-500/10',
-  },
-  'E-Commerce': {
-    icon: 'bg-amber-500/10 text-amber-600 dark:text-amber-300',
-    badge: 'text-amber-600 dark:text-amber-300',
-    accent: 'from-amber-500/25 to-rose-500/10',
-  },
-};
-
 export const Portfolio: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>('All');
 
@@ -112,164 +81,201 @@ export const Portfolio: React.FC = () => {
       : PROJECTS.filter((project) => project.category === activeFilter);
 
   return (
-    <main className="min-h-screen bg-[var(--app-bg)] text-[var(--app-text)]">
-      <section className="mx-auto max-w-7xl px-5 pb-24 pt-14 sm:px-8 sm:pb-28 sm:pt-20 lg:pb-32">
-        {/* Header */}
-        <div className="max-w-4xl">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-violet-500/20 bg-violet-500/8 px-3.5 py-2 text-xs font-bold uppercase tracking-[0.16em] text-violet-600 dark:text-violet-300">
-            <Layers3 className="h-3.5 w-3.5" />
-            Selected work
+    <main className="min-h-[calc(100vh-72px)] bg-[var(--app-bg)] text-[var(--app-text)]">
+      <section className="border-b border-[var(--app-border)] bg-[var(--app-surface)]">
+        <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)] lg:items-end">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--app-muted)]">
+                <Layers3 className="h-3.5 w-3.5 text-[var(--app-brand)]" />
+                Selected work
+              </div>
+
+              <h1 className="mt-6 max-w-4xl text-4xl font-extrabold leading-[1.03] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
+                Digital products built for real business use.
+              </h1>
+
+              <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--app-muted)] sm:text-lg">
+                Explore examples of web platforms, dashboards, SaaS products
+                and digital experiences built around clarity, performance and
+                practical business requirements.
+              </p>
+            </div>
+
+            <div className="border-t border-[var(--app-border)] pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--app-muted)]">
+                Our approach
+              </p>
+
+              <div className="mt-5 space-y-4">
+                {[
+                  'Clear interfaces built around real users',
+                  'Responsive experiences across devices',
+                  'Modern and maintainable frontend systems',
+                  'Technology selected around project requirements',
+                ].map((item) => (
+                  <div key={item} className="flex items-start gap-3">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--app-brand)]" />
+                    <p className="text-sm leading-6 text-[var(--app-text)]">
+                      {item}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+          <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--app-brand)]">
+                Portfolio
+              </p>
+              <h2 className="mt-2 text-2xl font-extrabold tracking-[-0.035em] sm:text-3xl">
+                Selected projects
+              </h2>
+            </div>
+
+            <p className="max-w-md text-sm leading-6 text-[var(--app-muted)]">
+              Filter the work by product type to see different examples of
+              what we can build.
+            </p>
           </div>
 
-          <h1 className="max-w-4xl text-4xl font-extrabold leading-[1.02] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
-            Digital products designed to
-            <span className="block bg-gradient-to-r from-violet-600 via-blue-600 to-emerald-500 bg-clip-text text-transparent">
-              work beautifully.
-            </span>
-          </h1>
+          <div className="flex flex-wrap gap-2 border-b border-[var(--app-border)] pb-5">
+            {FILTERS.map((category) => {
+              const isActive = activeFilter === category;
 
-          <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--app-muted)] sm:text-lg">
-            A selection of web platforms, dashboards, SaaS products and
-            interactive experiences built with performance, clarity and
-            real-world business needs in mind.
-          </p>
-        </div>
-
-        {/* Filters */}
-        <div className="mt-12 flex flex-wrap gap-2 border-b border-[var(--app-border)] pb-5">
-          {FILTERS.map((category) => {
-            const isActive = activeFilter === category;
-
-            return (
-              <button
-                key={category}
-                type="button"
-                onClick={() => setActiveFilter(category)}
-                className={`rounded-full border px-4 py-2 text-sm font-bold transition ${
-                  isActive
-                    ? 'border-[var(--app-brand)] bg-[var(--app-brand)] text-white shadow-sm'
-                    : 'border-[var(--app-border)] bg-[var(--app-surface)] text-[var(--app-muted)] hover:border-violet-400/40 hover:text-[var(--app-text)]'
-                }`}
-              >
-                {category}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Project grid */}
-        <div className="mt-8 grid gap-5 lg:grid-cols-2">
-          {filteredProjects.map((project, index) => {
-            const Icon = categoryIcons[project.category];
-            const styles = categoryStyles[project.category];
-
-            return (
-              <article
-                key={project.id}
-                className="group overflow-hidden rounded-[2rem] border border-[var(--app-border)] bg-[var(--app-surface)] shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
-              >
-                {/* Project visual */}
-                <div
-                  className={`relative h-64 overflow-hidden bg-gradient-to-br ${project.imageBg} p-6 sm:h-72 sm:p-8`}
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => setActiveFilter(category)}
+                  className={`rounded-lg border px-4 py-2.5 text-sm font-bold transition ${
+                    isActive
+                      ? 'border-[var(--app-brand)] bg-[var(--app-brand)] text-[var(--app-brand-contrast)]'
+                      : 'border-[var(--app-border)] bg-[var(--app-surface)] text-[var(--app-muted)] hover:border-[var(--app-border-strong)] hover:text-[var(--app-text)]'
+                  }`}
                 >
-                  <div className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full bg-violet-500/10 blur-3xl" />
-                  <div className="pointer-events-none absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl" />
+                  {category}
+                </button>
+              );
+            })}
+          </div>
 
-                  <div className="relative flex h-full flex-col justify-between">
-                    <div className="flex items-start justify-between gap-4">
-                      <span
-                        className={`inline-flex items-center gap-2 rounded-full border border-[var(--app-border)] bg-[var(--app-surface)]/80 px-3 py-1.5 text-xs font-bold backdrop-blur-sm ${styles.badge}`}
-                      >
-                        <Icon className="h-3.5 w-3.5" />
-                        {project.category}
-                      </span>
+          <div className="mt-6 overflow-hidden rounded-xl border border-[var(--app-border)] bg-[var(--app-border)]">
+            {filteredProjects.map((project, index) => {
+              const Icon = categoryIcons[project.category];
 
-                      {project.liveUrl && (
+              return (
+                <article
+                  key={project.id}
+                  className="bg-[var(--app-surface)] p-6 transition hover:bg-[var(--app-surface-2)] sm:p-7 lg:p-8"
+                >
+                  <div className="grid gap-7 lg:grid-cols-[72px_minmax(0,1fr)_auto] lg:items-start lg:gap-8">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--app-brand-soft)] text-[var(--app-brand)]">
+                      <Icon className="h-5 w-5" />
+                    </div>
+
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className="text-[11px] font-bold tracking-[0.16em] text-[var(--app-muted-2)]">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+
+                        <span className="h-1 w-1 rounded-full bg-[var(--app-muted-2)]" />
+
+                        <span className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--app-brand)]">
+                          {project.category}
+                        </span>
+                      </div>
+
+                      <h3 className="mt-3 text-xl font-extrabold tracking-[-0.025em] sm:text-2xl">
+                        {project.title}
+                      </h3>
+
+                      <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--app-muted)]">
+                        {project.description}
+                      </p>
+
+                      <div className="mt-5 flex flex-wrap gap-2">
+                        {project.techStack.map((tech) => (
+                          <span
+                            key={tech}
+                            className="rounded-md border border-[var(--app-border)] bg-[var(--app-surface-2)] px-2.5 py-1.5 text-xs font-medium text-[var(--app-muted)]"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="border-t border-[var(--app-border)] pt-5 lg:w-64 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--app-muted)]">
+                        Project outcome
+                      </p>
+
+                      <p className="mt-2 text-sm font-bold leading-6 text-[var(--app-text)]">
+                        {project.metrics}
+                      </p>
+
+                      {project.liveUrl && project.liveUrl !== '#' && (
                         <a
                           href={project.liveUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          aria-label={`View ${project.title}`}
-                          className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--app-border)] bg-[var(--app-surface)]/80 text-[var(--app-text)] backdrop-blur-sm transition hover:-translate-y-0.5 hover:bg-[var(--app-surface)]"
+                          className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[var(--app-brand)] transition hover:text-[var(--app-brand-hover)]"
                         >
+                          View live project
                           <ArrowUpRight className="h-4 w-4" />
                         </a>
                       )}
                     </div>
-
-                    <div>
-                      <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--app-muted)]">
-                        {String(index + 1).padStart(2, '0')} / Case study
-                      </p>
-
-                      <h2 className="max-w-xl text-2xl font-extrabold tracking-tight sm:text-3xl">
-                        {project.title}
-                      </h2>
-                    </div>
                   </div>
-                </div>
-
-                {/* Project details */}
-                <div className="p-6 sm:p-8">
-                  <p className="text-sm leading-7 text-[var(--app-muted)]">
-                    {project.description}
-                  </p>
-
-                  <div className="mt-7 flex items-start gap-3 border-t border-[var(--app-border)] pt-5">
-                    <div
-                      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${styles.icon}`}
-                    >
-                      <Check className="h-3.5 w-3.5" />
-                    </div>
-
-                    <p className="pt-1 text-sm font-bold text-[var(--app-text)]">
-                      {project.metrics}
-                    </p>
-                  </div>
-
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {project.techStack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="rounded-full border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-1.5 text-xs font-medium text-[var(--app-muted)]"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </article>
-            );
-          })}
+                </article>
+              );
+            })}
+          </div>
         </div>
+      </section>
 
-        {/* Closing CTA */}
-        <div className="relative mt-16 overflow-hidden rounded-[2rem] border border-violet-500/20 bg-[var(--app-surface)] p-8 shadow-lg shadow-violet-500/5 sm:p-10 lg:p-12">
-          <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-violet-500/10 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-28 left-1/3 h-72 w-72 rounded-full bg-blue-500/8 blur-3xl" />
-
-          <div className="relative flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
-            <div className="max-w-2xl">
-              <p className="text-sm font-bold text-violet-600 dark:text-violet-300">
-                Have something in mind?
+      <section className="border-y border-[var(--app-border)] bg-[var(--app-surface-2)]">
+        <div className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+          <div className="flex flex-col gap-6 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--app-brand)]">
+                Your project
               </p>
 
-              <h2 className="mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl">
-                Let&apos;s build your next digital product.
+              <h2 className="mt-2 text-2xl font-extrabold tracking-[-0.035em] sm:text-3xl">
+                Have something worth building?
               </h2>
 
-              <p className="mt-3 text-sm leading-6 text-[var(--app-muted)]">
-                Tell us what you need and get an initial project estimate.
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--app-muted)] sm:text-base">
+                Tell us what you need and we&apos;ll help define the right
+                scope, features and starting point for the project.
               </p>
             </div>
 
-            <Link
-              to="/estimator"
-              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-[var(--app-brand)] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-violet-500/15 transition hover:-translate-y-0.5 hover:shadow-xl"
-            >
-              Start with an estimate
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+            <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+              <Link
+                to="/estimator"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--app-brand)] px-5 py-3 text-sm font-bold text-[var(--app-brand-contrast)] transition hover:bg-[var(--app-brand-hover)]"
+              >
+                Start a project
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center rounded-lg border border-[var(--app-border-strong)] px-5 py-3 text-sm font-bold text-[var(--app-text)] transition hover:bg-[var(--app-surface-2)]"
+              >
+                Contact Femix
+              </Link>
+            </div>
           </div>
         </div>
       </section>
