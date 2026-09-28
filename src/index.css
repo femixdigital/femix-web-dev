@@ -10,30 +10,37 @@
     "Segoe UI",
     sans-serif;
 
-  --app-bg: #f4f6f8;
+  --app-bg: #f4f6fb;
   --app-surface: #ffffff;
-  --app-surface-2: #f8fafb;
-  --app-surface-3: #eef2f4;
+  --app-surface-2: #f0f2f8;
+  --app-surface-3: #e5e8f1;
 
-  --app-text: #111827;
-  --app-text-strong: #0b1220;
-  --app-muted: #667085;
-  --app-muted-2: #98a2b3;
+  --app-text: #111421;
+  --app-text-strong: #080a12;
+  --app-muted: #626a7d;
+  --app-muted-2: #8b93a5;
 
-  --app-border: #e4e7ec;
-  --app-border-strong: #d0d5dd;
+  --app-border: #dfe3ed;
+  --app-border-strong: #cbd1df;
 
-  --app-brand: #0f766e;
-  --app-brand-hover: #0d625c;
-  --app-brand-soft: #e6f5f2;
+  --app-brand: #7357ff;
+  --app-brand-bright: #9b7cff;
+  --app-brand-hover: #6548f5;
+  --app-brand-soft: #eeeaff;
   --app-brand-contrast: #ffffff;
+
+  --app-accent: #27d9ff;
+  --app-accent-soft: #dff9ff;
+
+  --app-brand-glow: rgba(115, 87, 255, 0.18);
+  --app-accent-glow: rgba(39, 217, 255, 0.1);
 
   --app-success: #16825d;
   --app-warning: #b7791f;
   --app-danger: #c2415d;
   --app-info: #356ae6;
 
-  --app-header: rgba(255, 255, 255, 0.94);
+  --app-header: rgba(244, 246, 251, 0.84);
 
   color: var(--app-text);
   background: var(--app-bg);
@@ -47,13 +54,21 @@ html {
   min-width: 320px;
   background: var(--app-bg);
   color-scheme: light;
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: var(--app-bg);
+  background:
+    radial-gradient(
+      circle at 50% -10%,
+      var(--app-brand-glow),
+      transparent 32rem
+    ),
+    var(--app-bg);
   color: var(--app-text);
 }
 
@@ -74,41 +89,87 @@ button {
   cursor: pointer;
 }
 
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--app-brand);
+  outline-offset: 3px;
+}
+
 ::selection {
-  background: #cde9e5;
-  color: #123c38;
+  background: var(--app-brand);
+  color: var(--app-brand-contrast);
 }
 
 .dark {
-  --app-bg: #0b1015;
-  --app-surface: #111820;
-  --app-surface-2: #151e27;
-  --app-surface-3: #1b2630;
+  --app-bg: #05060b;
+  --app-surface: #0b0d15;
+  --app-surface-2: #111420;
+  --app-surface-3: #181c2b;
 
-  --app-text: #f2f4f7;
+  --app-text: #eef1f8;
   --app-text-strong: #ffffff;
-  --app-muted: #98a2b3;
-  --app-muted-2: #667085;
+  --app-muted: #969daf;
+  --app-muted-2: #697186;
 
-  --app-border: #25313b;
-  --app-border-strong: #34424e;
+  --app-border: #1e2333;
+  --app-border-strong: #30374c;
 
-  --app-brand: #2fb7a6;
-  --app-brand-hover: #43c8b7;
-  --app-brand-soft: #123c38;
-  --app-brand-contrast: #06110f;
+  --app-brand: #8065ff;
+  --app-brand-bright: #a98fff;
+  --app-brand-hover: #9179ff;
+  --app-brand-soft: #17132e;
+  --app-brand-contrast: #ffffff;
+
+  --app-accent: #27ddff;
+  --app-accent-soft: #102a31;
+
+  --app-brand-glow: rgba(128, 101, 255, 0.2);
+  --app-accent-glow: rgba(39, 221, 255, 0.1);
 
   --app-success: #35b982;
   --app-warning: #d9a441;
   --app-danger: #ef718b;
   --app-info: #6d96ed;
 
-  --app-header: rgba(11, 16, 21, 0.94);
+  --app-header: rgba(5, 6, 11, 0.82);
 
   color-scheme: dark;
 }
 
+.dark body {
+  background:
+    radial-gradient(
+      circle at 50% -12%,
+      var(--app-brand-glow),
+      transparent 34rem
+    ),
+    var(--app-bg);
+}
+
 .dark ::selection {
-  background: #245b55;
-  color: #ffffff;
+  background: var(--app-brand);
+  color: var(--app-brand-contrast);
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

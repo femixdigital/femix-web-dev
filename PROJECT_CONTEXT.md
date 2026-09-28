@@ -371,11 +371,11 @@ CURRENT VERIFIED CHECKPOINT:
 - 3D direction: use the best practical performant technology for high-quality 3D/WebGL visuals rather than limiting the design to simple CSS effects. Preserve smooth performance and responsive behavior on the Samsung Galaxy S10+.
 - UX direction: avoid long-scrolling agency pages, generic SaaS dashboards, excessive text, repetitive cards, excessive gradients/glows, and unnecessary animation. Use visual communication, short labels, interactive cards, 3D objects, icons, and typography instead.
 - Backend preservation: existing Supabase schema, lead submission flow, admin functionality, estimator logic, routing foundations, and other working business functionality should be preserved unless a frontend requirement genuinely requires a change.
-- Completed in current milestone: focused Home page redesign with premium responsive layout, preserved routing and existing business functionality
-- Home production verification: npm run build passed successfully
-- Current working change: PROJECT_CONTEXT.md updated with the new nested-SPA/product-platform design direction
+- Completed in current milestone: established the first 3D/product-platform Home experience with a reusable React Three Fiber scene, minimal-copy composition, premium indigo/violet + spectral aqua visual system, and preserved existing project CTAs/routing
+- Home production verification: npm run build passed successfully after Three.js/R3F integration and visual foundation replacement
+- Current working change: added three.js, @react-three/fiber, @react-three/drei and motion dependencies; created src/components/three/FemixScene.tsx; rebuilt Home.tsx around the 3D product-platform direction; replaced the previous lime visual foundation with indigo/violet + spectral aqua tokens; production build passes
 - Preserved untracked .before-* backup files remain intentionally untouched
-- Next frontend milestone: establish the new premium visual foundation and persistent nested-SPA shell, then rebuild the Home experience around the new 3D/product-platform direction.
+- Next frontend milestone: refine and optimize the 3D Home experience, add purposeful interaction/motion, verify mobile performance, then continue the nested Services/Work SPA surfaces without disturbing working backend functionality.
 
 WHEN RESUMING:
 
