@@ -355,7 +355,37 @@ export const AdminDashboard: React.FC = () => {
   }
 
   if (!session) {
-    return <AdminLogin onSuccess={() => window.location.reload()} />;
+    return (
+      <AdminLogin
+        onSuccess={async () => {
+          const {
+            data: { session: currentSession },
+          } = await supabase.auth.getSession();
+
+          setSession(currentSession);
+
+          if (currentSession?.user) {
+            const { data, error } = await supabase
+              .from('admin_users')
+              .select('user_id')
+              .eq('user_id', currentSession.user.id)
+              .maybeSingle();
+
+            if (error) {
+              console.error('Admin membership check failed:', error);
+              setIsAdmin(false);
+            } else {
+              setIsAdmin(Boolean(data));
+            }
+          } else {
+            setIsAdmin(false);
+          }
+
+          setAuthLoading(false);
+          setAdminLoading(false);
+        }}
+      />
+    );
   }
 
   if (!isAdmin) {
