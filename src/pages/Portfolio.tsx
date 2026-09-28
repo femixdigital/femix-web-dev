@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
+  ArrowRight,
   ArrowUpRight,
   BarChart3,
   Check,
@@ -26,7 +28,7 @@ const PROJECTS: Project[] = [
     category: 'SaaS',
     description:
       'A real-time product analytics and user event tracking platform featuring custom PostgreSQL indexing, subscription billing, and live data charts.',
-    imageBg: 'from-neutral-800 via-neutral-900 to-stone-950',
+    imageBg: 'from-violet-500/20 via-blue-500/10 to-emerald-500/10',
     techStack: ['React', 'TypeScript', 'Supabase', 'Tailwind CSS', 'Stripe API'],
     metrics: '+140% faster load times, 10k+ active users',
     liveUrl: '#',
@@ -37,7 +39,7 @@ const PROJECTS: Project[] = [
     category: 'Dashboard',
     description:
       'Enterprise-grade administrative dashboard equipped with role-based access control, CSV export pipelines, and interactive toast feedback alerts.',
-    imageBg: 'from-stone-800 via-neutral-900 to-neutral-950',
+    imageBg: 'from-blue-500/20 via-indigo-500/10 to-violet-500/10',
     techStack: ['React', 'Vite', 'PostgreSQL', 'Lucide Icons'],
     metrics: 'Reduced report generation time by 75%',
     liveUrl: '#',
@@ -48,7 +50,7 @@ const PROJECTS: Project[] = [
     category: 'SPA',
     description:
       'High-performance single-page shopping application with instant client-side routing, optimistic cart updates, and secure payment processing.',
-    imageBg: 'from-neutral-700 via-stone-900 to-neutral-950',
+    imageBg: 'from-emerald-500/20 via-teal-500/10 to-blue-500/10',
     techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Stripe Elements'],
     metrics: '99/100 Lighthouse Performance score',
     liveUrl: '#',
@@ -59,7 +61,7 @@ const PROJECTS: Project[] = [
     category: 'SaaS',
     description:
       'Developer productivity suite featuring real-time document synchronization, team permission management, and custom webhook integrations.',
-    imageBg: 'from-stone-700 via-neutral-900 to-neutral-950',
+    imageBg: 'from-amber-500/20 via-orange-500/10 to-rose-500/10',
     techStack: ['React', 'Supabase RLS', 'TypeScript', 'Tailwind CSS'],
     metrics: 'Zero downtime across 3 server regions',
     liveUrl: '#',
@@ -75,6 +77,32 @@ const categoryIcons = {
   'E-Commerce': ShoppingBag,
 };
 
+const categoryStyles: Record<
+  Project['category'],
+  { icon: string; badge: string; accent: string }
+> = {
+  SaaS: {
+    icon: 'bg-violet-500/10 text-violet-600 dark:text-violet-300',
+    badge: 'text-violet-600 dark:text-violet-300',
+    accent: 'from-violet-500/25 to-blue-500/10',
+  },
+  SPA: {
+    icon: 'bg-blue-500/10 text-blue-600 dark:text-blue-300',
+    badge: 'text-blue-600 dark:text-blue-300',
+    accent: 'from-blue-500/25 to-emerald-500/10',
+  },
+  Dashboard: {
+    icon: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-300',
+    badge: 'text-emerald-600 dark:text-emerald-300',
+    accent: 'from-emerald-500/25 to-teal-500/10',
+  },
+  'E-Commerce': {
+    icon: 'bg-amber-500/10 text-amber-600 dark:text-amber-300',
+    badge: 'text-amber-600 dark:text-amber-300',
+    accent: 'from-amber-500/25 to-rose-500/10',
+  },
+};
+
 export const Portfolio: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>('All');
 
@@ -84,20 +112,23 @@ export const Portfolio: React.FC = () => {
       : PROJECTS.filter((project) => project.category === activeFilter);
 
   return (
-    <main className="min-h-screen bg-[#0c0c0b] text-white">
-      <section className="mx-auto max-w-7xl px-5 pb-20 pt-14 sm:px-8 sm:pt-20">
+    <main className="min-h-screen bg-[var(--app-bg)] text-[var(--app-text)]">
+      <section className="mx-auto max-w-7xl px-5 pb-24 pt-14 sm:px-8 sm:pb-28 sm:pt-20 lg:pb-32">
         {/* Header */}
-        <div className="max-w-3xl">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-neutral-300">
+        <div className="max-w-4xl">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-violet-500/20 bg-violet-500/8 px-3.5 py-2 text-xs font-bold uppercase tracking-[0.16em] text-violet-600 dark:text-violet-300">
             <Layers3 className="h-3.5 w-3.5" />
             Selected work
           </div>
 
-          <h1 className="max-w-3xl text-4xl font-semibold tracking-[-0.04em] text-white sm:text-6xl">
-            Digital products designed to work beautifully.
+          <h1 className="max-w-4xl text-4xl font-extrabold leading-[1.02] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
+            Digital products designed to
+            <span className="block bg-gradient-to-r from-violet-600 via-blue-600 to-emerald-500 bg-clip-text text-transparent">
+              work beautifully.
+            </span>
           </h1>
 
-          <p className="mt-6 max-w-2xl text-base leading-7 text-neutral-400 sm:text-lg">
+          <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--app-muted)] sm:text-lg">
             A selection of web platforms, dashboards, SaaS products and
             interactive experiences built with performance, clarity and
             real-world business needs in mind.
@@ -105,7 +136,7 @@ export const Portfolio: React.FC = () => {
         </div>
 
         {/* Filters */}
-        <div className="mt-12 flex flex-wrap gap-2 border-b border-white/10 pb-5">
+        <div className="mt-12 flex flex-wrap gap-2 border-b border-[var(--app-border)] pb-5">
           {FILTERS.map((category) => {
             const isActive = activeFilter === category;
 
@@ -114,10 +145,10 @@ export const Portfolio: React.FC = () => {
                 key={category}
                 type="button"
                 onClick={() => setActiveFilter(category)}
-                className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
+                className={`rounded-full border px-4 py-2 text-sm font-bold transition ${
                   isActive
-                    ? 'border-white bg-white text-neutral-950'
-                    : 'border-white/10 bg-white/[0.03] text-neutral-400 hover:border-white/20 hover:text-white'
+                    ? 'border-[var(--app-brand)] bg-[var(--app-brand)] text-white shadow-sm'
+                    : 'border-[var(--app-border)] bg-[var(--app-surface)] text-[var(--app-muted)] hover:border-violet-400/40 hover:text-[var(--app-text)]'
                 }`}
               >
                 {category}
@@ -127,24 +158,28 @@ export const Portfolio: React.FC = () => {
         </div>
 
         {/* Project grid */}
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        <div className="mt-8 grid gap-5 lg:grid-cols-2">
           {filteredProjects.map((project, index) => {
             const Icon = categoryIcons[project.category];
+            const styles = categoryStyles[project.category];
 
             return (
               <article
                 key={project.id}
-                className="group overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.025] transition duration-300 hover:-translate-y-1 hover:border-white/20"
+                className="group overflow-hidden rounded-[2rem] border border-[var(--app-border)] bg-[var(--app-surface)] shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
                 {/* Project visual */}
                 <div
                   className={`relative h-64 overflow-hidden bg-gradient-to-br ${project.imageBg} p-6 sm:h-72 sm:p-8`}
                 >
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_25%,rgba(255,255,255,0.12),transparent_30%)]" />
+                  <div className="pointer-events-none absolute -right-16 -top-20 h-64 w-64 rounded-full bg-violet-500/10 blur-3xl" />
+                  <div className="pointer-events-none absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl" />
 
                   <div className="relative flex h-full flex-col justify-between">
-                    <div className="flex items-start justify-between">
-                      <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/20 px-3 py-1.5 text-xs font-medium text-white/80 backdrop-blur-sm">
+                    <div className="flex items-start justify-between gap-4">
+                      <span
+                        className={`inline-flex items-center gap-2 rounded-full border border-[var(--app-border)] bg-[var(--app-surface)]/80 px-3 py-1.5 text-xs font-bold backdrop-blur-sm ${styles.badge}`}
+                      >
                         <Icon className="h-3.5 w-3.5" />
                         {project.category}
                       </span>
@@ -155,7 +190,7 @@ export const Portfolio: React.FC = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={`View ${project.title}`}
-                          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-black/20 text-white/70 backdrop-blur-sm transition hover:bg-white hover:text-neutral-950"
+                          className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--app-border)] bg-[var(--app-surface)]/80 text-[var(--app-text)] backdrop-blur-sm transition hover:-translate-y-0.5 hover:bg-[var(--app-surface)]"
                         >
                           <ArrowUpRight className="h-4 w-4" />
                         </a>
@@ -163,10 +198,11 @@ export const Portfolio: React.FC = () => {
                     </div>
 
                     <div>
-                      <p className="mb-2 text-xs font-medium uppercase tracking-[0.16em] text-white/50">
+                      <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--app-muted)]">
                         {String(index + 1).padStart(2, '0')} / Case study
                       </p>
-                      <h2 className="max-w-xl text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+
+                      <h2 className="max-w-xl text-2xl font-extrabold tracking-tight sm:text-3xl">
                         {project.title}
                       </h2>
                     </div>
@@ -175,13 +211,18 @@ export const Portfolio: React.FC = () => {
 
                 {/* Project details */}
                 <div className="p-6 sm:p-8">
-                  <p className="text-sm leading-7 text-neutral-400">
+                  <p className="text-sm leading-7 text-[var(--app-muted)]">
                     {project.description}
                   </p>
 
-                  <div className="mt-7 flex items-start gap-3 border-t border-white/10 pt-5">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-neutral-300" />
-                    <p className="text-sm font-medium text-neutral-200">
+                  <div className="mt-7 flex items-start gap-3 border-t border-[var(--app-border)] pt-5">
+                    <div
+                      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${styles.icon}`}
+                    >
+                      <Check className="h-3.5 w-3.5" />
+                    </div>
+
+                    <p className="pt-1 text-sm font-bold text-[var(--app-text)]">
                       {project.metrics}
                     </p>
                   </div>
@@ -190,7 +231,7 @@ export const Portfolio: React.FC = () => {
                     {project.techStack.map((tech) => (
                       <span
                         key={tech}
-                        className="rounded-full border border-white/10 bg-white/[0.035] px-3 py-1.5 text-xs text-neutral-400"
+                        className="rounded-full border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-1.5 text-xs font-medium text-[var(--app-muted)]"
                       >
                         {tech}
                       </span>
@@ -203,27 +244,37 @@ export const Portfolio: React.FC = () => {
         </div>
 
         {/* Closing CTA */}
-        <div className="mt-16 overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.035] p-7 sm:p-10">
-          <div className="flex flex-col gap-7 md:flex-row md:items-center md:justify-between">
+        <div className="relative mt-16 overflow-hidden rounded-[2rem] border border-violet-500/20 bg-[var(--app-surface)] p-8 shadow-lg shadow-violet-500/5 sm:p-10 lg:p-12">
+          <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-violet-500/10 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-28 left-1/3 h-72 w-72 rounded-full bg-blue-500/8 blur-3xl" />
+
+          <div className="relative flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
             <div className="max-w-2xl">
-              <p className="text-sm font-medium text-neutral-400">
+              <p className="text-sm font-bold text-violet-600 dark:text-violet-300">
                 Have something in mind?
               </p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+
+              <h2 className="mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl">
                 Let&apos;s build your next digital product.
               </h2>
+
+              <p className="mt-3 text-sm leading-6 text-[var(--app-muted)]">
+                Tell us what you need and get an initial project estimate.
+              </p>
             </div>
 
-            <a
-              href="/estimator"
-              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-200"
+            <Link
+              to="/estimator"
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-[var(--app-brand)] px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-violet-500/15 transition hover:-translate-y-0.5 hover:shadow-xl"
             >
               Start with an estimate
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>
     </main>
   );
 };
+
+export default Portfolio;
