@@ -65,7 +65,7 @@ export const Home: React.FC = () => {
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  to="/estimator"
+                  to="/start-project"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--app-brand)] px-5 py-3.5 text-sm font-bold text-[var(--app-brand-contrast)] shadow-sm transition hover:bg-[var(--app-brand-hover)]"
                 >
                   Start a project
@@ -238,7 +238,7 @@ export const Home: React.FC = () => {
 
             <div className="flex flex-col gap-2 sm:flex-row lg:flex-col">
               <Link
-                to="/estimator"
+                to="/start-project"
                 className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--app-brand)] px-5 py-3 text-sm font-bold text-[var(--app-brand-contrast)] transition hover:bg-[var(--app-brand-hover)]"
               >
                 Start a project
