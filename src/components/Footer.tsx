@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Code2, Heart } from 'lucide-react';
 
 export const Footer: React.FC = () => {
@@ -33,7 +34,7 @@ export const Footer: React.FC = () => {
                 <a href="#contact" className="hover:text-cyan-400 transition-colors">Contact Us</a>
               </li>
               <li>
-                <a href="/admin" className="hover:text-cyan-400 transition-colors">Admin Dashboard</a>
+                <Link to="/admin" className="hover:text-cyan-400 transition-colors">Admin Dashboard</Link>
               </li>
             </ul>
           </div>
