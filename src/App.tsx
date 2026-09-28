@@ -7,6 +7,8 @@ import { Estimator } from './pages/Estimator';
 import Contact from './pages/Contact';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { Portfolio } from './pages/Portfolio';
+import About from './pages/About';
+import Services from './pages/Services';
 import { NotFound } from './pages/NotFound';
 
 const Footer: React.FC = () => (
@@ -69,6 +71,8 @@ export function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/portfolio" element={<Portfolio />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/about" element={<About />} />
               <Route path="/estimator" element={<Estimator />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/admin" element={<AdminDashboard />} />
