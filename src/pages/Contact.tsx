@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useState, type FormEvent } from 'react';
 import {
   AlertCircle,
@@ -160,13 +160,13 @@ export default function Contact() {
                 Get a starting project estimate before sending your enquiry.
               </p>
 
-              <a
-                href="/estimator"
+              <Link
+                to="/estimator"
                 className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[var(--app-text)] transition hover:text-violet-600 dark:hover:text-violet-300"
               >
                 Open project estimator
                 <ArrowRight className="h-4 w-4" />
-              </a>
+              </Link>
             </div>
           </div>
 
