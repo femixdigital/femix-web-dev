@@ -1,3 +1,4 @@
+import { useSearchParams } from 'react-router-dom';
 import { useState, type FormEvent } from 'react';
 import {
   AlertCircle,
@@ -11,10 +12,18 @@ import {
 import { supabase } from '../lib/supabase';
 
 export default function Contact() {
+  const [searchParams] = useSearchParams();
+  const selectedPackage = searchParams.get('package')?.trim() || '';
+  const selectedPrice = searchParams.get('price')?.trim() || '';
+
+  const initialMessage = selectedPackage
+    ? `I'm interested in the ${selectedPackage}${selectedPrice ? ` (starting from ₦${Number(selectedPrice).toLocaleString()})` : ''}.\n\nProject details:\n`
+    : '';
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: '',
+    message: initialMessage,
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -56,7 +65,7 @@ export default function Contact() {
             full_name: formData.name.trim(),
             email: formData.email.trim(),
             notes: formData.message.trim(),
-            service_type: 'General Contact Inquiry',
+            service_type: selectedPackage || 'General Contact Inquiry',
             status: 'new',
             source: 'website-contact-form',
           },
@@ -200,6 +209,22 @@ export default function Contact() {
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600 dark:text-violet-300">
                     Project inquiry
                   </p>
+
+                  {selectedPackage && (
+                    <div className="mt-4 rounded-2xl border border-violet-500/20 bg-violet-500/5 px-4 py-3">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-violet-600 dark:text-violet-300">
+                        Selected package
+                      </p>
+                      <p className="mt-1 text-sm font-extrabold text-[var(--app-text)]">
+                        {selectedPackage}
+                        {selectedPrice && (
+                          <span className="ml-2 font-semibold text-[var(--app-muted)]">
+                            from ₦{Number(selectedPrice).toLocaleString()}
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                  )}
 
                   <h2 className="mt-2 text-2xl font-extrabold tracking-tight sm:text-3xl">
                     Let&apos;s discuss your project.

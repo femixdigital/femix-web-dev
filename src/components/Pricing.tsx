@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -127,8 +128,19 @@ const accentStyles: Record<
 };
 
 export const Pricing: React.FC<PricingProps> = ({ onSelectPackage }) => {
+  const navigate = useNavigate();
+
   const handleSelect = (name: string, amount: number) => {
     onSelectPackage?.(name, amount);
+
+    if (!onSelectPackage) {
+      const params = new URLSearchParams({
+        package: name,
+        price: String(amount),
+      });
+
+      navigate(`/contact?${params.toString()}`);
+    }
   };
 
   return (
