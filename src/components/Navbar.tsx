@@ -9,9 +9,7 @@ import {
   Menu,
   MessageCircle,
   Settings2,
-  Sparkles,
   Users,
-
   X,
 } from 'lucide-react';
 import { ThemeSwitcher } from './ThemeSwitcher';
@@ -51,32 +49,28 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--app-border)] bg-[color:var(--app-bg)]/90 backdrop-blur-xl">
-      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-5 sm:px-8">
+    <header className="sticky top-0 z-50 border-b border-[var(--app-border)] bg-[var(--app-header)] backdrop-blur-xl">
+      <div className="mx-auto flex h-[70px] max-w-[1440px] items-center gap-4 px-4 sm:px-6 lg:px-8">
         <Link
           to="/"
-          className="group flex min-w-0 items-center gap-3"
+          className="group flex min-w-0 shrink-0 items-center gap-3"
           aria-label="Femix Web Dev home"
         >
-          <span className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-slate-950 text-white shadow-lg shadow-violet-500/10 dark:bg-white dark:text-slate-950">
-            <span className="absolute -right-2 -top-2 h-6 w-6 rounded-full bg-violet-500" />
-            <span className="absolute -bottom-3 -left-2 h-7 w-7 rounded-full bg-emerald-400" />
-            <span className="relative text-sm font-black tracking-[-0.08em]">
-              FW
-            </span>
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--app-border-strong)] bg-[var(--app-text-strong)] text-[var(--app-bg)] shadow-sm transition-transform duration-200 group-hover:-translate-y-0.5">
+            <span className="text-xs font-black tracking-[-0.12em]">FX</span>
           </span>
 
           <span className="min-w-0">
-            <span className="block truncate text-[17px] font-extrabold tracking-[-0.035em] text-[var(--app-text)] sm:text-[19px]">
+            <span className="block truncate text-[16px] font-extrabold tracking-[-0.035em] text-[var(--app-text-strong)] sm:text-[17px]">
               Femix Web Dev
             </span>
-            <span className="hidden text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--app-muted)] sm:block">
-              Design · Code · Digital Products
+            <span className="hidden text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--app-muted)] sm:block">
+              Digital products & web systems
             </span>
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav className="ml-auto hidden items-center gap-0.5 xl:flex">
           {navItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
@@ -85,38 +79,36 @@ export const Navbar: React.FC = () => {
               <Link
                 key={item.href}
                 to={item.href}
-                className={`group relative flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition ${
+                className={`relative flex items-center gap-2 px-3.5 py-2.5 text-[13px] font-semibold transition-colors ${
                   active
-                    ? 'bg-[var(--app-surface)] text-[var(--app-text)] shadow-sm'
-                    : 'text-[var(--app-muted)] hover:bg-[var(--app-surface)] hover:text-[var(--app-text)]'
+                    ? 'text-[var(--app-text-strong)]'
+                    : 'text-[var(--app-muted)] hover:text-[var(--app-text)]'
                 }`}
               >
-                <Icon
-                  className={`h-4 w-4 ${
-                    active
-                      ? 'text-violet-500'
-                      : 'text-[var(--app-muted)] group-hover:text-violet-500'
-                  }`}
-                />
+                <Icon className="h-3.5 w-3.5" />
                 {item.label}
+
+                {active && (
+                  <span className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-[var(--app-brand)]" />
+                )}
               </Link>
             );
           })}
         </nav>
 
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="ml-auto hidden items-center gap-2 xl:ml-4 xl:flex">
           <ThemeSwitcher />
 
           <Link
             to="/estimator"
-            className="flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-violet-600/20 transition hover:bg-violet-700"
+            className="flex items-center gap-2 rounded-lg bg-[var(--app-brand)] px-4 py-2.5 text-[13px] font-bold text-[var(--app-brand-contrast)] shadow-sm transition hover:bg-[var(--app-brand-hover)]"
           >
             Start a project
             <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
 
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="ml-auto flex items-center gap-2 xl:hidden">
           <ThemeSwitcher />
 
           <button
@@ -124,7 +116,7 @@ export const Navbar: React.FC = () => {
             onClick={() => setMobileOpen((value) => !value)}
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileOpen}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] text-[var(--app-text)]"
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] text-[var(--app-text)] transition hover:border-[var(--app-border-strong)]"
           >
             {mobileOpen ? (
               <X className="h-5 w-5" />
@@ -136,8 +128,8 @@ export const Navbar: React.FC = () => {
       </div>
 
       {mobileOpen && (
-        <div className="border-t border-[var(--app-border)] bg-[var(--app-bg)] lg:hidden">
-          <nav className="mx-auto max-w-7xl space-y-1 px-5 py-4 sm:px-8">
+        <div className="border-t border-[var(--app-border)] bg-[var(--app-surface)] xl:hidden">
+          <nav className="mx-auto max-w-[1440px] space-y-1 px-4 py-4 sm:px-6">
             {navItems.map((item) => {
               const Icon = item.icon;
               const active = isActive(item.href);
@@ -146,18 +138,14 @@ export const Navbar: React.FC = () => {
                 <Link
                   key={item.href}
                   to={item.href}
-                  className={`flex items-center justify-between rounded-2xl px-4 py-3.5 text-sm font-semibold ${
+                  className={`flex items-center justify-between rounded-lg px-4 py-3.5 text-sm font-semibold transition ${
                     active
-                      ? 'bg-[var(--app-surface)] text-[var(--app-text)]'
-                      : 'text-[var(--app-muted)]'
+                      ? 'bg-[var(--app-brand-soft)] text-[var(--app-text-strong)]'
+                      : 'text-[var(--app-muted)] hover:bg-[var(--app-surface-2)] hover:text-[var(--app-text)]'
                   }`}
                 >
                   <span className="flex items-center gap-3">
-                    <Icon
-                      className={`h-4 w-4 ${
-                        active ? 'text-violet-500' : ''
-                      }`}
-                    />
+                    <Icon className="h-4 w-4" />
                     {item.label}
                   </span>
 
@@ -168,10 +156,10 @@ export const Navbar: React.FC = () => {
 
             <Link
               to="/estimator"
-              className="mt-3 flex items-center justify-between rounded-2xl bg-violet-600 px-4 py-3.5 text-sm font-bold text-white"
+              className="mt-3 flex items-center justify-between rounded-lg bg-[var(--app-brand)] px-4 py-3.5 text-sm font-bold text-[var(--app-brand-contrast)]"
             >
               <span className="flex items-center gap-3">
-                <Sparkles className="h-4 w-4" />
+                <ArrowUpRight className="h-4 w-4" />
                 Start a project
               </span>
 
