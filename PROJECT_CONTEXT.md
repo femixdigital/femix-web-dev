@@ -118,7 +118,7 @@ The current `App.tsx` contains routing for:
 - `/contact`
 - `/admin`
 
-The application has recently been redesigned toward a premium theme-aware interface, but the current Home/Navbar implementation is still a long-scroll marketing layout with a purple/blue/green accent system. This implementation is now scheduled for a structural redesign into the new nested SPA/product-platform direction described above.
+The application is now actively transitioning from the previous long-scroll marketing layout into the nested SPA/product-platform direction described above. The first verified structural milestone replaces the old Home composition with a focused product-style interface and replaces the previous spherical 3D visual with an original Femix FX 3D core.
 
 ## Design Direction
 
@@ -201,7 +201,7 @@ Preserve useful existing functionality while redesigning the presentation:
 Do not unnecessarily change Supabase schema, RLS, authentication, or backend functionality during the visual redesign.
 
 ## Existing Design To Review
-`src/pages/Home.tsx` currently contains the old hero, service cards, technology section, and CTA sections.
+`src/pages/Home.tsx` now contains the new focused product-style Home experience with minimal copy, compact service navigation, and the new 3D Femix visual.
 
 The old design uses cyan/blue/slate styling and technical language.
 
@@ -371,11 +371,11 @@ CURRENT VERIFIED CHECKPOINT:
 - 3D direction: use the best practical performant technology for high-quality 3D/WebGL visuals rather than limiting the design to simple CSS effects. Preserve smooth performance and responsive behavior on the Samsung Galaxy S10+.
 - UX direction: avoid long-scrolling agency pages, generic SaaS dashboards, excessive text, repetitive cards, excessive gradients/glows, and unnecessary animation. Use visual communication, short labels, interactive cards, 3D objects, icons, and typography instead.
 - Backend preservation: existing Supabase schema, lead submission flow, admin functionality, estimator logic, routing foundations, and other working business functionality should be preserved unless a frontend requirement genuinely requires a change.
-- Completed in current milestone: established the first 3D/product-platform Home experience with a reusable React Three Fiber scene, minimal-copy composition, premium indigo/violet + spectral aqua visual system, and preserved existing project CTAs/routing
-- Home production verification: npm run build passed successfully after Three.js/R3F integration and visual foundation replacement
-- Current working change: added three.js, @react-three/fiber, @react-three/drei and motion dependencies; created src/components/three/FemixScene.tsx; rebuilt Home.tsx around the 3D product-platform direction; replaced the previous lime visual foundation with indigo/violet + spectral aqua tokens; production build passes
+- Completed in current milestone: replaced the old long-scroll Home composition with a focused product-style SPA entry surface, minimal-copy layout, compact service navigation, and an original Femix FX 3D core with orbital geometry.
+- Home production verification: npm run build passed successfully after the SPA shell, Home redesign, and new 3D FX scene were implemented.
+- Current working change: created the new src/components/three/FemixScene.tsx FX core/orbit visual, rebuilt Home.tsx around the product-interface direction, removed the footer from the persistent shell, and cleaned the App.tsx imports. Production build passes.
 - Preserved untracked .before-* backup files remain intentionally untouched
-- Next frontend milestone: refine and optimize the 3D Home experience, add purposeful interaction/motion, verify mobile performance, then continue the nested Services/Work SPA surfaces without disturbing working backend functionality.
+- Next frontend milestone: build the nested Services/service-detail SPA surfaces, then continue the Work/project-detail experience without disturbing working backend functionality.
 
 WHEN RESUMING:
 
