@@ -10,6 +10,7 @@ import About from './pages/About';
 import Services from './pages/Services';
 import { NotFound } from './pages/NotFound';
 import StartProject from './pages/StartProject';
+import ServiceDetail from './pages/ServiceDetail';
 
 
 export function App() {
@@ -24,6 +25,7 @@ export function App() {
               <Route path="/" element={<Home />} />
               <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/services" element={<Services />} />
+              <Route path="/services/:service" element={<ServiceDetail />} />
               <Route path="/about" element={<About />} />
               <Route path="/estimator" element={<Estimator />} />
               <Route path="/start-project" element={<StartProject />} />
