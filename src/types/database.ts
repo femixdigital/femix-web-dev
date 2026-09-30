@@ -1,5 +1,6 @@
 export type LeadStatus = 'new' | 'contacted' | 'qualified' | 'converted' | 'archived';
 export type OrderStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled';
+export type PaymentStatus = 'unpaid' | 'proof_submitted' | 'verified' | 'rejected';
 export type CurrencyCode = 'USD' | 'NGN';
 
 export interface Lead {
@@ -27,6 +28,12 @@ export interface Order {
   client_phone?: string | null;
   status: OrderStatus;
   payment_reference?: string | null;
+  payment_status: PaymentStatus;
+  payment_proof_path?: string | null;
+  payment_submitted_at?: string | null;
+  payment_verified_at?: string | null;
+  payment_verified_by?: string | null;
+  payment_submission_token?: string | null;
   requirements?: string | null;
   created_at: string;
   updated_at: string;

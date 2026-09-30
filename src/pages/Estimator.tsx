@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../components/Toast';
 import {
@@ -92,6 +93,7 @@ const formatNGN = (amount: number) =>
 
 export const Estimator: React.FC = () => {
   const { showToast } = useToast();
+  const navigate = useNavigate();
 
   const [pages, setPages] = useState<number>(3);
   const [hasAuth, setHasAuth] = useState<boolean>(false);
@@ -217,8 +219,13 @@ export const Estimator: React.FC = () => {
     ].join('\n');
 
     try {
+      const orderId = crypto.randomUUID();
+      const paymentSubmissionToken = crypto.randomUUID();
+
       const { error } = await supabase.from('orders').insert([
         {
+          id: orderId,
+          payment_submission_token: paymentSubmissionToken,
           package_name: 'Custom Project Estimate',
           amount: totalNGN,
           currency: 'NGN',
@@ -232,15 +239,21 @@ export const Estimator: React.FC = () => {
 
       if (error) throw error;
 
-      showToast(
-        'Quote Request Submitted!',
-        'We received your estimate request and will contact you with the next steps.',
-        'success',
+      sessionStorage.setItem(
+        'femix_payment_order',
+        JSON.stringify({
+          orderId,
+          paymentSubmissionToken,
+          amount: totalNGN,
+          packageName: 'Custom Project Estimate',
+        }),
       );
 
       setClientName('');
       setClientEmail('');
       setClientPhone('');
+
+      navigate('/payment');
     } catch (err: unknown) {
       const message =
         err instanceof Error
@@ -539,7 +552,7 @@ export const Estimator: React.FC = () => {
                     </button>
                   </form>
 
-                  <div className="mt-5 flex items-start gap-3 rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] p-3.5 text-xs leading-5 text-[var(--app-muted)]">
+                                    <div className="mt-5 flex items-start gap-3 rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] p-3.5 text-xs leading-5 text-[var(--app-muted)]">
                     <Info className="mt-0.5 h-4 w-4 shrink-0 text-[var(--app-brand)]" />
 
                     <span>

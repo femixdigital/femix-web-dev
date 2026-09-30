@@ -395,3 +395,36 @@ The AI assistant must first:
 DO NOT START FROM SCRATCH.
 
 The goal is to continue the existing Femix Web Dev project from its actual repository state, even when the previous ChatGPT conversation or account is unavailable.
+
+## 2026-09-28 — Compact Visual Homepage Milestone
+
+### Verified changes
+- Removed the Estimator page from `App.tsx` routing.
+- Removed all Estimator navigation references from the Navbar.
+- Corrected both Navbar "Start a Project" CTAs to `/start-project`.
+- Preserved the independent `/payment` route.
+- Preserved `/services/:service` routing and existing service routes.
+- Replaced the previous 3D homepage presentation with a lightweight visual homepage.
+- Removed `FemixScene` from the homepage without deleting the reusable 3D component.
+- Reworked the homepage into a compact, visual, product-style layout with:
+  - strong compact hero
+  - Start a Project and View Work CTAs
+  - visual build/technology tiles
+  - selected work cards
+  - compact service links
+- Replaced the previous purple/cyan-heavy global palette with a multi-color system using warm neutrals, orange, blue, green and amber accents.
+- Preserved existing theme variables so other pages continue using the same design system.
+- Kept Supabase/backend functionality untouched.
+- Kept payment functionality independent from the removed Estimator route.
+
+### Verification
+- `npm run build` passed successfully.
+- TypeScript compilation passed.
+- Vite production build passed with 2026 modules transformed.
+
+### Design direction
+The current homepage direction is intentionally short, visual, compact and product-like rather than a long-form SaaS/agency landing page. The uploaded reference remains a visual inspiration rather than something to copy directly.
+
+### Workflow requirement
+For subsequent meaningful milestones:
+Build → Test → Update `PROJECT_CONTEXT.md` → `git status` → commit → push `origin main`.
