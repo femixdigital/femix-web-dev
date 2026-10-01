@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowLeft, ArrowRight, CheckCircle2, CreditCard, Upload, Wallet } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle2, Upload, Wallet } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useToast } from '../components/Toast';
@@ -133,31 +133,71 @@ export const Payment: React.FC = () => {
   if (!session) {
     return (
       <main className="min-h-[calc(100vh-4rem)] bg-[var(--app-bg)] text-[var(--app-text)]">
-        <section className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-2xl items-center px-4 py-16 sm:px-6">
-          <div className="w-full rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-7 text-center sm:p-10">
-            <CreditCard className="mx-auto h-8 w-8 text-[var(--app-brand)]" />
+        <section className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+          <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--app-brand-bright)]">
+            FEMIX WEB DEV / PAYMENT
+          </div>
 
-            <h1 className="mt-5 text-3xl font-extrabold tracking-[-0.04em]">
-              Payment details unavailable
-            </h1>
+          <h1 className="mt-4 text-4xl font-extrabold tracking-[-0.05em] sm:text-5xl">
+            Payment details
+          </h1>
 
-            <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[var(--app-muted)]">
-              Start with a project estimate first. Once your quote request is
-              submitted, your payment details will appear here.
-            </p>
+          <p className="mt-3 max-w-xl text-sm leading-6 text-[var(--app-muted)]">
+            Use the account below for your Femix Web Dev payment. Get your project estimate first to receive the exact amount and submit your payment proof.
+          </p>
 
+          <div className="mt-8 overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)]">
+            <div className="border-b border-[var(--app-border)] p-6">
+              <div className="flex items-center gap-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--app-brand-soft)]">
+                  <Wallet className="h-5 w-5 text-[var(--app-brand)]" />
+                </span>
+                <div>
+                  <p className="text-sm font-bold">Femix Web Dev account</p>
+                  <p className="text-xs text-[var(--app-muted)]">Bank transfer</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-1 p-6">
+              <div className="flex items-center justify-between gap-4 border-b border-[var(--app-border)] py-4">
+                <span className="text-sm text-[var(--app-muted)]">Bank</span>
+                <span className="text-sm font-bold">OPay</span>
+              </div>
+
+              <div className="flex items-center justify-between gap-4 border-b border-[var(--app-border)] py-4">
+                <span className="text-sm text-[var(--app-muted)]">Account name</span>
+                <span className="text-right text-sm font-bold">WASIU FEMI NUHN</span>
+              </div>
+
+              <div className="flex items-center justify-between gap-4 py-4">
+                <span className="text-sm text-[var(--app-muted)]">Account number</span>
+                <span className="text-sm font-extrabold tracking-wide">611 585 7333</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Link
               to="/estimator"
-              className="mt-7 inline-flex items-center gap-2 rounded-lg bg-[var(--app-brand)] px-5 py-3 text-sm font-bold text-[var(--app-brand-contrast)] transition hover:bg-[var(--app-brand-hover)]"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--app-brand)] px-5 py-3 text-sm font-bold text-[var(--app-brand-contrast)] transition hover:bg-[var(--app-brand-hover)]"
             >
-              Get a project estimate
+              Get project estimate
               <ArrowRight className="h-4 w-4" />
+            </Link>
+
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center rounded-lg border border-[var(--app-border)] px-5 py-3 text-sm font-bold transition hover:bg-[var(--app-surface-2)]"
+            >
+              Contact Femix
             </Link>
           </div>
         </section>
       </main>
     );
   }
+
 
   return (
     <main className="min-h-[calc(100vh-4rem)] bg-[var(--app-bg)] text-[var(--app-text)]">
@@ -322,6 +362,6 @@ export const Payment: React.FC = () => {
       </section>
     </main>
   );
-};
 
+};
 export default Payment;

@@ -11,6 +11,7 @@ import { NotFound } from './pages/NotFound';
 import StartProject from './pages/StartProject';
 import ServiceDetail from './pages/ServiceDetail';
 import Payment from './pages/Payment';
+import Estimator from './pages/Estimator';
 
 
 export function App() {
@@ -28,6 +29,7 @@ export function App() {
               <Route path="/services/:service" element={<ServiceDetail />} />
               <Route path="/about" element={<About />} />
               <Route path="/payment" element={<Payment />} />
+              <Route path="/estimator" element={<Estimator />} />
               <Route path="/start-project" element={<StartProject />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/admin" element={<AdminDashboard />} />

@@ -26,7 +26,7 @@ interface PricingTier {
   seoPrice: number;
 }
 
-const USD_TO_NGN = 1500;
+const USD_TO_NGN = 1380;
 
 const PRICING: PricingTier = {
   basePrice: 299,
