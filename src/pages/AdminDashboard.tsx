@@ -422,7 +422,7 @@ export const AdminDashboard: React.FC = () => {
   return (
     <main className="min-h-[calc(100vh-72px)] bg-[var(--app-bg)] px-5 py-8 text-[var(--app-text)] sm:px-8 sm:py-12">
       <div className="mx-auto max-w-7xl">
-        <section className="relative overflow-hidden rounded-[2rem] border border-[var(--app-border)] bg-[var(--app-surface)] p-6 shadow-sm sm:p-8 lg:p-10">
+        <section className="relative overflow-hidden rounded-[1.75rem] border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-lg shadow-slate-200/40 sm:p-7 lg:p-8 dark:shadow-black/20">
           <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[var(--app-brand-soft)] blur-3xl" />
           <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-[var(--app-brand)]/8 blur-3xl" />
 
@@ -452,7 +452,7 @@ export const AdminDashboard: React.FC = () => {
               <button
                 onClick={fetchData}
                 disabled={loadingData}
-                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-2)] px-4 py-3 text-sm font-bold transition hover:border-[var(--app-brand)] hover:text-[var(--app-brand)] disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] px-4 py-3 text-sm font-extrabold shadow-sm transition hover:border-[var(--app-brand)] hover:text-[var(--app-brand)] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <RefreshCw
                   className={`h-4 w-4 ${loadingData ? 'animate-spin' : ''}`}
@@ -462,7 +462,7 @@ export const AdminDashboard: React.FC = () => {
 
               <button
                 onClick={handleSignOut}
-                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[var(--app-border)] px-4 py-3 text-sm font-bold text-[var(--app-muted)] transition hover:border-rose-400/30 hover:text-rose-500"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--app-border)] px-4 py-3 text-sm font-extrabold text-[var(--app-muted)] shadow-sm transition hover:border-rose-400/30 hover:text-rose-500"
               >
                 <LogOut className="h-4 w-4" />
                 Sign out
@@ -505,7 +505,7 @@ export const AdminDashboard: React.FC = () => {
           />
         </section>
 
-        <section className="mt-6 overflow-hidden rounded-[2rem] border border-[var(--app-border)] bg-[var(--app-surface)] shadow-sm">
+        <section className="mt-6 overflow-hidden rounded-[1.75rem] border border-[var(--app-border)] bg-[var(--app-surface)] shadow-lg shadow-slate-200/35 dark:shadow-black/20">
           <div className="flex flex-col gap-4 border-b border-[var(--app-border)] p-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             <div>
               <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--app-brand)]">
@@ -517,7 +517,7 @@ export const AdminDashboard: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-2 sm:flex-row">
-              <div className="flex rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-2)] p-1">
+              <div className="flex rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] p-1 shadow-sm">
                 <TabButton
                   active={activeTab === 'leads'}
                   onClick={() => setActiveTab('leads')}
@@ -539,7 +539,7 @@ export const AdminDashboard: React.FC = () => {
                 onClick={
                   activeTab === 'leads' ? exportLeadsCSV : exportOrdersCSV
                 }
-                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[var(--app-border)] px-4 py-2.5 text-xs font-bold transition hover:border-[var(--app-brand)] hover:text-[var(--app-brand)]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--app-border)] px-4 py-2.5 text-xs font-extrabold shadow-sm transition hover:border-[var(--app-brand)] hover:text-[var(--app-brand)]"
               >
                 <Download className="h-3.5 w-3.5" />
                 Export {activeTab}
@@ -577,7 +577,7 @@ const MetricCard: React.FC<{
   };
 
   return (
-    <div className="rounded-[1.5rem] border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-sm">
+    <div className="rounded-[1.35rem] border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-md shadow-slate-200/35 transition hover:-translate-y-0.5 hover:shadow-lg dark:shadow-black/20">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs font-bold text-[var(--app-muted)]">{label}</p>
@@ -603,7 +603,7 @@ const TabButton: React.FC<{
 }> = ({ active, onClick, icon, label, count }) => (
   <button
     onClick={onClick}
-    className={`inline-flex items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition ${
+    className={`inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-xs font-extrabold shadow-sm transition ${
       active
         ? 'bg-[var(--app-brand)] text-white shadow-sm'
         : 'text-[var(--app-muted)] hover:text-[var(--app-text)]'
@@ -812,7 +812,7 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
 const DeleteButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   <button
     onClick={onClick}
-    className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--app-border)] px-2.5 py-1.5 text-[10px] font-extrabold text-[var(--app-muted)] transition hover:border-rose-400/30 hover:bg-rose-500/10 hover:text-rose-500"
+    className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--app-border)] px-2.5 py-1.5 text-[10px] font-extrabold shadow-sm text-[var(--app-muted)] transition hover:border-rose-400/30 hover:bg-rose-500/10 hover:text-rose-500"
   >
     <Trash2 className="h-3 w-3" />
     Delete
