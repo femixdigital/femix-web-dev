@@ -1,5 +1,16 @@
 import React from 'react';
-import { ArrowLeft, ArrowUpRight, CheckCircle2, Code2, Boxes, Cpu, Layers3, type LucideIcon } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  BarChart3,
+  CheckCircle2,
+  Code2,
+  Boxes,
+  Cpu,
+  Layers3,
+  ShoppingBag,
+  type LucideIcon,
+} from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 
 type ServiceData = {
@@ -43,6 +54,54 @@ const serviceData: Record<string, ServiceData> = {
     icon: Layers3,
     capabilities: ['Campaign pages', 'Product launches', 'Lead generation', 'Mobile-first design'],
     panel: 'LANDING / CONVERSION',
+  },
+  ecommerce: {
+    label: 'COMMERCE',
+    title: 'E-commerce',
+    description: 'Modern online stores designed to showcase products and turn visitors into customers.',
+    icon: ShoppingBag,
+    capabilities: ['Product catalogues', 'Shopping carts', 'Checkout flows', 'Payment integration'],
+    panel: 'COMMERCE / SALES',
+  },
+  saas: {
+    label: 'SAAS',
+    title: 'SaaS platforms',
+    description: 'Subscription-ready software products built for customers, teams and recurring workflows.',
+    icon: Boxes,
+    capabilities: ['User accounts', 'Subscription workflows', 'Multi-user dashboards', 'Database integration'],
+    panel: 'SAAS / PLATFORM',
+  },
+  spa: {
+    label: 'SPA',
+    title: 'Single-page applications',
+    description: 'Fast, app-like web experiences with smooth navigation and responsive interfaces.',
+    icon: Layers3,
+    capabilities: ['Client-side routing', 'Interactive interfaces', 'API integration', 'Responsive UX'],
+    panel: 'SPA / FRONTEND',
+  },
+  dashboards: {
+    label: 'DASHBOARDS',
+    title: 'Dashboards & admin systems',
+    description: 'Clear operational dashboards that turn business data into useful actions.',
+    icon: BarChart3,
+    capabilities: ['Analytics views', 'Data tables', 'Role-based access', 'Admin workflows'],
+    panel: 'DASHBOARD / DATA',
+  },
+  'custom-web-applications': {
+    label: 'CUSTOM APPS',
+    title: 'Custom web applications',
+    description: 'Purpose-built applications for workflows, customer portals and specialized business needs.',
+    icon: Code2,
+    capabilities: ['Custom workflows', 'Authentication', 'Database systems', 'Third-party integrations'],
+    panel: 'APP / CUSTOM',
+  },
+  'business-platforms': {
+    label: 'PLATFORMS',
+    title: 'Advanced business platforms',
+    description: 'Larger digital platforms that connect customers, teams, data and business operations.',
+    icon: Cpu,
+    capabilities: ['Multi-role systems', 'Business automation', 'Advanced dashboards', 'Scalable architecture'],
+    panel: 'PLATFORM / SYSTEM',
   },
 };
 

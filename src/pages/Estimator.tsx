@@ -266,6 +266,7 @@ export const Estimator: React.FC = () => {
     }
   };
 
+
   return (
     <main className="min-h-[calc(100vh-72px)] bg-[var(--app-bg)] text-[var(--app-text)]">
       <section className="border-b border-[var(--app-border)] bg-[var(--app-surface)]">

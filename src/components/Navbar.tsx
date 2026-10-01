@@ -7,6 +7,7 @@ const navItems = [
   { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
   { label: 'Work', href: '/portfolio' },
+  { label: 'Payment', href: '/payment' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
 ];
@@ -51,7 +52,7 @@ export const Navbar: React.FC = () => {
           </span>
 
           <span className="hidden text-[15px] font-black tracking-[-0.045em] text-[var(--app-text-strong)] sm:block">
-            FEMIX
+            Femix Web Dev
           </span>
         </Link>
 
