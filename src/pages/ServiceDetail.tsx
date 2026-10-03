@@ -5,6 +5,7 @@ import {
   BarChart3,
   CheckCircle2,
   Code2,
+  CreditCard,
   Boxes,
   Cpu,
   Layers3,
@@ -102,6 +103,14 @@ const serviceData: Record<string, ServiceData> = {
     icon: Cpu,
     capabilities: ['Multi-role systems', 'Business automation', 'Advanced dashboards', 'Scalable architecture'],
     panel: 'PLATFORM / SYSTEM',
+  },
+  'payment-integration': {
+    label: 'PAYMENTS',
+    title: 'Payment integration',
+    description: 'Secure checkout and payment flows connected to your website or application.',
+    icon: CreditCard,
+    capabilities: ['Payment gateway setup', 'Checkout flows', 'Payment confirmation', 'Transaction handling'],
+    panel: 'PAYMENT / CHECKOUT',
   },
 };
 

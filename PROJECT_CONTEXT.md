@@ -428,3 +428,26 @@ The current homepage direction is intentionally short, visual, compact and produ
 ### Workflow requirement
 For subsequent meaningful milestones:
 Build → Test → Update `PROJECT_CONTEXT.md` → `git status` → commit → push `origin main`.
+
+## 2026-10-03 — Compact UI + Notification Backend Milestone
+
+- Preserved all current application routes and existing Supabase/payment functionality.
+- Refined the visual layer for Home, Services, Portfolio, Payment, and global styling toward the compact premium product direction.
+- Payment page visual layer was refined while preserving the existing secure proof-upload flow:
+  - private `payment-proofs` storage bucket
+  - payment proof validation
+  - `submit_payment_proof()` RPC
+  - payment submission token validation
+  - `proof_submitted` payment state
+- Production frontend build verified successfully with `npm run build`.
+- Updated the existing `supabase/functions/send-lead-email/index.ts` instead of creating a second email system.
+- Edge Function now matches the current database schema:
+  - `leads` notifications use `full_name`, `email`, `phone`, `service_type`, `budget`, `notes`, and `source`
+  - `orders` notifications use `package_name`, `amount`, `currency`, client fields, status, and requirements
+  - payment-proof notifications detect an order transition to `payment_status = 'proof_submitted'`
+- Added HTML escaping and Resend response/error validation to the Edge Function.
+- Confirmed the repository currently has no Supabase CLI configuration and no in-repo Database Webhook configuration.
+- Confirmed `.env` and `.env.local` are ignored by Git and are not tracked.
+- The email notification code is prepared, but production email delivery is NOT considered live until the Edge Function is deployed and the required Supabase Database Webhooks are configured and tested.
+- Preserved the previous Edge Function as `supabase/functions/send-lead-email/index.ts.before-current-schema`.
+- Continue using the required workflow: Build → Test → Update PROJECT_CONTEXT.md → git status → commit → push origin main.

@@ -129,7 +129,7 @@ export const Home: React.FC = () => {
   return (
     <main className="min-h-screen bg-[var(--app-bg)] text-[var(--app-text)]">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-[var(--app-surface)] dark:bg-gradient-to-br dark:from-[#172554] dark:via-[#0f172a] dark:to-[#1e3a8a]">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[var(--app-brand-soft)] via-[var(--app-surface)] to-blue-100/70 dark:from-[#172554] dark:via-[#0f172a] dark:to-[#1e3a8a]">
         <div className="relative mx-auto max-w-7xl px-6 py-14 sm:px-8 lg:px-12 lg:py-20">
           <div className="mx-auto max-w-4xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-200/80 bg-white/95 px-4 py-2 text-sm font-extrabold text-[var(--app-brand)] shadow-lg shadow-blue-900/10 backdrop-blur dark:border-blue-400/20 dark:bg-slate-900/80">
