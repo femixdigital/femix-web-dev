@@ -17,7 +17,7 @@ import Estimator from './pages/Estimator';
 export function App() {
   return (
     <ThemeProvider>
-      <Router>
+      <Router basename={import.meta.env.BASE_URL}>
         <div className="min-h-screen bg-[var(--app-bg)] font-sans text-[var(--app-text)] antialiased">
           <Navbar />
 
