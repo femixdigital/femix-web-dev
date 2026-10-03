@@ -41,8 +41,13 @@ interface Order {
   client_name: string;
   client_email: string;
   client_phone: string | null;
-  status: string;
+  status: 'pending' | 'in_progress' | 'completed' | 'cancelled';
   payment_reference: string | null;
+  payment_status: 'unpaid' | 'proof_submitted' | 'verified' | 'rejected';
+  payment_proof_path: string | null;
+  payment_submitted_at: string | null;
+  payment_verified_at: string | null;
+  payment_verified_by: string | null;
   requirements: string | null;
   created_at: string;
   updated_at: string;
@@ -213,6 +218,65 @@ export const AdminDashboard: React.FC = () => {
 
       showToast('Delete failed', message, 'error');
     }
+  };
+
+  const updateOrder = async (
+    id: string,
+    changes: Partial<Pick<Order, 'status' | 'payment_status'>>,
+  ) => {
+    const updateData: Record<string, unknown> = { ...changes };
+
+    if (changes.payment_status === 'verified') {
+      updateData.payment_verified_at = new Date().toISOString();
+      updateData.payment_verified_by = session?.user.id ?? null;
+    }
+
+    if (changes.payment_status === 'rejected') {
+      updateData.payment_verified_at = null;
+      updateData.payment_verified_by = null;
+    }
+
+    const { data, error } = await supabase
+      .from('orders')
+      .update(updateData)
+      .eq('id', id)
+      .select('*')
+      .single();
+
+    if (error) {
+      console.error('Failed to update order:', error);
+      alert(`Failed to update order: ${error.message}`);
+      return;
+    }
+
+    setOrders((current) =>
+      current.map((order) =>
+        order.id === id ? (data as Order) : order,
+      ),
+    );
+  };
+
+  const viewPaymentProof = async (order: Order) => {
+    if (!order.payment_proof_path) {
+      alert('No payment proof has been uploaded for this order.');
+      return;
+    }
+
+    const { data, error } = await supabase.storage
+      .from('payment-proofs')
+      .createSignedUrl(order.payment_proof_path, 300);
+
+    if (error || !data?.signedUrl) {
+      console.error('Failed to create payment proof URL:', error);
+      alert(
+        `Unable to open payment proof: ${
+          error?.message || 'No signed URL was created.'
+        }`,
+      );
+      return;
+    }
+
+    window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
   };
 
   const exportCSV = (
@@ -551,7 +615,12 @@ export const AdminDashboard: React.FC = () => {
           {activeTab === 'leads' ? (
             <LeadTable leads={leads} onDelete={deleteLead} />
           ) : (
-            <OrderTable orders={orders} onDelete={deleteOrder} />
+            <OrderTable
+              orders={orders}
+              onDelete={deleteOrder}
+              onUpdate={updateOrder}
+              onViewProof={viewPaymentProof}
+            />
           )}
 
           <div className="border-t border-[var(--app-border)] px-5 py-4 text-xs text-[var(--app-muted)] sm:px-6">
@@ -706,7 +775,12 @@ const LeadTable: React.FC<{
 const OrderTable: React.FC<{
   orders: Order[];
   onDelete: (id: string) => void;
-}> = ({ orders, onDelete }) => {
+  onUpdate: (
+    id: string,
+    changes: Partial<Pick<Order, 'status' | 'payment_status'>>,
+  ) => void;
+  onViewProof: (order: Order) => void;
+}> = ({ orders, onDelete, onUpdate, onViewProof }) => {
   if (orders.length === 0) {
     return (
       <EmptyState
@@ -719,13 +793,14 @@ const OrderTable: React.FC<{
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[1050px] text-left text-xs">
+      <table className="w-full min-w-[1250px] text-left text-xs">
         <thead className="border-b border-[var(--app-border)] bg-[var(--app-surface-2)] text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--app-muted)]">
           <tr>
             <th className="px-6 py-4">Client</th>
             <th className="px-6 py-4">Package</th>
             <th className="px-6 py-4">Amount</th>
-            <th className="px-6 py-4">Status</th>
+            <th className="px-6 py-4">Order status</th>
+            <th className="px-6 py-4">Payment</th>
             <th className="px-6 py-4">Payment ref.</th>
             <th className="px-6 py-4">Date</th>
             <th className="px-6 py-4 text-right">Action</th>
@@ -754,7 +829,70 @@ const OrderTable: React.FC<{
               </td>
 
               <td className="px-6 py-5">
-                <StatusBadge status={order.status} />
+                <select
+                  value={order.status}
+                  onChange={(e) =>
+                    onUpdate(order.id, {
+                      status: e.target.value as Order['status'],
+                    })
+                  }
+                  className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-2.5 py-2 text-[11px] font-bold outline-none"
+                >
+                  <option value="pending">Pending</option>
+                  <option value="in_progress">In progress</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </td>
+
+              <td className="px-6 py-5">
+                <div className="flex flex-col gap-2">
+                  <StatusBadge status={order.payment_status} />
+
+                  {order.payment_status === 'proof_submitted' &&
+                    order.payment_proof_path && (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => onViewProof(order)}
+                          className="rounded-lg border border-[var(--app-border)] px-2.5 py-1.5 text-[10px] font-extrabold transition hover:bg-[var(--app-surface-2)]"
+                        >
+                          View proof
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            onUpdate(order.id, {
+                              payment_status: 'verified',
+                            })
+                          }
+                          className="rounded-lg bg-[var(--app-brand)] px-2.5 py-1.5 text-[10px] font-extrabold text-white transition hover:opacity-90"
+                        >
+                          Verify
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            onUpdate(order.id, {
+                              payment_status: 'rejected',
+                            })
+                          }
+                          className="rounded-lg border border-rose-400/30 px-2.5 py-1.5 text-[10px] font-extrabold text-rose-600 transition hover:bg-rose-500/10"
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    )}
+
+                  {order.payment_status !== 'proof_submitted' &&
+                    order.payment_proof_path && (
+                      <button
+                        onClick={() => onViewProof(order)}
+                        className="w-fit rounded-lg border border-[var(--app-border)] px-2.5 py-1.5 text-[10px] font-extrabold transition hover:bg-[var(--app-surface-2)]"
+                      >
+                        View proof
+                      </button>
+                    )}
+                </div>
               </td>
 
               <td className="max-w-[180px] truncate px-6 py-5 text-[var(--app-muted)]">

@@ -162,3 +162,275 @@ select:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* =========================================================
+   Femix bold social-style visual system
+   ========================================================= */
+
+body,
+button,
+a,
+input,
+textarea,
+select {
+  font-weight: 700;
+}
+
+body {
+  text-shadow: 0 1px 1px rgba(15, 23, 42, 0.08);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 900 !important;
+  letter-spacing: -0.035em;
+  text-shadow: 0 2px 3px rgba(15, 23, 42, 0.10);
+}
+
+button {
+  border-radius: 10px;
+  font-weight: 800 !important;
+  box-shadow:
+    0 2px 5px rgba(15, 23, 42, 0.10),
+    0 1px 2px rgba(15, 23, 42, 0.08);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 5px 12px rgba(15, 23, 42, 0.14),
+    0 2px 4px rgba(15, 23, 42, 0.08);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow:
+    0 2px 5px rgba(15, 23, 42, 0.10);
+}
+
+a {
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(15, 23, 42, 0.07);
+}
+
+input,
+textarea,
+select {
+  font-weight: 700 !important;
+  border-radius: 10px !important;
+  box-shadow:
+    inset 0 1px 2px rgba(15, 23, 42, 0.04),
+    0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow:
+    0 0 0 3px var(--app-brand-glow),
+    0 3px 8px rgba(15, 23, 42, 0.08);
+}
+
+/* Elevated card treatment */
+div[class*="rounded-xl"][class*="border"],
+div[class*="rounded-2xl"][class*="border"],
+div[class*="rounded-3xl"][class*="border"] {
+  box-shadow:
+    0 2px 5px rgba(15, 23, 42, 0.06),
+    0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+/* Stronger card hover */
+div[class*="rounded-xl"][class*="border"]:hover,
+div[class*="rounded-2xl"][class*="border"]:hover,
+div[class*="rounded-3xl"][class*="border"]:hover {
+  box-shadow:
+    0 4px 8px rgba(15, 23, 42, 0.08),
+    0 12px 28px rgba(15, 23, 42, 0.08);
+}
+
+.dark body {
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.30);
+}
+
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+}
+
+.dark div[class*="rounded-xl"][class*="border"],
+.dark div[class*="rounded-2xl"][class*="border"],
+.dark div[class*="rounded-3xl"][class*="border"] {
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.22),
+    0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button {
+    transition: none;
+  }
+
+  button:hover,
+  button:active {
+    transform: none;
+  }
+}
+
+
+/* =========================================================
+   Femix social-style refinement
+   ========================================================= */
+
+:root {
+  --app-card-radius: 16px;
+  --app-button-radius: 12px;
+  --app-card-shadow:
+    0 2px 4px rgba(15, 23, 42, 0.06),
+    0 8px 24px rgba(15, 23, 42, 0.07);
+  --app-card-shadow-hover:
+    0 4px 8px rgba(15, 23, 42, 0.08),
+    0 14px 32px rgba(15, 23, 42, 0.10);
+}
+
+.dark {
+  --app-card-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.25),
+    0 12px 28px rgba(0, 0, 0, 0.18);
+  --app-card-shadow-hover:
+    0 5px 12px rgba(0, 0, 0, 0.30),
+    0 16px 34px rgba(0, 0, 0, 0.22);
+}
+
+/* Buttons */
+button {
+  border-radius: var(--app-button-radius);
+  font-weight: 800 !important;
+  letter-spacing: -0.01em;
+}
+
+button:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+button:not(:disabled):active {
+  transform: translateY(0);
+}
+
+/* Brand/action buttons */
+a[class*="bg-[var(--app-brand)]"],
+button[class*="bg-[var(--app-brand)]"] {
+  border-radius: var(--app-button-radius);
+  font-weight: 800 !important;
+  box-shadow:
+    0 2px 5px rgba(37, 99, 235, 0.20),
+    0 6px 14px rgba(37, 99, 235, 0.10);
+}
+
+a[class*="bg-[var(--app-brand)]"]:hover,
+button[class*="bg-[var(--app-brand)]"]:hover {
+  box-shadow:
+    0 4px 8px rgba(37, 99, 235, 0.22),
+    0 10px 20px rgba(37, 99, 235, 0.13);
+}
+
+/* Inputs */
+input,
+textarea,
+select {
+  border-radius: var(--app-button-radius) !important;
+  font-weight: 700 !important;
+}
+
+/* =========================================================
+   Admin workspace
+   ========================================================= */
+
+.admin-workspace,
+.admin-workspace * {
+  --admin-radius: 16px;
+}
+
+.admin-workspace table {
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+
+.admin-workspace th {
+  font-weight: 900 !important;
+  letter-spacing: 0.06em;
+}
+
+.admin-workspace td {
+  font-weight: 700;
+}
+
+.admin-workspace button,
+.admin-workspace select {
+  font-weight: 800 !important;
+}
+
+.admin-workspace select {
+  min-height: 40px;
+  border-radius: 10px !important;
+  font-weight: 800 !important;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.admin-workspace table tbody tr {
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.admin-workspace table tbody tr:hover {
+  box-shadow:
+    inset 4px 0 0 var(--app-brand);
+}
+
+/* Admin metric cards */
+.admin-workspace [class*="rounded-2xl"],
+.admin-workspace [class*="rounded-3xl"] {
+  box-shadow: var(--app-card-shadow);
+}
+
+.admin-workspace [class*="rounded-2xl"]:hover,
+.admin-workspace [class*="rounded-3xl"]:hover {
+  box-shadow: var(--app-card-shadow-hover);
+}
+
+/* Admin status pills */
+.admin-workspace [class*="rounded-full"] {
+  font-weight: 900 !important;
+  letter-spacing: 0.01em;
+}
+
+/* Admin action buttons */
+.admin-workspace button {
+  border-radius: 10px;
+}
+
+@media (max-width: 640px) {
+  .admin-workspace {
+    font-size: 14px;
+  }
+
+  .admin-workspace table {
+    font-size: 12px;
+  }
+}
+
