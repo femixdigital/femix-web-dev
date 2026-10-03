@@ -1,10 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <rect width="512" height="512" rx="112" fill="#2563EB"/>
-  <path d="M112 156c0-18 14-32 32-32h224c18 0 32 14 32 32v200c0 18-14 32-32 32H144c-18 0-32-14-32-32V156Z"
-        fill="none" stroke="#fff" stroke-width="22" stroke-linejoin="round"/>
-  <path d="M112 174l144 82 144-82M256 256v132M184 132l72 42 72-42"
-        fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="256" y="326" text-anchor="middle"
-        font-family="Arial, Helvetica, sans-serif" font-size="82" font-weight="900"
-        fill="#fff" letter-spacing="-4">FWD</text>
+
+  <!-- Monitor -->
+  <rect x="96" y="92" width="320" height="238" rx="28"
+        fill="none" stroke="#fff" stroke-width="22"/>
+
+  <!-- Code brackets -->
+  <path d="M190 165l-62 46 62 46"
+        fill="none" stroke="#fff" stroke-width="22"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M322 165l62 46-62 46"
+        fill="none" stroke="#fff" stroke-width="22"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M278 150l-44 122"
+        fill="none" stroke="#fff" stroke-width="22"
+        stroke-linecap="round"/>
+
+  <!-- Monitor stand -->
+  <path d="M256 330v48M190 398h132"
+        fill="none" stroke="#fff" stroke-width="22"
+        stroke-linecap="round"/>
+
+
 </svg>
