@@ -46,9 +46,13 @@
         "priceRange": "$$$"
       }
     </script>
-  <script>window.addEventListener("error",function(e){document.body.innerHTML="<pre style="white-space:pre-wrap;padding:20px;font:16px monospace;color:red">JS ERROR:
-"+(e.error?.stack||e.message||e.error)+"</pre>"});window.addEventListener("unhandledrejection",function(e){document.body.innerHTML="<pre style="white-space:pre-wrap;padding:20px;font:16px monospace;color:red">PROMISE ERROR:
-"+(e.reason?.stack||e.reason)+"</pre>"});</script></head>
+  <script>window.onerror=function(m,u,l,c,e){document.body.innerHTML="<pre style="white-space:pre-wrap;padding:24px;font:16px monospace;color:#f00;background:#fff">ERROR: "+m+"
+
+URL: "+u+"
+LINE: "+l+"
+COL: "+c+"
+
+"+(e&&e.stack||"")+"</pre>"};window.onunhandledrejection=function(e){document.body.innerHTML="<pre style="white-space:pre-wrap;padding:24px;font:16px monospace;color:#f00;background:#fff">PROMISE ERROR: "+(e.reason&&e.reason.stack||e.reason||"unknown")+"</pre>"};</script></head>
   <body class="bg-[#090d16] text-slate-100 antialiased selection:bg-cyan-500 selection:text-slate-950">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
