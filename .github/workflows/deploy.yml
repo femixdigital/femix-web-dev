@@ -41,6 +41,9 @@ jobs:
       - name: Show build fingerprint
         run: ls -lh dist/assets/index-*.js
 
+      - name: Add build fingerprint
+        run: echo $GITHUB_SHA > dist/build-id.txt
+
       - name: Add SPA fallback
         run: cp dist/index.html dist/404.html
 
