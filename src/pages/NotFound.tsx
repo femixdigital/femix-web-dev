@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight, Compass } from 'lucide-react';
 
 export const NotFound: React.FC = () => {
