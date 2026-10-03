@@ -1,0 +1,19 @@
+{
+  "name": "Femix Web Dev",
+  "short_name": "FWD",
+  "description": "Professional web development services by Femix Web Dev.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#2563EB",
+  "icons": [
+    {
+      "src": "./pwa-icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
