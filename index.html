@@ -46,8 +46,8 @@
         "priceRange": "$$$"
       }
     </script>
+  <script>window.addEventListener("error",function(e){var r=document.getElementById("root");if(r)r.innerHTML="<pre style='padding:20px;color:red;white-space:pre-wrap'>JS ERROR:\n"+(e.error&&e.error.stack||e.message)+"</pre>"});window.addEventListener("unhandledrejection",function(e){var r=document.getElementById("root");if(r)r.innerHTML="<pre style='padding:20px;color:red;white-space:pre-wrap'>PROMISE ERROR:\n"+(e.reason&&e.reason.stack||e.reason)+"</pre>"});</script>
   </head>
-  <script>window.addEventListener("error",function(e){document.getElementById("root").innerHTML="<pre style="padding:20px;color:red;white-space:pre-wrap">JS ERROR:\n"+(e.error&&e.error.stack||e.message)+"</pre>"});window.addEventListener("unhandledrejection",function(e){document.getElementById("root").innerHTML="<pre style="padding:20px;color:red;white-space:pre-wrap">PROMISE ERROR:\n"+(e.reason&&e.reason.stack||e.reason)+"</pre>"});</script>
   <body class="bg-[#090d16] text-slate-100 antialiased selection:bg-cyan-500 selection:text-slate-950">
     <div id="root"><h2 style="padding:20px">Femix is loading…</h2></div>
     <script type="module" src="/src/main.tsx"></script>
