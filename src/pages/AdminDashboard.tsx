@@ -707,67 +707,82 @@ const LeadTable: React.FC<{
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full min-w-[1050px] text-left text-xs">
-        <thead className="border-b border-[var(--app-border)] bg-[var(--app-surface-2)] text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--app-muted)]">
-          <tr>
-            <th className="px-5 py-4">Client</th>
-            <th className="px-4 py-3">Email</th>
-            <th className="px-4 py-3">Service</th>
-            <th className="px-4 py-3">Budget</th>
-            <th className="px-4 py-3">Status</th>
-            <th className="px-4 py-3">Date</th>
-            <th className="px-4 py-3 text-right">Action</th>
-          </tr>
-        </thead>
+    <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 sm:p-5 xl:grid-cols-3">
+      {leads.map((lead) => (
+        <article
+          key={lead.id}
+          className="group flex min-w-0 flex-col rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--app-brand)]/40 hover:shadow-lg"
+        >
+          <div className="flex items-start gap-3">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--app-brand-soft)] text-sm font-extrabold text-[var(--app-brand)]">
+              {(lead.full_name || "C")
+                .trim()
+                .split(/\s+/)
+                .slice(0, 2)
+                .map((part) => part[0])
+                .join("")
+                .toUpperCase()}
+            </div>
+            <div className="min-w-0 flex-1">
+              <h3 className="break-words text-sm font-extrabold text-[var(--app-text)]">
+                {lead.full_name || "Unnamed client"}
+              </h3>
+              <p className="mt-1 break-all text-xs text-[var(--app-muted)]">
+                {lead.email}
+              </p>
+            </div>
+            <StatusBadge status={lead.status || "new"} />
+          </div>
 
-        <tbody className="divide-y divide-[var(--app-border)]">
-          {leads.map((lead) => (
-            <tr
-              key={lead.id}
-              className="transition-colors duration-150 hover:bg-[var(--app-surface-2)]"
-            >
-              <td className="px-4 py-3">
-                <p className="font-extrabold">{lead.full_name}</p>
-                {lead.phone && (
-                  <p className="mt-1 text-[11px] text-[var(--app-muted)]">
-                    {lead.phone}
-                  </p>
-                )}
-              </td>
+          <div className="my-5 h-px bg-[var(--app-border)]" />
 
-              <td className="px-4 py-3">
-                <span className="flex items-center gap-2 text-[var(--app-muted)]">
-                  <Mail className="h-3.5 w-3.5 shrink-0" />
-                  {lead.email}
-                </span>
-              </td>
-
-              <td className="px-4 py-3">
-                <span className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] px-2.5 py-1 text-[var(--app-muted)]">
-                  {lead.service_type || 'Not specified'}
-                </span>
-              </td>
-
-              <td className="px-4 py-3 text-[var(--app-muted)]">
-                {lead.budget || 'Not specified'}
-              </td>
-
-              <td className="px-4 py-3">
-                <StatusBadge status={lead.status || 'new'} />
-              </td>
-
-              <td className="px-4 py-3 text-[var(--app-muted)]">
+          <dl className="grid grid-cols-2 gap-x-3 gap-y-4 text-xs">
+            <div className="min-w-0">
+              <dt className="mb-1.5 font-semibold text-[var(--app-muted)]">Service</dt>
+              <dd className="break-words font-bold text-[var(--app-text)]">
+                {lead.service_type || "Not specified"}
+              </dd>
+            </div>
+            <div className="min-w-0">
+              <dt className="mb-1.5 font-semibold text-[var(--app-muted)]">Budget</dt>
+              <dd className="break-words font-bold text-[var(--app-text)]">
+                {lead.budget || "Not specified"}
+              </dd>
+            </div>
+            <div className="min-w-0">
+              <dt className="mb-1.5 font-semibold text-[var(--app-muted)]">Phone</dt>
+              <dd className="break-words font-medium text-[var(--app-text)]">
+                {lead.phone || "Not provided"}
+              </dd>
+            </div>
+            <div className="min-w-0">
+              <dt className="mb-1.5 font-semibold text-[var(--app-muted)]">Received</dt>
+              <dd className="break-words font-medium text-[var(--app-text)]">
                 {formatDate(lead.created_at)}
-              </td>
+              </dd>
+            </div>
+          </dl>
 
-              <td className="px-4 py-3 text-right">
-                <DeleteButton onClick={() => onDelete(lead.id)} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          {lead.notes && (
+            <div className="mt-4 rounded-xl bg-[var(--app-surface-2)] p-3">
+              <p className="mb-1 text-[10px] font-extrabold uppercase tracking-wider text-[var(--app-muted)]">
+                Client notes
+              </p>
+              <p className="whitespace-pre-wrap break-words text-xs leading-5 text-[var(--app-text)]">
+                {lead.notes}
+              </p>
+            </div>
+          )}
+
+          <div className="mt-auto flex items-center justify-between gap-3 pt-5">
+            <span className="flex min-w-0 items-center gap-1.5 text-[11px] text-[var(--app-muted)]">
+              <Mail className="h-3.5 w-3.5 shrink-0" />
+              <span className="truncate">{lead.email}</span>
+            </span>
+            <DeleteButton onClick={() => onDelete(lead.id)} />
+          </div>
+        </article>
+      ))}
     </div>
   );
 };
@@ -777,7 +792,7 @@ const OrderTable: React.FC<{
   onDelete: (id: string) => void;
   onUpdate: (
     id: string,
-    changes: Partial<Pick<Order, 'status' | 'payment_status'>>,
+    changes: Partial<Pick<Order, "status" | "payment_status">>,
   ) => void;
   onViewProof: (order: Order) => void;
 }> = ({ orders, onDelete, onUpdate, onViewProof }) => {
@@ -792,124 +807,133 @@ const OrderTable: React.FC<{
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full min-w-[1250px] text-left text-xs">
-        <thead className="border-b border-[var(--app-border)] bg-[var(--app-surface-2)] text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--app-muted)]">
-          <tr>
-            <th className="px-5 py-4">Client</th>
-            <th className="px-4 py-3">Package</th>
-            <th className="px-4 py-3">Amount</th>
-            <th className="px-4 py-3">Order status</th>
-            <th className="px-4 py-3">Payment</th>
-            <th className="px-4 py-3">Payment ref.</th>
-            <th className="px-4 py-3">Date</th>
-            <th className="px-4 py-3 text-right">Action</th>
-          </tr>
-        </thead>
+    <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 sm:p-5 xl:grid-cols-3">
+      {orders.map((order) => (
+        <article
+          key={order.id}
+          className="flex min-w-0 flex-col rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--app-brand)]/40 hover:shadow-lg"
+        >
+          <div className="flex items-start gap-3">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--app-brand-soft)] text-[var(--app-brand)]">
+              <ShoppingBag className="h-5 w-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h3 className="break-words text-sm font-extrabold text-[var(--app-text)]">
+                {order.client_name}
+              </h3>
+              <p className="mt-1 break-all text-xs text-[var(--app-muted)]">
+                {order.client_email}
+              </p>
+            </div>
+          </div>
 
-        <tbody className="divide-y divide-[var(--app-border)]">
-          {orders.map((order) => (
-            <tr
-              key={order.id}
-              className="transition-colors duration-150 hover:bg-[var(--app-surface-2)]"
+          <div className="mt-5 rounded-2xl bg-[var(--app-brand-soft)] p-4">
+            <p className="text-[10px] font-extrabold uppercase tracking-wider text-[var(--app-muted)]">
+              Order amount
+            </p>
+            <p className="mt-1 break-words text-2xl font-extrabold tracking-tight text-[var(--app-brand)]">
+              {formatMoney(order.amount, order.currency)}
+            </p>
+            <p className="mt-1 break-words text-xs text-[var(--app-muted)]">
+              {order.package_name}
+            </p>
+          </div>
+
+          <div className="mt-5">
+            <label
+              htmlFor={`order-status-${order.id}`}
+              className="mb-2 block text-xs font-bold text-[var(--app-muted)]"
             >
-              <td className="px-4 py-3">
-                <p className="font-extrabold">{order.client_name}</p>
-                <p className="mt-1 text-[11px] text-[var(--app-muted)]">
-                  {order.client_email}
-                </p>
-              </td>
+              Order status
+            </label>
+            <select
+              id={`order-status-${order.id}`}
+              value={order.status}
+              onChange={(e) =>
+                onUpdate(order.id, {
+                  status: e.target.value as Order["status"],
+                })
+              }
+              className="w-full rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] px-3 py-2.5 text-xs font-bold text-[var(--app-text)] outline-none transition focus:border-[var(--app-brand)] focus:ring-2 focus:ring-[var(--app-brand)]/15"
+            >
+              <option value="pending">Pending</option>
+              <option value="in_progress">In progress</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
 
-              <td className="px-4 py-3 text-[var(--app-muted)]">
-                {order.package_name}
-              </td>
+          <div className="mt-4 rounded-xl border border-[var(--app-border)] p-3">
+            <p className="mb-2 text-xs font-bold text-[var(--app-muted)]">Payment</p>
+            <StatusBadge status={order.payment_status} />
 
-              <td className="px-4 py-3 font-extrabold">
-                {formatMoney(order.amount, order.currency)}
-              </td>
-
-              <td className="px-4 py-3">
-                <select
-                  value={order.status}
-                  onChange={(e) =>
-                    onUpdate(order.id, {
-                      status: e.target.value as Order['status'],
-                    })
-                  }
-                  className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-2.5 py-2 text-[11px] font-bold outline-none"
-                >
-                  <option value="pending">Pending</option>
-                  <option value="in_progress">In progress</option>
-                  <option value="completed">Completed</option>
-                  <option value="cancelled">Cancelled</option>
-                </select>
-              </td>
-
-              <td className="px-4 py-3">
-                <div className="flex flex-col gap-2">
-                  <StatusBadge status={order.payment_status} />
-
-                  {order.payment_status === 'proof_submitted' &&
-                    order.payment_proof_path && (
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => onViewProof(order)}
-                          className="rounded-lg border border-[var(--app-border)] px-2.5 py-1.5 text-[10px] font-extrabold transition hover:bg-[var(--app-surface-2)]"
-                        >
-                          View proof
-                        </button>
-
-                        <button
-                          onClick={() =>
-                            onUpdate(order.id, {
-                              payment_status: 'verified',
-                            })
-                          }
-                          className="rounded-lg bg-[var(--app-brand)] px-2.5 py-1.5 text-[10px] font-extrabold text-white transition hover:opacity-90"
-                        >
-                          Verify
-                        </button>
-
-                        <button
-                          onClick={() =>
-                            onUpdate(order.id, {
-                              payment_status: 'rejected',
-                            })
-                          }
-                          className="rounded-lg border border-rose-400/30 px-2.5 py-1.5 text-[10px] font-extrabold text-rose-600 transition hover:bg-rose-500/10"
-                        >
-                          Reject
-                        </button>
-                      </div>
-                    )}
-
-                  {order.payment_status !== 'proof_submitted' &&
-                    order.payment_proof_path && (
-                      <button
-                        onClick={() => onViewProof(order)}
-                        className="w-fit rounded-lg border border-[var(--app-border)] px-2.5 py-1.5 text-[10px] font-extrabold transition hover:bg-[var(--app-surface-2)]"
-                      >
-                        View proof
-                      </button>
-                    )}
+            {order.payment_status === "proof_submitted" &&
+              order.payment_proof_path && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <button
+                    onClick={() => onViewProof(order)}
+                    className="rounded-lg border border-[var(--app-border)] px-3 py-2 text-[11px] font-extrabold transition hover:border-[var(--app-brand)] hover:text-[var(--app-brand)]"
+                  >
+                    View proof
+                  </button>
+                  <button
+                    onClick={() =>
+                      onUpdate(order.id, { payment_status: "verified" })
+                    }
+                    className="rounded-lg bg-[var(--app-brand)] px-3 py-2 text-[11px] font-extrabold text-white transition hover:opacity-90"
+                  >
+                    Verify
+                  </button>
+                  <button
+                    onClick={() =>
+                      onUpdate(order.id, { payment_status: "rejected" })
+                    }
+                    className="rounded-lg border border-rose-400/40 px-3 py-2 text-[11px] font-extrabold text-rose-600 transition hover:bg-rose-500/10"
+                  >
+                    Reject
+                  </button>
                 </div>
-              </td>
+              )}
 
-              <td className="max-w-[180px] truncate px-4 py-3 text-[var(--app-muted)]">
-                {order.payment_reference || 'Not paid'}
-              </td>
+            {order.payment_status !== "proof_submitted" &&
+              order.payment_proof_path && (
+                <button
+                  onClick={() => onViewProof(order)}
+                  className="mt-3 rounded-lg border border-[var(--app-border)] px-3 py-2 text-[11px] font-extrabold transition hover:border-[var(--app-brand)] hover:text-[var(--app-brand)]"
+                >
+                  View proof
+                </button>
+              )}
+          </div>
 
-              <td className="px-4 py-3 text-[var(--app-muted)]">
+          <dl className="mt-4 space-y-3 text-xs">
+            <div className="flex items-start justify-between gap-3">
+              <dt className="shrink-0 text-[var(--app-muted)]">Payment reference</dt>
+              <dd className="break-all text-right font-medium text-[var(--app-text)]">
+                {order.payment_reference || "Not paid"}
+              </dd>
+            </div>
+            <div className="flex items-start justify-between gap-3">
+              <dt className="shrink-0 text-[var(--app-muted)]">Order date</dt>
+              <dd className="text-right font-medium text-[var(--app-text)]">
                 {formatDate(order.created_at)}
-              </td>
+              </dd>
+            </div>
+            {order.client_phone && (
+              <div className="flex items-start justify-between gap-3">
+                <dt className="shrink-0 text-[var(--app-muted)]">Phone</dt>
+                <dd className="break-all text-right font-medium text-[var(--app-text)]">
+                  {order.client_phone}
+                </dd>
+              </div>
+            )}
+          </dl>
 
-              <td className="px-4 py-3 text-right">
-                <DeleteButton onClick={() => onDelete(order.id)} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <div className="mt-auto flex justify-end pt-5">
+            <DeleteButton onClick={() => onDelete(order.id)} />
+          </div>
+        </article>
+      ))}
     </div>
   );
 };
