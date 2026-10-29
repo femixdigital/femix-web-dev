@@ -481,18 +481,18 @@ export const AdminDashboard: React.FC = () => {
   return (
     <main className="min-h-[calc(100vh-72px)] bg-[var(--app-bg)] px-3 py-6 text-[var(--app-text)] sm:px-6 sm:py-8 lg:px-8">
       <div className="mx-auto w-full max-w-7xl">
-        <section className="relative overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-sm transition-shadow duration-300 sm:rounded-3xl sm:p-7 lg:p-8 dark:shadow-black/20">
+        <section className="relative overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-4 shadow-sm transition-shadow duration-300 sm:rounded-3xl sm:p-7 lg:p-8 dark:shadow-black/20">
           <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[var(--app-brand-soft)] blur-3xl" />
           <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-[var(--app-brand)]/8 blur-3xl" />
 
-          <div className="relative flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="relative flex flex-col gap-5 sm:gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--app-brand)]">
                 <Shield className="h-3 w-3" />
                 Private workspace
               </div>
 
-              <h1 className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">
+              <h1 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">
                 Admin workspace
               </h1>
 
@@ -501,13 +501,13 @@ export const AdminDashboard: React.FC = () => {
                 from one secure workspace.
               </p>
 
-              <div className="mt-5 flex items-center gap-2 text-xs text-[var(--app-muted)]">
-                <span className="h-2 w-2 rounded-full bg-[var(--app-brand)]" />
-                {session.user?.email}
+              <div className="mt-4 inline-flex max-w-full items-center gap-2 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-2 text-xs text-[var(--app-muted)]">
+                <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-500" />
+                <span className="break-all">{session.user?.email}</span>
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 sm:flex-row">
+            <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto">
               <button
                 onClick={fetchData}
                 disabled={loadingData}
@@ -530,39 +530,21 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </section>
 
-        <section className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          <MetricCard
-            label="Client leads"
-            value={leads.length}
-            caption="Website enquiries"
-            icon={<Users className="h-5 w-5" />}
-            tone="brand"
-          />
-
-          <MetricCard
-            label="Project orders"
-            value={orders.length}
-            caption={`${pendingOrders} currently pending`}
-            icon={<ShoppingBag className="h-5 w-5" />}
-            tone="neutral"
-          />
-
-          <MetricCard
-            label="Paid / completed"
-            value={paidOrders}
-            caption="Recorded successful orders"
-            icon={<CheckCircle2 className="h-5 w-5" />}
-            tone="brand"
-          />
-
-          <MetricCard
-            label="Order value"
-            value={formatMoney(totalOrderValue, 'NGN')}
-            caption="NGN orders only"
-            icon={<TrendingUp className="h-5 w-5" />}
-            tone="neutral"
-          />
+        <section className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <div className="min-w-0">
+            <MetricCard label="Client leads" value={leads.length} caption="Website enquiries" icon={<Users className="h-5 w-5" />} tone="brand" />
+          </div>
+          <div className="min-w-0">
+            <MetricCard label="Project orders" value={orders.length} caption={`${pendingOrders} currently pending`} icon={<ShoppingBag className="h-5 w-5" />} tone="neutral" />
+          </div>
+          <div className="min-w-0">
+            <MetricCard label="Paid / completed" value={paidOrders} caption="Recorded successful orders" icon={<CheckCircle2 className="h-5 w-5" />} tone="brand" />
+          </div>
+          <div className="col-span-2 min-w-0">
+            <MetricCard label="Total order value" value={formatMoney(totalOrderValue, 'NGN')} caption="Recorded NGN orders" icon={<TrendingUp className="h-5 w-5" />} tone="featured" />
+          </div>
         </section>
+
 
         <section className="mt-5 overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] shadow-sm sm:rounded-3xl dark:shadow-black/20">
           <div className="flex flex-col gap-4 border-b border-[var(--app-border)] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
@@ -633,27 +615,35 @@ const MetricCard: React.FC<{
   value: string | number;
   caption: string;
   icon: React.ReactNode;
-  tone: 'brand' | 'neutral';
+  tone: 'brand' | 'neutral' | 'featured';
 }> = ({ label, value, caption, icon, tone }) => {
+  const featured = tone === 'featured';
   const toneClasses = {
     brand: 'bg-[var(--app-brand-soft)] text-[var(--app-brand)]',
     neutral: 'bg-[var(--app-surface-3)] text-[var(--app-text)]',
+    featured: 'bg-white/15 text-white',
   };
 
   return (
-    <div className="group rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--app-brand)]/30 hover:shadow-lg sm:p-5 dark:shadow-black/20">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-xs font-bold text-[var(--app-muted)]">{label}</p>
-          <p className="mt-4 break-words text-2xl font-extrabold tracking-[-0.045em] sm:text-3xl">
+    <div className={`group h-full min-w-0 rounded-2xl border p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg sm:rounded-3xl sm:p-5 dark:shadow-black/20 ${
+      featured
+        ? 'border-[var(--app-brand)] bg-[var(--app-brand)] text-white'
+        : 'border-[var(--app-border)] bg-[var(--app-surface)] hover:border-[var(--app-brand)]/30'
+    }`}>
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <p className={`text-xs font-bold ${featured ? 'text-white/80' : 'text-[var(--app-muted)]'}`}>{label}</p>
+          <p className={`mt-4 break-words font-extrabold tracking-[-0.045em] ${
+            featured ? 'text-2xl sm:text-3xl lg:text-4xl' : 'text-2xl sm:text-3xl'
+          }`}>
             {value}
           </p>
         </div>
-
-        <div className={`rounded-2xl p-3.5 transition-transform duration-200 group-hover:scale-105 ${toneClasses[tone]}`}>{icon}</div>
+        <div className={`shrink-0 rounded-2xl p-3 transition-transform duration-200 group-hover:scale-105 ${toneClasses[tone]}`}>
+          {icon}
+        </div>
       </div>
-
-      <p className="mt-3 text-xs text-[var(--app-muted)]">{caption}</p>
+      <p className={`mt-3 text-xs ${featured ? 'text-white/80' : 'text-[var(--app-muted)]'}`}>{caption}</p>
     </div>
   );
 };
