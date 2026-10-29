@@ -45,12 +45,6 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess }) => {
 
       if (error) throw error;
 
-      showToast(
-        'Login Successful',
-        'Welcome to the secure Admin Dashboard.',
-        'success',
-      );
-
       onSuccess();
     } catch (err: any) {
       const message =

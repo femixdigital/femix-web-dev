@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Check, ChevronDown, Monitor, Moon, Sun } from 'lucide-react';
+import { Check, ChevronDown, Monitor, Sun } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import type { ThemeMode } from './ThemeProvider';
 
@@ -9,7 +9,6 @@ const options: Array<{
   icon: React.ComponentType<{ className?: string }>;
 }> = [
   { value: 'light', label: 'Light', icon: Sun },
-  { value: 'dark', label: 'Dark', icon: Moon },
   { value: 'system', label: 'System', icon: Monitor },
 ];
 
@@ -19,7 +18,7 @@ export const ThemeSwitcher: React.FC = () => {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
   const current =
-    options.find((option) => option.value === theme) ?? options[2];
+    options.find((option) => option.value === theme) ?? options[0];
 
   useEffect(() => {
     const handlePointerDown = (event: PointerEvent) => {

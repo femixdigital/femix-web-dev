@@ -141,11 +141,6 @@ export const AdminDashboard: React.FC = () => {
       setLeads((leadsRes.data || []) as Lead[]);
       setOrders((ordersRes.data || []) as Order[]);
 
-      showToast(
-        'Data refreshed',
-        'Latest leads and orders have been synchronized.',
-        'success',
-      );
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : 'Failed to fetch admin data.';
