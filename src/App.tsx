@@ -12,6 +12,7 @@ import StartProject from './pages/StartProject';
 import ServiceDetail from './pages/ServiceDetail';
 import Payment from './pages/Payment';
 import Estimator from './pages/Estimator';
+import AdminPasswordRecovery from './pages/AdminPasswordRecovery';
 
 
 export function App() {
@@ -32,6 +33,7 @@ export function App() {
               <Route path="/estimator" element={<Estimator />} />
               <Route path="/start-project" element={<StartProject />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/admin/reset-password" element={<AdminPasswordRecovery />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

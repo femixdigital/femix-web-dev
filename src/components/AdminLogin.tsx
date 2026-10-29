@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useToast } from './Toast';
 import {
@@ -21,6 +22,42 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState('');
+
+  const handlePasswordReset = async () => {
+    if (!email.trim()) {
+      showToast('Email required', 'Enter your admin email first.', 'error');
+      return;
+    }
+
+    setAuthError('');
+    setLoading(true);
+    try {
+      const redirectTo = new URL(
+        `${import.meta.env.BASE_URL}admin/reset-password`,
+        window.location.origin,
+      ).toString();
+
+      const { error } = await supabase.auth.resetPasswordForEmail(
+        email.trim(),
+        { redirectTo },
+      );
+      if (error) throw error;
+
+      showToast(
+        'Check your email',
+        'If the address is registered, a password-reset link will be sent.',
+        'success',
+      );
+    } catch (err: unknown) {
+      setAuthError(
+        err instanceof Error
+          ? err.message
+          : 'Unable to request a password reset. Please try again.',
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -150,6 +187,19 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess }) => {
                     )}
                   </button>
                 </div>
+              </div>
+
+              <div className="mt-2 flex justify-end">
+                <Link
+                  to="/admin/reset-password"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    void handlePasswordReset();
+                  }}
+                  className="text-sm font-semibold text-[var(--app-brand)] hover:underline"
+                >
+                  Forgot Password? Click here to reset
+                </Link>
               </div>
 
               <button
