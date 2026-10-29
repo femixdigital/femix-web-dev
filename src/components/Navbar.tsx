@@ -104,7 +104,7 @@ export const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      <div className="h-20 sm:h-24" aria-hidden="true" />
+
     </>
   );
 };
