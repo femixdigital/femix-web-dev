@@ -21,7 +21,7 @@ export function App() {
         <div className="min-h-screen bg-[var(--app-bg)] font-sans text-[var(--app-text)] antialiased">
           <Navbar />
 
-          <main className="min-h-screen pt-16 pb-[calc(6rem+env(safe-area-inset-bottom))] sm:pb-[calc(6rem+env(safe-area-inset-bottom))]">
+          <main className="min-h-screen pt-16 pb-[calc(4rem+env(safe-area-inset-bottom))] sm:pb-[calc(4rem+env(safe-area-inset-bottom))]">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/portfolio" element={<Portfolio />} />
