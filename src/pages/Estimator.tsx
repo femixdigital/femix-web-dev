@@ -29,13 +29,13 @@ interface PricingTier {
 const USD_TO_NGN = 1380;
 
 const PRICING: PricingTier = {
-  basePrice: 299,
-  perPagePrice: 75,
-  authPrice: 250,
-  databasePrice: 350,
-  paymentsPrice: 300,
-  cmsPrice: 200,
-  seoPrice: 150,
+  basePrice: 149,
+  perPagePrice: 30,
+  authPrice: 150,
+  databasePrice: 200,
+  paymentsPrice: 150,
+  cmsPrice: 100,
+  seoPrice: 75,
 };
 
 const ADDONS = [
@@ -95,7 +95,7 @@ export const Estimator: React.FC = () => {
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const [pages, setPages] = useState<number>(3);
+  const [pages, setPages] = useState<number>(1);
   const [hasAuth, setHasAuth] = useState<boolean>(false);
   const [hasDatabase, setHasDatabase] = useState<boolean>(false);
   const [hasPayments, setHasPayments] = useState<boolean>(false);
@@ -559,7 +559,7 @@ export const Estimator: React.FC = () => {
                     <span>
                       USD/NGN figures are display estimates using a ₦
                       {USD_TO_NGN.toLocaleString('en-NG')}/$1 reference rate.
-                      Final pricing depends on the confirmed project scope.
+                      Final pricing depends on the confirmed project scope. Hosting, domain renewals, paid third-party services and ongoing maintenance may cost extra.
                     </span>
                   </div>
                 </div>

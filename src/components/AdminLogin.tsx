@@ -20,6 +20,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +34,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess }) => {
       return;
     }
 
+    setAuthError('');
     setLoading(true);
 
     try {
@@ -51,11 +53,10 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess }) => {
 
       onSuccess();
     } catch (err: any) {
-      showToast(
-        'Authentication Failed',
-        err.message || 'Invalid login credentials.',
-        'error',
-      );
+      const message =
+        err instanceof Error ? err.message : 'Unable to sign in. Please try again.';
+      setAuthError(message);
+      showToast('Authentication Failed', message, 'error');
     } finally {
       setLoading(false);
     }
@@ -84,6 +85,16 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess }) => {
           </div>
 
           <form onSubmit={handleLogin} className="mt-7">
+            {authError && (
+              <div
+                role="alert"
+                aria-live="polite"
+                className="mb-4 rounded-xl border border-red-300 bg-red-50 p-4 text-sm leading-6 text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200"
+              >
+                <p className="font-bold">Sign-in failed</p>
+                <p className="mt-1 break-words">{authError}</p>
+              </div>
+            )}
             <div className="space-y-4">
               <div>
                 <label

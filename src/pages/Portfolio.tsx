@@ -1,6 +1,8 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
+  ArrowRight,
   ArrowUpRight,
   BarChart3,
   Code2,
@@ -23,8 +25,7 @@ const PROJECTS: Project[] = [
     id: '1',
     title: 'PulseMetrics SaaS Platform',
     category: 'SaaS',
-    description:
-      'Real-time product analytics, subscriptions and live reporting.',
+    description: 'Real-time product analytics, subscriptions and live reporting.',
     techStack: ['React', 'TypeScript', 'Supabase', 'Tailwind CSS'],
     metrics: '+140% faster load times · 10k+ users',
     liveUrl: '#',
@@ -33,8 +34,7 @@ const PROJECTS: Project[] = [
     id: '2',
     title: 'OmniFlow Admin Dashboard',
     category: 'Dashboard',
-    description:
-      'Role-based operations, reporting workflows and data exports.',
+    description: 'Role-based operations, reporting workflows and data exports.',
     techStack: ['React', 'Vite', 'PostgreSQL', 'Lucide'],
     metrics: '75% faster report generation',
     liveUrl: '#',
@@ -52,8 +52,7 @@ const PROJECTS: Project[] = [
     id: '4',
     title: 'DevSync Collaborative Workspace',
     category: 'SaaS',
-    description:
-      'Real-time collaboration, permissions and webhook integrations.',
+    description: 'Real-time collaboration, permissions and webhook integrations.',
     techStack: ['React', 'Supabase RLS', 'TypeScript', 'Tailwind CSS'],
     metrics: 'Built for multi-region operation',
     liveUrl: '#',
@@ -69,29 +68,6 @@ const categoryIcons = {
   'E-Commerce': ShoppingBag,
 };
 
-const categoryStyles = {
-  SaaS: {
-    accent: 'text-violet-600 dark:text-violet-300',
-    surface: 'bg-violet-50 dark:bg-violet-950/30',
-    bar: 'bg-violet-500',
-  },
-  SPA: {
-    accent: 'text-blue-600 dark:text-blue-300',
-    surface: 'bg-blue-50 dark:bg-blue-950/30',
-    bar: 'bg-blue-500',
-  },
-  Dashboard: {
-    accent: 'text-emerald-600 dark:text-emerald-300',
-    surface: 'bg-emerald-50 dark:bg-emerald-950/30',
-    bar: 'bg-emerald-500',
-  },
-  'E-Commerce': {
-    accent: 'text-orange-600 dark:text-orange-300',
-    surface: 'bg-orange-50 dark:bg-orange-950/30',
-    bar: 'bg-orange-500',
-  },
-};
-
 export const Portfolio: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>('All');
 
@@ -102,196 +78,145 @@ export const Portfolio: React.FC = () => {
 
   return (
     <main className="min-h-[calc(100vh-64px)] bg-[var(--app-bg)] text-[var(--app-text)]">
-      <section className="mx-auto max-w-[1440px] px-4 pb-6 pt-8 sm:px-6 sm:pt-10 lg:px-8">
-        <div className="grid overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] lg:grid-cols-[1fr_auto]">
-          <div className="p-6 sm:p-8 lg:p-10">
-            <div className="flex items-center gap-3">
-              <span className="h-2 w-2 rounded-full bg-[var(--app-accent)]" />
-              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[var(--app-muted)]">
-                FEMIX / SELECTED WORK
+      <div className="mx-auto max-w-5xl space-y-4 px-3 pb-6 pt-3 sm:px-5 lg:px-6">
+        <section className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-4 sm:p-5">
+          <div className="flex items-center gap-2 text-xs font-semibold text-[var(--app-primary)]">
+            <span className="h-2 w-2 rounded-full bg-[var(--app-primary)]" />
+            FEMIX WEB DEV
+          </div>
+
+          <div className="mt-3 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                Our Portfolio
+              </h1>
+              <p className="mt-2 max-w-xl text-sm leading-6 text-[var(--app-muted)] sm:text-base">
+                Websites, applications and digital systems designed to solve real business problems.
               </p>
             </div>
 
-            <h1 className="mt-5 max-w-3xl text-4xl font-black leading-[0.94] tracking-[-0.065em] sm:text-5xl lg:text-6xl">
-              Work that
-              <br />
-              <span className="text-[var(--app-accent)]">gets results.</span>
-            </h1>
+            <Link
+              to="/start-project"
+              className="inline-flex w-fit items-center justify-center gap-2 rounded-lg bg-[var(--app-primary)] px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90"
+            >
+              Start a Project <ArrowRight size={16} />
+            </Link>
+          </div>
 
-            <p className="mt-4 max-w-xl text-sm leading-6 text-[var(--app-muted)]">
-              Selected websites, applications and digital systems built around real requirements.
+          <div className="mt-4 grid grid-cols-3 gap-2 border-t border-[var(--app-border)] pt-3">
+            {[
+              { label: 'Projects', value: '04' },
+              { label: 'Categories', value: '04' },
+              { label: 'Built for', value: 'Business' },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="rounded-lg bg-[var(--app-bg)] p-3"
+              >
+                <p className="text-xs text-[var(--app-muted)]">{item.label}</p>
+                <p className="mt-1 text-base font-bold text-[var(--app-text)] sm:text-lg">
+                  {item.value}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <div className="mb-3">
+            <h2 className="text-xl font-bold">Selected Projects</h2>
+            <p className="mt-1 text-sm text-[var(--app-muted)]">
+              Explore our work by category.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 border-t border-[var(--app-border)] lg:w-[330px] lg:border-l lg:border-t-0">
-            <div className="flex min-h-[100px] flex-col justify-between border-r border-[var(--app-border)] bg-violet-50 p-4 dark:bg-violet-950/30">
-              <span className="text-[9px] font-black uppercase tracking-[0.18em] text-violet-700 dark:text-violet-300">
-                SaaS
-              </span>
-              <Layers3 className="h-5 w-5 text-violet-600 dark:text-violet-300" />
-            </div>
-            <div className="flex min-h-[100px] flex-col justify-between bg-blue-50 p-4 dark:bg-blue-950/30">
-              <span className="text-[9px] font-black uppercase tracking-[0.18em] text-blue-700 dark:text-blue-300">
-                Apps
-              </span>
-              <Code2 className="h-5 w-5 text-blue-600 dark:text-blue-300" />
-            </div>
-            <div className="flex min-h-[100px] flex-col justify-between border-r border-t border-[var(--app-border)] bg-emerald-50 p-4 dark:bg-emerald-950/30">
-              <span className="text-[9px] font-black uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">
-                Data
-              </span>
-              <BarChart3 className="h-5 w-5 text-emerald-600 dark:text-emerald-300" />
-            </div>
-            <div className="flex min-h-[100px] flex-col justify-between border-t border-[var(--app-border)] bg-orange-50 p-4 dark:bg-orange-950/30">
-              <span className="text-[9px] font-black uppercase tracking-[0.18em] text-orange-700 dark:text-orange-300">
-                Commerce
-              </span>
-              <ShoppingBag className="h-5 w-5 text-orange-600 dark:text-orange-300" />
-            </div>
-          </div>
-        </div>
-      </section>
+          <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
+            {FILTERS.map((category) => {
+              const isActive = activeFilter === category;
 
-      <section className="mx-auto max-w-[1440px] px-4 pb-8 sm:px-6 lg:px-8">
-        <div className="mb-4 flex items-center justify-between border-b border-[var(--app-border)] pb-3">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--app-muted)]">
-              Explore
-            </p>
-            <h2 className="mt-1 text-xl font-black tracking-[-0.04em] sm:text-2xl">
-              Project archive
-            </h2>
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => setActiveFilter(category)}
+                  aria-pressed={isActive}
+                  className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                    isActive
+                      ? 'border-[var(--app-primary)] bg-[var(--app-primary)] text-white'
+                      : 'border-[var(--app-border)] bg-[var(--app-surface)] text-[var(--app-muted)] hover:border-[var(--app-primary)] hover:text-[var(--app-primary)]'
+                  }`}
+                >
+                  {category}
+                </button>
+              );
+            })}
           </div>
 
-          <Link
-            to="/start-project"
-            className="hidden items-center gap-1.5 text-xs font-bold text-[var(--app-text)] sm:flex"
-          >
-            Start a project
-            <ArrowUpRight className="h-3.5 w-3.5" />
-          </Link>
-        </div>
 
-        <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
-          {FILTERS.map((category) => {
-            const isActive = activeFilter === category;
 
-            return (
-              <button
-                key={category}
-                type="button"
-                onClick={() => setActiveFilter(category)}
-                className={`shrink-0 rounded-lg border px-3.5 py-2 text-xs font-bold transition ${
-                  isActive
-                    ? 'border-[var(--app-text-strong)] bg-[var(--app-text-strong)] text-[var(--app-bg)]'
-                    : 'border-[var(--app-border)] bg-[var(--app-surface)] text-[var(--app-muted)] hover:border-[var(--app-border-strong)] hover:text-[var(--app-text)]'
-                }`}
-              >
-                {category}
-              </button>
-            );
-          })}
-        </div>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {filteredProjects.map((project) => {
+              const Icon = categoryIcons[project.category];
 
-        <div className="grid gap-3 sm:grid-cols-2">
-          {filteredProjects.map((project, index) => {
-            const Icon = categoryIcons[project.category];
-            const style = categoryStyles[project.category];
-
-            return (
-              <article
-                key={project.id}
-                className="group overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] transition duration-200 hover:-translate-y-0.5 hover:border-[var(--app-border-strong)]"
-              >
-                <div className={`h-1.5 ${style.bar}`} />
-
-                <div className="p-5 sm:p-6">
-                  <div className="flex items-start justify-between">
-                    <span
-                      className={`flex h-10 w-10 items-center justify-center rounded-xl ${style.surface}`}
-                    >
-                      <Icon className={`h-[18px] w-[18px] ${style.accent}`} />
+              return (
+                <article
+                  key={project.id}
+                  className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-3 transition hover:border-[var(--app-primary)] sm:p-4"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--app-bg)] text-[var(--app-primary)]">
+                      <Icon size={22} />
                     </span>
-
-                    <span className="font-mono text-[10px] text-[var(--app-muted-2)]">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                  </div>
-
-                  <div className="mt-7">
-                    <p
-                      className={`text-[9px] font-black uppercase tracking-[0.18em] ${style.accent}`}
-                    >
+                    <span className="rounded-full bg-[var(--app-bg)] px-3 py-1.5 text-xs font-medium text-[var(--app-muted)]">
                       {project.category}
-                    </p>
-
-                    <h2 className="mt-1.5 text-xl font-black tracking-[-0.04em]">
-                      {project.title}
-                    </h2>
-
-                    <p className="mt-2 max-w-xl text-xs leading-5 text-[var(--app-muted)]">
-                      {project.description}
-                    </p>
+                    </span>
                   </div>
 
-                  <div className="mt-5 flex flex-wrap gap-1.5">
+                  <h3 className="mt-4 text-lg font-bold leading-snug">
+                    {project.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-5 text-[var(--app-muted)]">
+                    {project.description}
+                  </p>
+
+                  <div className="mt-4 flex flex-wrap gap-1.5">
                     {project.techStack.map((tech) => (
                       <span
                         key={tech}
-                        className="rounded-md border border-[var(--app-border)] bg-[var(--app-surface-2)] px-2 py-1 text-[10px] font-semibold text-[var(--app-muted)]"
+                        className="rounded-md border border-[var(--app-border)] bg-[var(--app-bg)] px-2 py-1 text-xs text-[var(--app-muted)]"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
 
-                  <div className="mt-5 flex items-end justify-between gap-4 border-t border-[var(--app-border)] pt-4">
-                    <div>
-                      <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[var(--app-muted-2)]">
-                        Outcome
-                      </p>
-                      <p className="mt-1 text-xs font-bold leading-5">
-                        {project.metrics}
-                      </p>
-                    </div>
-
-                    {project.liveUrl && project.liveUrl !== '#' && (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`inline-flex shrink-0 items-center gap-1.5 text-xs font-bold ${style.accent}`}
-                      >
-                        View
-                        <ArrowUpRight className="h-3.5 w-3.5" />
-                      </a>
-                    )}
+                  <div className="mt-4 border-t border-[var(--app-border)] pt-4">
+                    <p className="text-xs font-medium text-[var(--app-muted)]">
+                      Outcome
+                    </p>
+                    <p className="mt-1 text-sm font-semibold leading-5 text-[var(--app-text)]">
+                      {project.metrics}
+                    </p>
                   </div>
-                </div>
-              </article>
-            );
-          })}
-        </div>
 
-        <div className="mt-6 flex items-center justify-between border-t border-[var(--app-border)] pt-5">
-          <p className="text-xs text-[var(--app-muted)]">Have a project in mind?</p>
-
-          <div className="flex gap-4">
-            <Link
-              to="/contact"
-              className="text-xs font-bold text-[var(--app-text)] transition hover:text-[var(--app-brand)]"
-            >
-              Contact
-            </Link>
-            <Link
-              to="/start-project"
-              className="text-xs font-bold text-[var(--app-brand)] transition hover:text-[var(--app-brand-hover)]"
-            >
-              Start a project
-            </Link>
+                  {project.liveUrl && project.liveUrl !== '#' && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[var(--app-primary)]"
+                    >
+                      View Project <ArrowUpRight size={16} />
+                    </a>
+                  )}
+                </article>
+              );
+            })}
           </div>
-        </div>
-      </section>
+        </section>
+
+
+      </div>
     </main>
   );
 };

@@ -155,9 +155,9 @@ export const Payment: React.FC = () => {
   if (!session) {
     return (
       <main className="min-h-[calc(100vh-4rem)] bg-[var(--app-bg)] text-[var(--app-text)]">
-        <section className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+        <section className="mx-auto max-w-5xl px-3 py-5 sm:px-5 sm:py-6 lg:px-6">
           <div className="grid overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] shadow-[0_18px_50px_rgba(0,0,0,0.06)] lg:grid-cols-[1fr_0.8fr]">
-            <div className="p-6 sm:p-8">
+            <div className="p-4 sm:p-5">
               <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[var(--app-brand)]">
                 FEMIX / PAYMENT
               </p>
@@ -250,7 +250,7 @@ export const Payment: React.FC = () => {
 
   return (
     <main className="min-h-[calc(100vh-4rem)] bg-[var(--app-bg)] text-[var(--app-text)]">
-      <section className="mx-auto max-w-5xl px-4 py-7 sm:px-6 sm:py-9 lg:px-8">
+      <section className="mx-auto max-w-5xl px-3 py-4 sm:px-5 sm:py-5 lg:px-6">
         <Link
           to="/estimator"
           className="inline-flex items-center gap-2 text-xs font-bold text-[var(--app-muted)] transition hover:text-[var(--app-text-strong)]"
@@ -259,12 +259,12 @@ export const Payment: React.FC = () => {
           Back to estimate
         </Link>
 
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[var(--app-brand)]">
               FEMIX / PAYMENT
             </p>
-            <h1 className="mt-2 text-4xl font-black leading-none tracking-[-0.06em] sm:text-5xl">
+            <h1 className="mt-2 text-3xl font-black leading-tight tracking-[-0.05em] sm:text-4xl">
               Complete your payment.
             </h1>
           </div>
@@ -275,9 +275,9 @@ export const Payment: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-7 grid gap-3 lg:grid-cols-[1fr_0.82fr]">
+        <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_0.82fr]">
           <section className="overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] shadow-[0_18px_50px_rgba(0,0,0,0.06)]">
-            <div className="border-b border-[var(--app-border)] bg-gradient-to-br from-[var(--app-surface)] to-[var(--app-surface-2)] p-5 sm:p-6">
+            <div className="border-b border-[var(--app-border)] bg-gradient-to-br from-[var(--app-surface)] to-[var(--app-surface-2)] p-4 sm:p-5">
               <div className="flex items-center gap-3">
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--app-brand-soft)]">
                   <Wallet className="h-5 w-5 text-[var(--app-brand)]" />
@@ -291,7 +291,7 @@ export const Payment: React.FC = () => {
               </div>
             </div>
 
-            <div className="p-5 sm:p-6">
+            <div className="p-4 sm:p-5">
               <div className="divide-y divide-[var(--app-border)]">
                 <div className="flex items-center justify-between gap-4 py-3">
                   <span className="text-xs text-[var(--app-muted)]">Bank</span>
@@ -323,11 +323,11 @@ export const Payment: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mt-5 rounded-xl border border-[var(--app-brand)]/20 bg-[var(--app-brand-soft)] p-5">
+              <div className="mt-4 rounded-xl border border-[var(--app-brand)]/20 bg-[var(--app-brand-soft)] p-4">
                 <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[var(--app-brand)]">
                   Amount to pay
                 </p>
-                <p className="mt-1 text-4xl font-black tracking-[-0.055em] text-[var(--app-brand)] sm:text-5xl">
+                <p className="mt-1 text-3xl font-black tracking-[-0.05em] text-[var(--app-brand)] sm:text-4xl">
                   {formatNGN(session.amount)}
                 </p>
                 <p className="mt-2 text-[11px] text-[var(--app-muted)]">
@@ -349,8 +349,7 @@ export const Payment: React.FC = () => {
                 </h2>
 
                 <p className="mt-3 max-w-sm text-sm leading-6 text-[var(--app-muted)]">
-                  We will verify your payment and contact you with the next
-                  step.
+                  We will verify your payment and contact you with the next step.
                 </p>
 
                 <Link
@@ -366,8 +365,7 @@ export const Payment: React.FC = () => {
                 <div>
                   <p className="text-sm font-bold">Send payment proof</p>
                   <p className="mt-1.5 text-xs leading-5 text-[var(--app-muted)]">
-                    Upload your receipt, transfer confirmation, or other proof
-                    of payment.
+                    Upload your transfer receipt or payment confirmation.
                   </p>
                 </div>
 
@@ -405,8 +403,7 @@ export const Payment: React.FC = () => {
                 </button>
 
                 <p className="mt-3 text-center text-[11px] leading-5 text-[var(--app-muted)]">
-                  Make sure the amount transferred matches the amount shown
-                  above.
+                  Ensure your transfer matches the amount shown above.
                 </p>
               </>
             )}

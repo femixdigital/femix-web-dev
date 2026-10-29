@@ -2,61 +2,59 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
-
-  --app-bg: #f8fafc;
-  --app-surface: #ffffff;
-  --app-surface-2: #f8fafc;
-  --app-surface-3: #f1f5f9;
-
-  --app-text: #111827;
-  --app-text-strong: #0f172a;
-  --app-muted: #6b7280;
-  --app-muted-2: #9ca3af;
-
-  --app-border: #e5e7eb;
-  --app-border-strong: #d1d5db;
-
-  --app-brand: #2563eb;
-  --app-brand-bright: #3b82f6;
-  --app-brand-hover: #1d4ed8;
-  --app-brand-soft: #eff6ff;
-  --app-brand-contrast: #ffffff;
-
-  --app-accent: #2563eb;
-  --app-accent-soft: #eff6ff;
-
-  --app-brand-glow: rgba(37, 99, 235, 0.08);
-  --app-accent-glow: rgba(37, 99, 235, 0.06);
-
-  --app-success: #16a34a;
-  --app-warning: #d97706;
-  --app-danger: #dc2626;
-  --app-info: #2563eb;
-
-  --app-header: rgba(255, 255, 255, 0.96);
-
-  color: var(--app-text);
-  background: var(--app-bg);
+  font-family: Helvetica, Arial, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --app-bg: #f0f2f5;
+  --app-surface: #ffffff;
+  --app-surface-2: #f7f8fa;
+  --app-surface-3: #e4e6eb;
+
+  --app-text: #1c1e21;
+  --app-text-strong: #1c1e21;
+  --app-muted: #65676b;
+  --app-muted-2: #8a8d91;
+
+  --app-border: #dadde1;
+  --app-border-strong: #ccd0d5;
+
+  --app-brand: #0866ff;
+  --app-brand-bright: #1877f2;
+  --app-brand-hover: #075ce5;
+  --app-brand-soft: #e7f3ff;
+  --app-brand-contrast: #ffffff;
+
+  --app-accent: #0866ff;
+  --app-accent-soft: #e7f3ff;
+
+  --app-brand-glow: rgba(8, 102, 255, 0.12);
+  --app-accent-glow: rgba(8, 102, 255, 0.08);
+
+  --app-success: #31a24c;
+  --app-warning: #f7b928;
+  --app-danger: #e41e3f;
+  --app-info: #1877f2;
+
+  --app-header: rgba(255, 255, 255, 0.96);
+
+  --app-card-radius: 12px;
+  --app-button-radius: 8px;
+  --app-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --app-card-shadow-hover: 0 3px 10px rgba(0, 0, 0, 0.10);
+
+  color: var(--app-text);
+  background: var(--app-bg);
+  color-scheme: light;
 }
 
 html {
   min-width: 320px;
-  background: var(--app-bg);
-  color-scheme: light;
   scroll-behavior: smooth;
-  scroll-padding-top: 88px;
+  scroll-padding-top: 76px;
+  background: var(--app-bg);
 }
 
 body {
@@ -65,7 +63,7 @@ body {
   min-height: 100vh;
   background: var(--app-bg);
   color: var(--app-text);
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.5;
 }
 
@@ -75,6 +73,7 @@ input,
 textarea,
 select {
   font: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button,
@@ -86,69 +85,226 @@ button {
   cursor: pointer;
 }
 
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
   outline: 2px solid var(--app-brand);
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 
 ::selection {
-  background: var(--app-brand);
-  color: var(--app-brand-contrast);
+  background: #cce4ff;
+  color: #1c1e21;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--app-text-strong);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  text-shadow: none;
+}
+
+p,
+li {
+  line-height: 1.55;
+}
+
+small {
+  font-size: 12px;
+}
+
+input,
+textarea,
+select {
+  color: var(--app-text);
+  background: var(--app-surface);
+  border-color: var(--app-border);
+  border-radius: var(--app-button-radius);
+  font-weight: 400;
+  box-shadow: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--app-muted-2);
+  opacity: 1;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--app-brand);
+  box-shadow: 0 0 0 2px var(--app-brand-glow);
+}
+
+button {
+  border-radius: var(--app-button-radius);
+  font-weight: 600;
+  box-shadow: none;
+  transition: background-color 150ms ease, border-color 150ms ease,
+    box-shadow 150ms ease, transform 150ms ease;
+}
+
+button:hover {
+  box-shadow: none;
+}
+
+button:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+a {
+  font-weight: inherit;
+  text-shadow: none;
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+a[download],
+button[download] {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+a[download] svg,
+button[download] svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Reusable surface and card styling */
+[class*="rounded-xl"][class*="border"],
+[class*="rounded-2xl"][class*="border"],
+[class*="rounded-3xl"][class*="border"] {
+  box-shadow: var(--app-card-shadow);
+}
+
+[class*="rounded-xl"][class*="border"]:hover,
+[class*="rounded-2xl"][class*="border"]:hover,
+[class*="rounded-3xl"][class*="border"]:hover {
+  box-shadow: var(--app-card-shadow-hover);
+}
+
+/* Admin workspace */
+.admin-workspace table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.admin-workspace th {
+  font-weight: 700;
+}
+
+.admin-workspace td {
+  font-weight: 400;
+}
+
+.admin-workspace button,
+.admin-workspace select {
+  font-weight: 600;
+}
+
+.admin-workspace select {
+  min-height: 40px;
+  border-radius: 8px;
+}
+
+.admin-workspace table tbody tr {
+  transition: background-color 150ms ease;
+}
+
+.admin-workspace table tbody tr:hover {
+  background: var(--app-brand-soft);
 }
 
 .dark {
-  --app-bg: #0f172a;
-  --app-surface: #111827;
-  --app-surface-2: #1e293b;
-  --app-surface-3: #334155;
+  --app-bg: #18191a;
+  --app-surface: #242526;
+  --app-surface-2: #3a3b3c;
+  --app-surface-3: #4e4f50;
 
-  --app-text: #f1f5f9;
-  --app-text-strong: #ffffff;
-  --app-muted: #94a3b8;
-  --app-muted-2: #64748b;
+  --app-text: #e4e6eb;
+  --app-text-strong: #f5f6f7;
+  --app-muted: #b0b3b8;
+  --app-muted-2: #8a8d91;
 
-  --app-border: #334155;
-  --app-border-strong: #475569;
+  --app-border: #3e4042;
+  --app-border-strong: #606266;
 
-  --app-brand: #3b82f6;
-  --app-brand-bright: #60a5fa;
-  --app-brand-hover: #2563eb;
-  --app-brand-soft: #172554;
+  --app-brand: #2d88ff;
+  --app-brand-bright: #4599ff;
+  --app-brand-hover: #1877f2;
+  --app-brand-soft: #263951;
   --app-brand-contrast: #ffffff;
 
-  --app-accent: #3b82f6;
-  --app-accent-soft: #172554;
+  --app-accent: #2d88ff;
+  --app-accent-soft: #263951;
 
-  --app-brand-glow: rgba(59, 130, 246, 0.12);
-  --app-accent-glow: rgba(59, 130, 246, 0.08);
+  --app-brand-glow: rgba(45, 136, 255, 0.18);
+  --app-accent-glow: rgba(45, 136, 255, 0.12);
 
-  --app-success: #22c55e;
-  --app-warning: #f59e0b;
-  --app-danger: #ef4444;
-  --app-info: #60a5fa;
+  --app-success: #31a24c;
+  --app-warning: #f7b928;
+  --app-danger: #ff5c75;
+  --app-info: #4599ff;
 
-  --app-header: rgba(15, 23, 42, 0.96);
+  --app-header: rgba(36, 37, 38, 0.96);
+
+  --app-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
+  --app-card-shadow-hover: 0 3px 10px rgba(0, 0, 0, 0.28);
 
   color-scheme: dark;
 }
 
+.dark html,
 .dark body {
   background: var(--app-bg);
-}
-
-.dark ::selection {
-  background: var(--app-brand);
-  color: var(--app-brand-contrast);
+  color: var(--app-text);
 }
 
 .dark input,
 .dark textarea,
 .dark select {
-  color-scheme: dark;
+  color: var(--app-text);
+  background: var(--app-surface);
+  border-color: var(--app-border);
+}
+
+.dark ::selection {
+  background: #263951;
+  color: #ffffff;
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    letter-spacing: -0.03em;
+  }
+
+  a[download],
+  button[download] {
+    min-height: 42px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -164,363 +320,3 @@ select:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
-
-/* =========================================================
-   Standard social-style typography
-   ========================================================= */
-
-body {
-  font-size: 18px;
-  line-height: 1.55;
-}
-
-p,
-li {
-  font-size: 18px;
-  line-height: 1.6;
-}
-
-small,
-.text-xs {
-  font-size: 15px;
-  line-height: 1.45;
-}
-
-.text-sm {
-  font-size: 16px;
-  line-height: 1.5;
-}
-
-.text-base {
-  font-size: 18px;
-  line-height: 1.55;
-}
-
-input,
-textarea,
-select {
-  font-size: 17px;
-  line-height: 1.55;
-}
-
-button,
-a {
-  font-size: 17px;
-  line-height: 1.45;
-}
-
-/* Downloadable/file icons */
-a[download] svg,
-button[download] svg {
-  width: 22px;
-  height: 22px;
-}
-
-a[download],
-button[download] {
-  min-height: 46px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-@media (max-width: 640px) {
-  body {
-    font-size: 18px;
-  }
-
-  p,
-  li {
-    font-size: 18px;
-    line-height: 1.6;
-  }
-
-  button,
-  a {
-    font-size: 17px;
-  }
-
-  input,
-  textarea,
-  select {
-    font-size: 17px;
-  }
-
-  a[download] svg,
-  button[download] svg {
-    width: 24px;
-    height: 24px;
-  }
-}
-
-/* =========================================================
-   Femix bold social-style visual system
-   ========================================================= */
-
-body,
-input,
-textarea,
-select {
-  font-weight: 400;
-}
-
-button,
-a {
-  font-weight: 600;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 800 !important;
-  letter-spacing: -0.035em;
-  text-shadow: 0 2px 3px rgba(15, 23, 42, 0.10);
-}
-
-button {
-  border-radius: 10px;
-  font-weight: 800 !important;
-  box-shadow:
-    0 2px 5px rgba(15, 23, 42, 0.10),
-    0 1px 2px rgba(15, 23, 42, 0.08);
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease,
-    background-color 160ms ease;
-}
-
-button:hover {
-  transform: translateY(-1px);
-  box-shadow:
-    0 5px 12px rgba(15, 23, 42, 0.14),
-    0 2px 4px rgba(15, 23, 42, 0.08);
-}
-
-button:active {
-  transform: translateY(0);
-  box-shadow:
-    0 2px 5px rgba(15, 23, 42, 0.10);
-}
-
-a {
-  font-weight: 700;
-  text-shadow: 0 1px 2px rgba(15, 23, 42, 0.07);
-}
-
-input,
-textarea,
-select {
-  font-weight: 700 !important;
-  border-radius: 10px !important;
-  box-shadow:
-    inset 0 1px 2px rgba(15, 23, 42, 0.04),
-    0 1px 2px rgba(15, 23, 42, 0.05);
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  box-shadow:
-    0 0 0 3px var(--app-brand-glow),
-    0 3px 8px rgba(15, 23, 42, 0.08);
-}
-
-/* Elevated card treatment */
-div[class*="rounded-xl"][class*="border"],
-div[class*="rounded-2xl"][class*="border"],
-div[class*="rounded-3xl"][class*="border"] {
-  box-shadow:
-    0 2px 5px rgba(15, 23, 42, 0.06),
-    0 8px 20px rgba(15, 23, 42, 0.06);
-}
-
-/* Stronger card hover */
-div[class*="rounded-xl"][class*="border"]:hover,
-div[class*="rounded-2xl"][class*="border"]:hover,
-div[class*="rounded-3xl"][class*="border"]:hover {
-  box-shadow:
-    0 4px 8px rgba(15, 23, 42, 0.08),
-    0 12px 28px rgba(15, 23, 42, 0.08);
-}
-
-.dark body {
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.30);
-}
-
-.dark h1,
-.dark h2,
-.dark h3,
-.dark h4,
-.dark h5,
-.dark h6 {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
-}
-
-.dark div[class*="rounded-xl"][class*="border"],
-.dark div[class*="rounded-2xl"][class*="border"],
-.dark div[class*="rounded-3xl"][class*="border"] {
-  box-shadow:
-    0 3px 8px rgba(0, 0, 0, 0.22),
-    0 10px 24px rgba(0, 0, 0, 0.18);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  button {
-    transition: none;
-  }
-
-  button:hover,
-  button:active {
-    transform: none;
-  }
-}
-
-
-/* =========================================================
-   Femix social-style refinement
-   ========================================================= */
-
-:root {
-  --app-card-radius: 16px;
-  --app-button-radius: 12px;
-  --app-card-shadow:
-    0 2px 4px rgba(15, 23, 42, 0.06),
-    0 8px 24px rgba(15, 23, 42, 0.07);
-  --app-card-shadow-hover:
-    0 4px 8px rgba(15, 23, 42, 0.08),
-    0 14px 32px rgba(15, 23, 42, 0.10);
-}
-
-.dark {
-  --app-card-shadow:
-    0 3px 8px rgba(0, 0, 0, 0.25),
-    0 12px 28px rgba(0, 0, 0, 0.18);
-  --app-card-shadow-hover:
-    0 5px 12px rgba(0, 0, 0, 0.30),
-    0 16px 34px rgba(0, 0, 0, 0.22);
-}
-
-/* Buttons */
-button {
-  border-radius: var(--app-button-radius);
-  font-weight: 800 !important;
-  letter-spacing: -0.01em;
-}
-
-button:not(:disabled):hover {
-  transform: translateY(-1px);
-}
-
-button:not(:disabled):active {
-  transform: translateY(0);
-}
-
-/* Brand/action buttons */
-a[class*="bg-[var(--app-brand)]"],
-button[class*="bg-[var(--app-brand)]"] {
-  border-radius: var(--app-button-radius);
-  font-weight: 800 !important;
-  box-shadow:
-    0 2px 5px rgba(37, 99, 235, 0.20),
-    0 6px 14px rgba(37, 99, 235, 0.10);
-}
-
-a[class*="bg-[var(--app-brand)]"]:hover,
-button[class*="bg-[var(--app-brand)]"]:hover {
-  box-shadow:
-    0 4px 8px rgba(37, 99, 235, 0.22),
-    0 10px 20px rgba(37, 99, 235, 0.13);
-}
-
-/* Inputs */
-input,
-textarea,
-select {
-  border-radius: var(--app-button-radius) !important;
-  font-weight: 700 !important;
-}
-
-/* =========================================================
-   Admin workspace
-   ========================================================= */
-
-.admin-workspace,
-.admin-workspace * {
-  --admin-radius: 16px;
-}
-
-.admin-workspace table {
-  border-collapse: separate;
-  border-spacing: 0;
-  overflow: hidden;
-}
-
-.admin-workspace th {
-  font-weight: 900 !important;
-  letter-spacing: 0.06em;
-}
-
-.admin-workspace td {
-  font-weight: 700;
-}
-
-.admin-workspace button,
-.admin-workspace select {
-  font-weight: 800 !important;
-}
-
-.admin-workspace select {
-  min-height: 40px;
-  border-radius: 10px !important;
-  font-weight: 800 !important;
-  box-shadow:
-    0 1px 3px rgba(15, 23, 42, 0.08);
-}
-
-.admin-workspace table tbody tr {
-  transition:
-    background-color 160ms ease,
-    box-shadow 160ms ease;
-}
-
-.admin-workspace table tbody tr:hover {
-  box-shadow:
-    inset 4px 0 0 var(--app-brand);
-}
-
-/* Admin metric cards */
-.admin-workspace [class*="rounded-2xl"],
-.admin-workspace [class*="rounded-3xl"] {
-  box-shadow: var(--app-card-shadow);
-}
-
-.admin-workspace [class*="rounded-2xl"]:hover,
-.admin-workspace [class*="rounded-3xl"]:hover {
-  box-shadow: var(--app-card-shadow-hover);
-}
-
-/* Admin status pills */
-.admin-workspace [class*="rounded-full"] {
-  font-weight: 900 !important;
-  letter-spacing: 0.01em;
-}
-
-/* Admin action buttons */
-.admin-workspace button {
-  border-radius: 10px;
-}
-
-@media (max-width: 640px) {
-  .admin-workspace {
-    font-size: 14px;
-  }
-
-  .admin-workspace table {
-    font-size: 12px;
-  }
-}
-
