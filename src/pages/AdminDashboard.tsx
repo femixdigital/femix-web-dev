@@ -63,6 +63,7 @@ export const AdminDashboard: React.FC = () => {
   const [adminLoading, setAdminLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('leads');
+  const [ordersFilter, setOrdersFilter] = useState<'all' | 'paid'>('all');
   const [leads, setLeads] = useState<Lead[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingData, setLoadingData] = useState(false);
@@ -390,15 +391,18 @@ export const AdminDashboard: React.FC = () => {
     [orders],
   );
 
-  const pendingOrders = orders.filter((order) =>
-    ['pending', 'new', 'quote'].includes(order.status.toLowerCase()),
-  ).length;
-
   const paidOrders = orders.filter((order) =>
     ['paid', 'completed', 'success'].includes(order.status.toLowerCase()),
   ).length;
 
-  const activeCount = activeTab === 'leads' ? leads.length : orders.length;
+  const visibleOrders =
+    ordersFilter === 'paid'
+      ? orders.filter((order) =>
+          ['paid', 'completed', 'success'].includes(order.status.toLowerCase()),
+        )
+      : orders;
+  const activeCount =
+    activeTab === 'leads' ? leads.length : visibleOrders.length;
 
   if (authLoading || adminLoading) {
     return (
@@ -532,13 +536,13 @@ export const AdminDashboard: React.FC = () => {
 
         <section className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
           <div className="min-w-0">
-            <MetricCard label="Client leads" value={leads.length} caption="Website enquiries" icon={<Users className="h-5 w-5" />} tone="brand" />
+            <MetricCard label="Client leads" value={leads.length} caption="Open client enquiries" icon={<Users className="h-5 w-5" />} tone="brand" onClick={() => { setActiveTab('leads'); setOrdersFilter('all'); }} />
           </div>
           <div className="min-w-0">
-            <MetricCard label="Project orders" value={orders.length} caption={`${pendingOrders} currently pending`} icon={<ShoppingBag className="h-5 w-5" />} tone="neutral" />
+            <MetricCard label="Project orders" value={orders.length} caption="View all project orders" icon={<ShoppingBag className="h-5 w-5" />} tone="neutral" onClick={() => { setActiveTab('orders'); setOrdersFilter('all'); }} />
           </div>
           <div className="min-w-0">
-            <MetricCard label="Paid / completed" value={paidOrders} caption="Recorded successful orders" icon={<CheckCircle2 className="h-5 w-5" />} tone="brand" />
+            <MetricCard label="Paid / completed" value={paidOrders} caption="View successful orders" icon={<CheckCircle2 className="h-5 w-5" />} tone="brand" onClick={() => { setActiveTab('orders'); setOrdersFilter('paid'); }} />
           </div>
           <div className="col-span-2 min-w-0">
             <MetricCard label="Total order value" value={formatMoney(totalOrderValue, 'NGN')} caption="Recorded NGN orders" icon={<TrendingUp className="h-5 w-5" />} tone="featured" />
@@ -561,7 +565,7 @@ export const AdminDashboard: React.FC = () => {
               <div className="flex rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] p-1 shadow-sm">
                 <TabButton
                   active={activeTab === 'leads'}
-                  onClick={() => setActiveTab('leads')}
+                  onClick={() => { setActiveTab('leads'); setOrdersFilter('all'); }}
                   icon={<Users className="h-3.5 w-3.5" />}
                   label="Leads"
                   count={leads.length}
@@ -569,7 +573,7 @@ export const AdminDashboard: React.FC = () => {
 
                 <TabButton
                   active={activeTab === 'orders'}
-                  onClick={() => setActiveTab('orders')}
+                  onClick={() => { setActiveTab('orders'); setOrdersFilter('all'); }}
                   icon={<ShoppingBag className="h-3.5 w-3.5" />}
                   label="Orders"
                   count={orders.length}
@@ -593,7 +597,7 @@ export const AdminDashboard: React.FC = () => {
             <LeadTable leads={leads} onDelete={deleteLead} />
           ) : (
             <OrderTable
-              orders={orders}
+              orders={visibleOrders}
               onDelete={deleteOrder}
               onUpdate={updateOrder}
               onViewProof={viewPaymentProof}
@@ -616,7 +620,8 @@ const MetricCard: React.FC<{
   caption: string;
   icon: React.ReactNode;
   tone: 'brand' | 'neutral' | 'featured';
-}> = ({ label, value, caption, icon, tone }) => {
+  onClick?: () => void;
+}> = ({ label, value, caption, icon, tone, onClick }) => {
   const featured = tone === 'featured';
   const toneClasses = {
     brand: 'bg-[var(--app-brand-soft)] text-[var(--app-brand)]',
@@ -625,7 +630,11 @@ const MetricCard: React.FC<{
   };
 
   return (
-    <div className={`group h-full min-w-0 rounded-2xl border p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg sm:rounded-3xl sm:p-5 dark:shadow-black/20 ${
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={`${label}: ${value}. ${caption}`}
+      className={`group h-full min-w-0 w-full rounded-2xl border p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--app-brand)] focus-visible:ring-offset-2 sm:rounded-3xl sm:p-5 dark:shadow-black/20 ${
       featured
         ? 'border-[var(--app-brand)] bg-[var(--app-brand)] text-white'
         : 'border-[var(--app-border)] bg-[var(--app-surface)] hover:border-[var(--app-brand)]/30'
@@ -644,7 +653,7 @@ const MetricCard: React.FC<{
         </div>
       </div>
       <p className={`mt-3 text-xs ${featured ? 'text-white/80' : 'text-[var(--app-muted)]'}`}>{caption}</p>
-    </div>
+    </button>
   );
 };
 
