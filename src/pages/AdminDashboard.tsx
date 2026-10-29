@@ -3,6 +3,9 @@ import {
   ArrowUpRight,
   BarChart3,
   CheckCircle2,
+  Check,
+  ChevronDown,
+  ChevronUp,
   Download,
   LogOut,
   Mail,
@@ -64,6 +67,10 @@ export const AdminDashboard: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('leads');
   const [ordersFilter, setOrdersFilter] = useState<'all' | 'paid'>('all');
+  const [recordsOpen, setRecordsOpen] = useState(true);
+  const [selectedMetric, setSelectedMetric] = useState<
+    'leads' | 'orders' | 'paid' | 'value' | null
+  >(null);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingData, setLoadingData] = useState(false);
@@ -536,78 +543,150 @@ export const AdminDashboard: React.FC = () => {
 
         <section className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
           <div className="min-w-0">
-            <MetricCard label="Client leads" value={leads.length} caption="Open client enquiries" icon={<Users className="h-5 w-5" />} tone="brand" onClick={() => { setActiveTab('leads'); setOrdersFilter('all'); }} />
+            <MetricCard
+              label="Client leads"
+              value={leads.length}
+              caption="Open client enquiries"
+              icon={<Users className="h-5 w-5" />}
+              tone="brand"
+              selected={selectedMetric === 'leads'}
+              onClick={() => {
+                setSelectedMetric('leads');
+                setActiveTab('leads');
+                setOrdersFilter('all');
+                setRecordsOpen(true);
+              }}
+            />
           </div>
           <div className="min-w-0">
-            <MetricCard label="Project orders" value={orders.length} caption="View all project orders" icon={<ShoppingBag className="h-5 w-5" />} tone="neutral" onClick={() => { setActiveTab('orders'); setOrdersFilter('all'); }} />
+            <MetricCard
+              label="Project orders"
+              value={orders.length}
+              caption="View all project orders"
+              icon={<ShoppingBag className="h-5 w-5" />}
+              tone="neutral"
+              selected={selectedMetric === 'orders'}
+              onClick={() => {
+                setSelectedMetric('orders');
+                setActiveTab('orders');
+                setOrdersFilter('all');
+                setRecordsOpen(true);
+              }}
+            />
           </div>
           <div className="min-w-0">
-            <MetricCard label="Paid / completed" value={paidOrders} caption="View successful orders" icon={<CheckCircle2 className="h-5 w-5" />} tone="brand" onClick={() => { setActiveTab('orders'); setOrdersFilter('paid'); }} />
+            <MetricCard
+              label="Paid / completed"
+              value={paidOrders}
+              caption="View successful orders"
+              icon={<CheckCircle2 className="h-5 w-5" />}
+              tone="brand"
+              selected={selectedMetric === 'paid'}
+              onClick={() => {
+                setSelectedMetric('paid');
+                setActiveTab('orders');
+                setOrdersFilter('paid');
+                setRecordsOpen(true);
+              }}
+            />
           </div>
           <div className="col-span-2 min-w-0">
-            <MetricCard label="Total order value" value={formatMoney(totalOrderValue, 'NGN')} caption="Recorded NGN orders" icon={<TrendingUp className="h-5 w-5" />} tone="featured" />
+            <MetricCard
+              label="Total order value"
+              value={formatMoney(totalOrderValue, 'NGN')}
+              caption="Recorded NGN orders · View all orders"
+              icon={<TrendingUp className="h-5 w-5" />}
+              tone="featured"
+              selected={selectedMetric === 'value'}
+              onClick={() => {
+                setSelectedMetric('value');
+                setActiveTab('orders');
+                setOrdersFilter('all');
+                setRecordsOpen(true);
+              }}
+            />
           </div>
         </section>
 
 
         <section className="mt-5 overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] shadow-sm sm:rounded-3xl dark:shadow-black/20">
           <div className="flex flex-col gap-4 border-b border-[var(--app-border)] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-            <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--app-brand)]">
-                Records
-              </p>
-              <h2 className="mt-1 text-lg font-extrabold">
-                Business activity
-              </h2>
-            </div>
+            <button
+              type="button"
+              onClick={() => setRecordsOpen((open) => !open)}
+              aria-expanded={recordsOpen}
+              aria-controls="business-activity-records"
+              className="flex min-w-0 items-center justify-between gap-4 rounded-xl text-left outline-none focus-visible:ring-2 focus-visible:ring-[var(--app-brand)]"
+            >
+              <span className="min-w-0">
+                <span className="block text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--app-brand)]">
+                  Records
+                </span>
+                <span className="mt-1 block text-lg font-extrabold">
+                  Business Activities
+                </span>
+                <span className="mt-1 block text-xs text-[var(--app-muted)]">
+                  {recordsOpen ? 'Tap to collapse records' : 'Tap to view leads and orders'}
+                </span>
+              </span>
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] text-[var(--app-brand)]">
+                {recordsOpen ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+              </span>
+            </button>
 
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <div className="flex rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] p-1 shadow-sm">
-                <TabButton
-                  active={activeTab === 'leads'}
-                  onClick={() => { setActiveTab('leads'); setOrdersFilter('all'); }}
-                  icon={<Users className="h-3.5 w-3.5" />}
-                  label="Leads"
-                  count={leads.length}
-                />
-
-                <TabButton
-                  active={activeTab === 'orders'}
-                  onClick={() => { setActiveTab('orders'); setOrdersFilter('all'); }}
-                  icon={<ShoppingBag className="h-3.5 w-3.5" />}
-                  label="Orders"
-                  count={orders.length}
-                />
+            {recordsOpen && (
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <div className="flex rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] p-1 shadow-sm">
+                  <TabButton
+                    active={activeTab === 'leads'}
+                    onClick={() => {
+                      setActiveTab('leads');
+                      setOrdersFilter('all');
+                    }}
+                    icon={<Users className="h-3.5 w-3.5" />}
+                    label="Leads"
+                    count={leads.length}
+                  />
+                  <TabButton
+                    active={activeTab === 'orders'}
+                    onClick={() => {
+                      setActiveTab('orders');
+                      setOrdersFilter('all');
+                    }}
+                    icon={<ShoppingBag className="h-3.5 w-3.5" />}
+                    label="Orders"
+                    count={orders.length}
+                  />
+                </div>
+                <button
+                  onClick={activeTab === 'leads' ? exportLeadsCSV : exportOrdersCSV}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--app-border)] px-4 py-2.5 text-xs font-extrabold shadow-sm transition hover:border-[var(--app-brand)] hover:text-[var(--app-brand)]"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  Export {activeTab}
+                  <ArrowUpRight className="h-3 w-3" />
+                </button>
               </div>
+            )}
+          </div>
 
-              <button
-                onClick={
-                  activeTab === 'leads' ? exportLeadsCSV : exportOrdersCSV
-                }
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--app-border)] px-4 py-2.5 text-xs font-extrabold shadow-sm transition hover:border-[var(--app-brand)] hover:text-[var(--app-brand)]"
-              >
-                <Download className="h-3.5 w-3.5" />
-                Export {activeTab}
-                <ArrowUpRight className="h-3 w-3" />
-              </button>
+          {recordsOpen && (
+            <div id="business-activity-records">
+              {activeTab === 'leads' ? (
+                <LeadTable leads={leads} onDelete={deleteLead} />
+              ) : (
+                <OrderTable
+                  orders={visibleOrders}
+                  onDelete={deleteOrder}
+                  onUpdate={updateOrder}
+                  onViewProof={viewPaymentProof}
+                />
+              )}
+              <div className="border-t border-[var(--app-border)] px-4 py-3 text-xs text-[var(--app-muted)]">
+                Showing {activeCount} {activeTab} record{activeCount === 1 ? '' : 's'}.
+              </div>
             </div>
-          </div>
-
-          {activeTab === 'leads' ? (
-            <LeadTable leads={leads} onDelete={deleteLead} />
-          ) : (
-            <OrderTable
-              orders={visibleOrders}
-              onDelete={deleteOrder}
-              onUpdate={updateOrder}
-              onViewProof={viewPaymentProof}
-            />
           )}
-
-          <div className="border-t border-[var(--app-border)] px-4 py-3 text-xs text-[var(--app-muted)] sm:px-4">
-            Showing {activeCount} {activeTab} record
-            {activeCount === 1 ? '' : 's'}.
-          </div>
         </section>
       </div>
     </main>
@@ -621,7 +700,8 @@ const MetricCard: React.FC<{
   icon: React.ReactNode;
   tone: 'brand' | 'neutral' | 'featured';
   onClick?: () => void;
-}> = ({ label, value, caption, icon, tone, onClick }) => {
+  selected?: boolean;
+}> = ({ label, value, caption, icon, tone, onClick, selected = false }) => {
   const featured = tone === 'featured';
   const toneClasses = {
     brand: 'bg-[var(--app-brand-soft)] text-[var(--app-brand)]',
@@ -633,11 +713,14 @@ const MetricCard: React.FC<{
     <button
       type="button"
       onClick={onClick}
-      aria-label={`${label}: ${value}. ${caption}`}
+      aria-pressed={onClick ? selected : undefined}
+      aria-label={`${label}: ${value}. ${caption}${selected ? ". Selected" : ""}`}
       className={`group h-full min-w-0 w-full rounded-2xl border p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--app-brand)] focus-visible:ring-offset-2 sm:rounded-3xl sm:p-5 dark:shadow-black/20 ${
       featured
         ? 'border-[var(--app-brand)] bg-[var(--app-brand)] text-white'
-        : 'border-[var(--app-border)] bg-[var(--app-surface)] hover:border-[var(--app-brand)]/30'
+        : selected
+          ? 'border-[var(--app-brand)] bg-[var(--app-brand-soft)] ring-2 ring-[var(--app-brand)]/15'
+          : 'border-[var(--app-border)] bg-[var(--app-surface)] hover:border-[var(--app-brand)]/30'
     }`}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
@@ -648,8 +731,15 @@ const MetricCard: React.FC<{
             {value}
           </p>
         </div>
-        <div className={`shrink-0 rounded-2xl p-3 transition-transform duration-200 group-hover:scale-105 ${toneClasses[tone]}`}>
-          {icon}
+        <div className="flex shrink-0 items-start gap-2">
+          {selected && (
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--app-brand)] text-white shadow-sm" aria-hidden="true">
+              <Check className="h-4 w-4" />
+            </span>
+          )}
+          <div className={`rounded-2xl p-3 transition-transform duration-200 group-hover:scale-105 ${toneClasses[tone]}`}>
+            {icon}
+          </div>
         </div>
       </div>
       <p className={`mt-3 text-xs ${featured ? 'text-white/80' : 'text-[var(--app-muted)]'}`}>{caption}</p>
