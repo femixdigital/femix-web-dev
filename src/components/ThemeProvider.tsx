@@ -6,22 +6,16 @@ import React, {
   useState,
 } from 'react';
 
-export type ThemeMode = 'light' | 'dark' | 'system';
+export type ThemeMode = 'light' | 'dark';
 
 interface ThemeContextValue {
   theme: ThemeMode;
   setTheme: (theme: ThemeMode) => void;
-  resolvedTheme: 'light' | 'dark';
+  resolvedTheme: ThemeMode;
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
-
 const STORAGE_KEY = 'femix-web-dev-theme';
-
-const getSystemTheme = (): 'light' | 'dark' =>
-  window.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'dark'
-    : 'light';
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -29,41 +23,19 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   const [theme, setThemeState] = useState<ThemeMode>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
 
-    if (saved === 'light' || saved === 'system') {
-      return saved;
-    }
-    if (saved === 'dark') {
-      return 'system';
-    }
+    if (saved === 'dark') return 'dark';
+    if (saved === 'light') return 'light';
 
-    return 'system';
+    // Migrate old "system" or invalid preferences to Light.
+    localStorage.setItem(STORAGE_KEY, 'light');
+    return 'light';
   });
-
-  const [systemTheme, setSystemTheme] = useState<'light' | 'dark'>(
-    getSystemTheme,
-  );
-
-  const resolvedTheme = theme === 'system' ? systemTheme : theme;
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-    const handleChange = (event: MediaQueryListEvent) => {
-      setSystemTheme(event.matches ? 'dark' : 'light');
-    };
-
-    setSystemTheme(mediaQuery.matches ? 'dark' : 'light');
-    mediaQuery.addEventListener('change', handleChange);
-
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
 
   useEffect(() => {
     const root = document.documentElement;
-
-    root.classList.toggle('dark', resolvedTheme === 'dark');
-    root.style.colorScheme = resolvedTheme;
-  }, [resolvedTheme]);
+    root.classList.toggle('dark', theme === 'dark');
+    root.style.colorScheme = theme;
+  }, [theme]);
 
   const setTheme = (nextTheme: ThemeMode) => {
     setThemeState(nextTheme);
@@ -74,9 +46,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     () => ({
       theme,
       setTheme,
-      resolvedTheme,
+      resolvedTheme: theme,
     }),
-    [theme, resolvedTheme],
+    [theme],
   );
 
   return (

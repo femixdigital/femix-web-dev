@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Check, ChevronDown, Monitor, Sun } from 'lucide-react';
+import { Check, ChevronDown, Moon, Sun } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import type { ThemeMode } from './ThemeProvider';
 
@@ -9,7 +9,7 @@ const options: Array<{
   icon: React.ComponentType<{ className?: string }>;
 }> = [
   { value: 'light', label: 'Light', icon: Sun },
-  { value: 'system', label: 'System', icon: Monitor },
+  { value: 'dark', label: 'Dark', icon: Moon },
 ];
 
 export const ThemeSwitcher: React.FC = () => {
@@ -17,8 +17,7 @@ export const ThemeSwitcher: React.FC = () => {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
-  const current =
-    options.find((option) => option.value === theme) ?? options[0];
+  const current = options.find((option) => option.value === theme) ?? options[0];
 
   useEffect(() => {
     const handlePointerDown = (event: PointerEvent) => {
@@ -31,9 +30,7 @@ export const ThemeSwitcher: React.FC = () => {
     };
 
     document.addEventListener('pointerdown', handlePointerDown);
-
-    return () =>
-      document.removeEventListener('pointerdown', handlePointerDown);
+    return () => document.removeEventListener('pointerdown', handlePointerDown);
   }, []);
 
   const CurrentIcon = current.icon;
@@ -46,7 +43,7 @@ export const ThemeSwitcher: React.FC = () => {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={`Theme: ${current.label}`}
-        className="flex h-10 items-center gap-2 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] px-3 text-sm font-semibold text-[var(--app-text)] transition hover:border-[var(--app-brand)]"
+        className="flex min-h-10 items-center gap-2 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] px-3 text-sm font-semibold text-[var(--app-text)] transition hover:border-[var(--app-brand)] hover:bg-[var(--app-surface-2)] active:scale-[0.98]"
       >
         <CurrentIcon className="h-4 w-4 text-[var(--app-brand)]" />
         <span className="hidden sm:inline">{current.label}</span>
@@ -60,7 +57,7 @@ export const ThemeSwitcher: React.FC = () => {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-40 overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-1.5 shadow-xl"
+          className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-36 overflow-hidden rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-1.5 shadow-xl"
         >
           {options.map((option) => {
             const Icon = option.icon;
@@ -75,7 +72,7 @@ export const ThemeSwitcher: React.FC = () => {
                   setTheme(option.value);
                   setOpen(false);
                 }}
-                className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                className={`flex min-h-10 w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-semibold transition ${
                   selected
                     ? 'bg-[var(--app-brand-soft)] text-[var(--app-brand)]'
                     : 'text-[var(--app-text)] hover:bg-[var(--app-surface-2)]'
@@ -85,7 +82,6 @@ export const ThemeSwitcher: React.FC = () => {
                   <Icon className="h-4 w-4" />
                   {option.label}
                 </span>
-
                 {selected && <Check className="h-4 w-4" />}
               </button>
             );
@@ -95,3 +91,5 @@ export const ThemeSwitcher: React.FC = () => {
     </div>
   );
 };
+
+export default ThemeSwitcher;

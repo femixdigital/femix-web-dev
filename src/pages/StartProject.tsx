@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
-  Calculator,
   CheckCircle2,
   ClipboardList,
   MessageSquare,
@@ -14,19 +13,19 @@ const paths = [
     number: '01',
     title: 'Estimate your project',
     description:
-      'Use the estimator if you want a quick starting point based on the pages, features, and functionality you need.',
+      'Tell us what you want to build and include your expected budget, if you have one.',
     href: '/estimator',
-    icon: Calculator,
-    action: 'Open estimator',
+    icon: ClipboardList,
+    action: 'Start estimate',
   },
   {
     number: '02',
-    title: 'Tell us what you need',
+    title: 'Send a project enquiry',
     description:
-      'Have a project idea, brief, or existing business requirement? Send the details directly and we will take it from there.',
+      'Describe the website or application you need, including any features or requirements you already have.',
     href: '/contact',
     icon: MessageSquare,
-    action: 'Send project details',
+    action: 'Send enquiry',
   },
 ];
 
@@ -34,17 +33,17 @@ const process = [
   {
     icon: ClipboardList,
     title: 'Understand',
-    description: 'We clarify the business goal, users, features, and scope.',
+    description: 'We discuss what the website or application needs to do.',
   },
   {
     icon: Sparkles,
     title: 'Shape',
-    description: 'We turn the requirements into a practical product direction.',
+    description: 'We agree on the pages, features and project scope.',
   },
   {
     icon: CheckCircle2,
     title: 'Build',
-    description: 'We design and develop the experience around real-world use.',
+    description: 'We develop the website or application and check that its features work.',
   },
 ];
 
@@ -60,7 +59,7 @@ export default function StartProject() {
             </div>
 
             <h1 className="mt-6 max-w-4xl text-4xl font-extrabold leading-[1.04] tracking-[-0.05em] sm:text-5xl lg:text-6xl">
-              Start with what you know. We&apos;ll help shape the rest.
+              Start a website or software project.
             </h1>
 
             <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--app-muted)] sm:text-lg">
@@ -74,14 +73,14 @@ export default function StartProject() {
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--app-muted)]">
               What happens next
             </p>
-            <p className="mt-3 text-sm leading-6 text-[var(--app-muted)]">
+            <p className="mt-3 text-base leading-7 text-[var(--app-muted)]">
               We focus first on understanding what the product needs to
               achieve, then turn that into a clear and practical build path.
             </p>
 
-            <div className="mt-5 flex items-center gap-2 text-sm font-bold text-[var(--app-text)]">
+            <div className="mt-5 flex items-center gap-2 text-base font-bold text-[var(--app-text)]">
               <ShieldCheck className="h-4 w-4 text-[var(--app-brand)]" />
-              Clear requirements. Practical execution.
+              Discuss the requirements before development.
             </div>
           </div>
         </div>
@@ -90,19 +89,19 @@ export default function StartProject() {
           <div className="mb-5 flex items-end justify-between gap-6">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--app-muted)]">
-                Choose your starting point
+                Start your project
               </p>
               <h2 className="mt-2 text-2xl font-extrabold tracking-tight">
-                Two simple ways to begin.
+                Choose how to get started.
               </h2>
             </div>
 
-            <p className="hidden text-right text-xs font-semibold text-[var(--app-muted)] sm:block">
-              Pick whichever fits your project today.
+            <p className="hidden text-right text-sm font-semibold text-[var(--app-muted)] sm:block">
+              Select an option below.
             </p>
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid max-w-2xl gap-4">
             {paths.map((path) => {
               const Icon = path.icon;
 
@@ -126,11 +125,11 @@ export default function StartProject() {
                     {path.title}
                   </h3>
 
-                  <p className="mt-3 max-w-xl text-sm leading-6 text-[var(--app-muted)]">
+                  <p className="mt-3 max-w-xl text-base leading-7 text-[var(--app-muted)]">
                     {path.description}
                   </p>
 
-                  <span className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[var(--app-text)] transition-colors group-hover:text-[var(--app-brand)]">
+                  <span className="mt-7 inline-flex items-center gap-2 text-base font-bold text-[var(--app-text)] transition-colors group-hover:text-[var(--app-brand)]">
                     {path.action}
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                   </span>
@@ -144,10 +143,10 @@ export default function StartProject() {
           <div className="grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--app-muted)]">
-                Our approach
+                How we work
               </p>
               <h2 className="mt-3 max-w-sm text-2xl font-extrabold tracking-tight">
-                From business need to working product.
+                How we handle a project.
               </h2>
             </div>
 
@@ -166,11 +165,11 @@ export default function StartProject() {
                   >
                     <Icon className="h-5 w-5 text-[var(--app-brand)]" />
 
-                    <h3 className="mt-5 text-sm font-extrabold">
+                    <h3 className="mt-5 text-lg font-extrabold">
                       {item.title}
                     </h3>
 
-                    <p className="mt-2 text-sm leading-6 text-[var(--app-muted)]">
+                    <p className="mt-2 text-base leading-7 text-[var(--app-muted)]">
                       {item.description}
                     </p>
                   </div>
@@ -182,10 +181,10 @@ export default function StartProject() {
 
         <div className="mt-12 flex flex-col gap-5 rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface-2)] p-6 sm:flex-row sm:items-center sm:justify-between sm:p-7">
           <div>
-            <p className="text-sm font-extrabold">
-              Still figuring out the idea?
+            <p className="text-lg font-extrabold">
+              Not sure about all the details?
             </p>
-            <p className="mt-1 max-w-2xl text-sm leading-6 text-[var(--app-muted)]">
+            <p className="mt-1 max-w-2xl text-base leading-7 text-[var(--app-muted)]">
               You don&apos;t need a complete specification before starting.
               Share what you have and we can work from there.
             </p>
@@ -193,9 +192,9 @@ export default function StartProject() {
 
           <Link
             to="/contact"
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[var(--app-brand)] px-5 py-3 text-sm font-bold text-[var(--app-brand-contrast)] transition-colors hover:bg-[var(--app-brand-hover)]"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[var(--app-brand)] px-5 py-3 text-base font-bold text-[var(--app-brand-contrast)] transition-colors hover:bg-[var(--app-brand-hover)]"
           >
-            Talk to Femix
+            Contact Femix Web Dev
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

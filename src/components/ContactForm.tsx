@@ -69,7 +69,7 @@ export const ContactForm: React.FC = () => {
         <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
           Start Your Project
         </h2>
-        <p className="text-slate-400 text-sm">
+        <p className="text-slate-400 text-base">
           Tell us about your requirements and we will craft a tailored proposal.
         </p>
       </div>
@@ -77,7 +77,7 @@ export const ContactForm: React.FC = () => {
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+            <label className="block text-sm font-semibold text-slate-300 uppercase tracking-wider mb-2">
               Full Name *
             </label>
             <input
@@ -86,13 +86,13 @@ export const ContactForm: React.FC = () => {
               disabled={loading}
               value={formData.full_name}
               onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
               placeholder="Jane Doe"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+            <label className="block text-sm font-semibold text-slate-300 uppercase tracking-wider mb-2">
               Email Address *
             </label>
             <input
@@ -101,7 +101,7 @@ export const ContactForm: React.FC = () => {
               disabled={loading}
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
               placeholder="jane@company.com"
             />
           </div>
@@ -109,7 +109,7 @@ export const ContactForm: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+            <label className="block text-sm font-semibold text-slate-300 uppercase tracking-wider mb-2">
               Phone Number
             </label>
             <input
@@ -117,20 +117,20 @@ export const ContactForm: React.FC = () => {
               disabled={loading}
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
               placeholder="+1 (555) 000-0000"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+            <label className="block text-sm font-semibold text-slate-300 uppercase tracking-wider mb-2">
               Service Required
             </label>
             <select
               disabled={loading}
               value={formData.service_type}
               onChange={(e) => setFormData({ ...formData, service_type: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
             >
               <option value="Full-Stack Web Development">Full-Stack Web Development</option>
               <option value="SPA Frontend Architecture">SPA Frontend Architecture</option>
@@ -141,14 +141,14 @@ export const ContactForm: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+          <label className="block text-sm font-semibold text-slate-300 uppercase tracking-wider mb-2">
             Estimated Budget
           </label>
           <select
             disabled={loading}
             value={formData.budget}
             onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
+            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:border-cyan-500 transition-colors disabled:opacity-50"
           >
             <option value="< $1,000">Under $1,000</option>
             <option value="$1,000 - $2,500">$1,000 - $2,500</option>
@@ -158,7 +158,7 @@ export const ContactForm: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+          <label className="block text-sm font-semibold text-slate-300 uppercase tracking-wider mb-2">
             Project Overview & Notes
           </label>
           <textarea
@@ -166,7 +166,7 @@ export const ContactForm: React.FC = () => {
             disabled={loading}
             value={formData.notes}
             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-500 transition-colors resize-none disabled:opacity-50"
+            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:border-cyan-500 transition-colors resize-none disabled:opacity-50"
             placeholder="Describe your project goals, timelines, or key features..."
           />
         </div>

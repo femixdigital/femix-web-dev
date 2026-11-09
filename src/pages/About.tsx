@@ -5,36 +5,61 @@ import {
   CheckCircle2,
   Code2,
   Cpu,
+  Layers3,
+  MonitorSmartphone,
   ShieldCheck,
-  Terminal,
+  Target,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const principles = [
   {
-    number: '01',
-    icon: Terminal,
-    title: 'Practical development',
-    description:
-      'Femix Web Dev grew from a hands-on development workflow focused on turning ideas into working, maintainable digital products without unnecessary complexity.',
+    icon: Target,
+    title: 'User-focused',
+    description: 'Pages and features should be easy for the intended users to understand and use.',
   },
   {
-    number: '02',
     icon: Cpu,
-    title: 'A modern stack',
-    description:
-      'We use React, TypeScript, Vite, Tailwind CSS and Supabase to build responsive products with a strong foundation for future growth.',
+    title: 'Practical technology',
+    description: 'We choose technologies based on what the project needs.',
   },
   {
-    number: '03',
+    icon: MonitorSmartphone,
+    title: 'Responsive design',
+    description: 'Websites should work properly on phones, tablets and desktop screens.',
+  },
+  {
     icon: ShieldCheck,
-    title: 'Built for real use',
-    description:
-      'Projects are structured around clear interfaces, reliable data handling, responsive experiences and deployment workflows that can support growing businesses.',
+    title: 'Built to grow',
+    description: 'We aim to keep the code organised so features can be updated later.',
   },
 ];
 
-const stack = [
+const process = [
+  {
+    number: '01',
+    icon: Target,
+    title: 'Understand',
+    description:
+      'We discuss what you need, who will use it and the features required.',
+  },
+  {
+    number: '02',
+    icon: Layers3,
+    title: 'Build',
+    description:
+      'We build the agreed features and share progress as the work develops.',
+  },
+  {
+    number: '03',
+    icon: CheckCircle2,
+    title: 'Deliver',
+    description:
+      'We check the finished work, fix issues and prepare it for launch.',
+  },
+];
+
+const technologies = [
   'React',
   'TypeScript',
   'Vite',
@@ -43,41 +68,33 @@ const stack = [
   'Vercel',
 ];
 
-const workflow = [
-  'Understand the business requirement',
-  'Define the right product scope',
-  'Design a clear user experience',
-  'Build with maintainable technology',
-  'Test across real devices',
-  'Deploy and continue improving',
-];
-
 export const About: React.FC = () => {
   return (
-    <main className="min-h-[calc(100vh-72px)] bg-[var(--app-bg)] text-[var(--app-text)]">
-      <section className="border-b border-[var(--app-border)] bg-[var(--app-surface)]">
-        <div className="mx-auto mx-auto max-w-5xl px-3 py-5 sm:px-5 sm:py-6 lg:px-6">
-          <div className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(260px,0.8fr)] lg:items-end">
+    <main className="min-h-[calc(100vh-72px)] bg-[var(--app-bg)] px-3 py-5 text-[var(--app-text)] sm:px-5 sm:py-7 lg:px-8">
+      <div className="mx-auto max-w-6xl space-y-5 sm:space-y-6">
+
+        {/* Introduction */}
+        <section className="overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-sm sm:p-8 lg:p-10">
+          <div className="grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-center">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--app-muted)]">
-                <Code2 className="h-3.5 w-3.5 text-[var(--app-brand)]" />
+              <div className="inline-flex items-center gap-2 rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-2 text-xs font-bold uppercase tracking-[0.15em] text-[var(--app-muted)]">
+                <Code2 className="h-4 w-4 text-[var(--app-brand)]" />
                 About Femix Web Dev
               </div>
 
-              <h1 className="mt-3 max-w-3xl text-3xl font-extrabold leading-tight tracking-[-0.04em] sm:text-4xl">
-                Practical engineering for useful digital products.
+              <h1 className="mt-5 max-w-2xl text-3xl font-extrabold leading-tight tracking-[-0.045em] sm:text-4xl lg:text-5xl">
+                Websites and applications for businesses and organisations.
               </h1>
 
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--app-muted)] sm:text-base">
-                Femix Web Dev is a digital development studio focused on
-                building professional websites, web applications, dashboards
-                and business systems around real requirements.
+              <p className="mt-4 max-w-xl text-base leading-7 text-[var(--app-muted)]">
+                Professional websites, web applications and business systems
+                designed around your needs.
               </p>
 
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-6 flex flex-wrap gap-3">
                 <Link
                   to="/start-project"
-                  className="inline-flex items-center gap-2 rounded-lg bg-[var(--app-brand)] px-4 py-2 text-sm font-bold text-[var(--app-brand-contrast)] transition hover:bg-[var(--app-brand-hover)]"
+                  className="inline-flex items-center gap-2 rounded-lg bg-[var(--app-brand)] px-5 py-3 text-base font-bold text-[var(--app-brand-contrast)] transition hover:bg-[var(--app-brand-hover)]"
                 >
                   Start a project
                   <ArrowUpRight className="h-4 w-4" />
@@ -85,7 +102,7 @@ export const About: React.FC = () => {
 
                 <Link
                   to="/services"
-                  className="inline-flex items-center gap-2 rounded-lg border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-4 py-2 text-sm font-bold text-[var(--app-text)] transition hover:bg-[var(--app-surface-2)]"
+                  className="inline-flex items-center gap-2 rounded-lg border border-[var(--app-border-strong)] bg-[var(--app-surface)] px-5 py-3 text-base font-bold text-[var(--app-text)] transition hover:bg-[var(--app-surface-2)]"
                 >
                   Explore services
                   <ArrowRight className="h-4 w-4" />
@@ -93,155 +110,140 @@ export const About: React.FC = () => {
               </div>
             </div>
 
-            <div className="border-t border-[var(--app-border)] pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--app-muted)]">
-                What matters to us
+            <div className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] p-5 sm:p-6">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--app-brand)]">
+                Our services
               </p>
 
-              <div className="mt-3 space-y-2">
+              <div className="mt-4 space-y-4">
                 {[
-                  'Clear interfaces built around real users',
-                  'Technology chosen for the actual project',
-                  'Responsive experiences across devices',
-                  'Maintainable foundations for future growth',
+                  'Business websites and company websites',
+                  'Web applications and admin dashboards',
+                  'Custom tools for business operations',
                 ].map((item) => (
                   <div key={item} className="flex items-start gap-3">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--app-brand)]" />
-                    <p className="text-sm leading-6 text-[var(--app-text)]">
+                    <span className="text-base font-semibold leading-6">
                       {item}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <div className="mx-auto mx-auto max-w-5xl px-3 py-5 sm:px-5 sm:py-6 lg:px-6">
-          <div className="mb-4">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--app-brand)]">
-              Our foundation
-            </p>
-
-            <h2 className="mt-1 text-xl font-bold tracking-[-0.03em] sm:text-2xl">
-              How we approach development
-            </h2>
-          </div>
-
-          <div className="overflow-hidden rounded-xl border border-[var(--app-border)] bg-[var(--app-border)]">
-            {principles.map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <article
-                  key={item.number}
-                  className="bg-[var(--app-surface)] p-3 transition hover:bg-[var(--app-surface-2)] sm:p-4"
-                >
-                  <div className="grid gap-3 sm:grid-cols-[48px_minmax(0,1fr)] lg:grid-cols-[48px_200px_minmax(0,1fr)] lg:items-center lg:gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--app-brand-soft)] text-[var(--app-brand)]">
-                      <Icon className="h-5 w-5" />
-                    </div>
-
-                    <div>
-                      <span className="text-[11px] font-bold tracking-[0.16em] text-[var(--app-muted-2)]">
-                        {item.number}
-                      </span>
-
-                      <h3 className="mt-1 text-base font-bold tracking-[-0.02em]">
-                        {item.title}
-                      </h3>
-                    </div>
-
-                    <p className="max-w-3xl text-sm leading-5 text-[var(--app-muted)]">
-                      {item.description}
-                    </p>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="border-y border-[var(--app-border)] bg-[var(--app-surface-2)]">
-        <div className="mx-auto mx-auto max-w-5xl px-3 py-5 sm:px-5 sm:py-6 lg:px-6">
-          <div className="grid gap-4 lg:grid-cols-[0.75fr_1.25fr]">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--app-brand)]">
-                Our approach
-              </p>
-
-              <h2 className="mt-2 text-2xl font-bold tracking-[-0.03em] sm:text-3xl">
-                Keep the technology useful.
-              </h2>
-            </div>
-
-            <div>
-              <p className="max-w-3xl text-sm leading-6 text-[var(--app-muted)]">
-                Good development is not about using the most tools. It is
-                about choosing the right ones, keeping the experience clear,
-                and making sure the final product solves the problem it was
-                built to solve.
-              </p>
-
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                {workflow.map((step) => (
-                  <div
-                    key={step}
-                    className="flex items-center gap-3 border-b border-[var(--app-border)] py-2"
-                  >
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-[var(--app-brand)]" />
-                    <span className="text-sm font-semibold text-[var(--app-text)]">
-                      {step}
                     </span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section>
-        <div className="mx-auto mx-auto max-w-5xl px-3 py-5 sm:px-5 sm:py-6 lg:px-6">
-          <div className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
+        {/* Principles */}
+        <section className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-sm sm:p-8">
+          <div className="mb-6">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--app-brand)]">
+              How we approach each project
+            </p>
+            <h2 className="mt-2 text-2xl font-extrabold tracking-[-0.035em] sm:text-3xl">
+              What matters in our work.
+            </h2>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            {principles.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <article
+                  key={item.title}
+                  className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] p-4 transition hover:border-[var(--app-brand)] sm:p-5"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--app-brand-soft)] text-[var(--app-brand)]">
+                    <Icon className="h-5 w-5" />
+                  </div>
+
+                  <h3 className="mt-4 text-base font-extrabold">
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-2 text-base leading-7 text-[var(--app-muted)]">
+                    {item.description}
+                  </p>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Development process */}
+        <section className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-sm sm:p-8">
+          <div className="mb-6">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--app-brand)]">
+              Project process
+            </p>
+            <h2 className="mt-2 text-2xl font-extrabold tracking-[-0.035em] sm:text-3xl">
+              How a project moves forward.
+            </h2>
+            <p className="mt-2 max-w-xl text-base leading-7 text-[var(--app-muted)]">
+              Each project starts with a discussion about what is needed, followed by development and testing.
+            </p>
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-3">
+            {process.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <article
+                  key={item.number}
+                  className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] p-5"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--app-brand-soft)] text-[var(--app-brand)]">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <span className="text-xs font-extrabold tracking-widest text-[var(--app-muted-2)]">
+                      {item.number}
+                    </span>
+                  </div>
+
+                  <h3 className="mt-5 text-lg font-extrabold">
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-2 text-base leading-7 text-[var(--app-muted)]">
+                    {item.description}
+                  </p>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Technology */}
+        <section className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-sm sm:p-8">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--app-brand)]">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--app-brand)]">
                 Technology
               </p>
-
-              <h2 className="mt-3 text-2xl font-extrabold tracking-[-0.035em] sm:text-3xl">
-                A focused modern stack.
+              <h2 className="mt-2 text-xl font-extrabold tracking-[-0.03em] sm:text-2xl">
+                Technologies we use.
               </h2>
-
-              <p className="mt-2 max-w-md text-sm leading-5 text-[var(--app-muted)]">
-                The stack stays focused so attention remains on the product,
-                the user experience and the business requirement.
+              <p className="mt-2 max-w-md text-base leading-7 text-[var(--app-muted)]">
+                Our projects use these tools where they suit the requirements.
               </p>
             </div>
 
-            <div className="grid gap-2 sm:grid-cols-2">
-              {stack.map((technology) => (
-                <div
+            <div className="flex flex-wrap gap-2 sm:max-w-md sm:justify-end">
+              {technologies.map((technology) => (
+                <span
                   key={technology}
-                  className="flex items-center gap-3 rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-3 py-3"
+                  className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-2 text-sm font-bold text-[var(--app-text)]"
                 >
-                  <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[var(--app-brand-soft)] text-[var(--app-brand)]">
-                    <CheckCircle2 className="h-4 w-4" />
-                  </span>
-
-                  <span className="text-sm font-bold text-[var(--app-text)]">
-                    {technology}
-                  </span>
-                </div>
+                  {technology}
+                </span>
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
+      </div>
     </main>
   );
 };

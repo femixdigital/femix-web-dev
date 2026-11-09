@@ -158,12 +158,12 @@ export const Payment: React.FC = () => {
         <section className="mx-auto max-w-5xl px-3 py-5 sm:px-5 sm:py-6 lg:px-6">
           <div className="grid overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] shadow-[0_18px_50px_rgba(0,0,0,0.06)] lg:grid-cols-[1fr_0.8fr]">
             <div className="p-4 sm:p-5">
-              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[var(--app-brand)]">
+              <p className="text-sm font-black uppercase tracking-[0.18em] text-[var(--app-brand)]">
                 FEMIX / PAYMENT
               </p>
 
               <h1 className="mt-4 max-w-xl text-4xl font-black leading-[0.95] tracking-[-0.06em] sm:text-5xl">
-                Payment details.
+                Make a payment
               </h1>
 
               <p className="mt-4 max-w-lg text-sm leading-6 text-[var(--app-muted)]">
@@ -178,7 +178,7 @@ export const Payment: React.FC = () => {
                   </span>
                   <div>
                     <p className="text-sm font-bold">Femix Web Dev account</p>
-                    <p className="text-xs text-[var(--app-muted)]">
+                    <p className="text-sm text-[var(--app-muted)]">
                       Bank transfer · OPay
                     </p>
                   </div>
@@ -186,21 +186,21 @@ export const Payment: React.FC = () => {
 
                 <div className="mt-5 divide-y divide-[var(--app-border)]">
                   <div className="flex items-center justify-between gap-4 py-3">
-                    <span className="text-xs text-[var(--app-muted)]">Bank</span>
+                    <span className="text-sm text-[var(--app-muted)]">Bank</span>
                     <span className="text-sm font-bold">OPay</span>
                   </div>
 
                   <div className="flex items-center justify-between gap-4 py-3">
-                    <span className="text-xs text-[var(--app-muted)]">
+                    <span className="text-sm text-[var(--app-muted)]">
                       Account name
                     </span>
-                    <span className="text-right text-xs font-bold sm:text-sm">
+                    <span className="text-right text-base font-bold">
                       WASIU FEMI NUHN
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between gap-4 py-3">
-                    <span className="text-xs text-[var(--app-muted)]">
+                    <span className="text-sm text-[var(--app-muted)]">
                       Account number
                     </span>
                     <span className="text-sm font-extrabold tracking-wide">
@@ -213,26 +213,20 @@ export const Payment: React.FC = () => {
 
             <div className="flex flex-col justify-between border-t border-[var(--app-border)] bg-[var(--app-surface-2)] p-6 lg:border-l lg:border-t-0 sm:p-8">
               <div>
-                <p className="text-[9px] font-black uppercase tracking-[0.18em] text-[var(--app-muted-2)]">
+                <p className="text-sm font-black uppercase tracking-[0.18em] text-[var(--app-muted-2)]">
                   Next step
                 </p>
                 <p className="mt-3 text-2xl font-black tracking-[-0.045em]">
-                  Get your exact project amount.
+                  Need a project estimate?
                 </p>
-                <p className="mt-3 text-xs leading-5 text-[var(--app-muted)]">
+                <p className="mt-3 text-sm leading-6 text-[var(--app-muted)]">
                   Your estimate creates the payment session needed to submit
                   your payment confirmation securely.
                 </p>
               </div>
 
               <div className="mt-7 flex flex-col gap-2">
-                <Link
-                  to="/estimator"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--app-brand)] px-5 py-3.5 text-sm font-bold text-[var(--app-brand-contrast)] shadow-[0_10px_25px_rgba(255,90,54,0.18)] transition duration-200 hover:-translate-y-0.5 hover:bg-[var(--app-brand-hover)]"
-                >
-                  Get project estimate
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
+
 
                 <Link
                   to="/contact"
@@ -252,24 +246,24 @@ export const Payment: React.FC = () => {
     <main className="min-h-[calc(100vh-4rem)] bg-[var(--app-bg)] text-[var(--app-text)]">
       <section className="mx-auto max-w-5xl px-3 py-4 sm:px-5 sm:py-5 lg:px-6">
         <Link
-          to="/estimator"
-          className="inline-flex items-center gap-2 text-xs font-bold text-[var(--app-muted)] transition hover:text-[var(--app-text-strong)]"
+          to="/contact"
+          className="inline-flex items-center gap-2 text-sm font-bold text-[var(--app-muted)] transition hover:text-[var(--app-text-strong)]"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
-          Back to estimate
+          Back to contact
         </Link>
 
         <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[var(--app-brand)]">
+            <p className="text-sm font-black uppercase tracking-[0.18em] text-[var(--app-brand)]">
               FEMIX / PAYMENT
             </p>
             <h1 className="mt-2 text-3xl font-black leading-tight tracking-[-0.05em] sm:text-4xl">
-              Complete your payment.
+              Pay for your project
             </h1>
           </div>
 
-          <div className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-3 py-2 text-xs">
+          <div className="rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-3 py-2 text-sm">
             <span className="text-[var(--app-muted)]">Package · </span>
             <span className="font-bold">{session.packageName}</span>
           </div>
@@ -283,8 +277,8 @@ export const Payment: React.FC = () => {
                   <Wallet className="h-5 w-5 text-[var(--app-brand)]" />
                 </span>
                 <div>
-                  <p className="text-sm font-bold">Transfer to OPay</p>
-                  <p className="text-xs text-[var(--app-muted)]">
+                  <p className="text-base font-bold">Transfer to OPay</p>
+                  <p className="text-sm text-[var(--app-muted)]">
                     Use the details below
                   </p>
                 </div>
@@ -294,21 +288,21 @@ export const Payment: React.FC = () => {
             <div className="p-4 sm:p-5">
               <div className="divide-y divide-[var(--app-border)]">
                 <div className="flex items-center justify-between gap-4 py-3">
-                  <span className="text-xs text-[var(--app-muted)]">Bank</span>
+                  <span className="text-sm text-[var(--app-muted)]">Bank</span>
                   <span className="text-sm font-bold">OPay</span>
                 </div>
 
                 <div className="flex items-center justify-between gap-4 py-3">
-                  <span className="text-xs text-[var(--app-muted)]">
+                  <span className="text-sm text-[var(--app-muted)]">
                     Account name
                   </span>
-                  <span className="text-right text-xs font-bold sm:text-sm">
+                  <span className="text-right text-base font-bold">
                     WASIU FEMI NUHN
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between gap-4 py-3">
-                  <span className="text-xs text-[var(--app-muted)]">
+                  <span className="text-sm text-[var(--app-muted)]">
                     Account number
                   </span>
                   <button
@@ -324,13 +318,13 @@ export const Payment: React.FC = () => {
               </div>
 
               <div className="mt-4 rounded-xl border border-[var(--app-brand)]/20 bg-[var(--app-brand-soft)] p-4">
-                <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[var(--app-brand)]">
+                <p className="text-xs font-black uppercase tracking-[0.14em] text-[var(--app-brand)]">
                   Amount to pay
                 </p>
                 <p className="mt-1 text-3xl font-black tracking-[-0.05em] text-[var(--app-brand)] sm:text-4xl">
                   {formatNGN(session.amount)}
                 </p>
-                <p className="mt-2 text-[11px] text-[var(--app-muted)]">
+                <p className="mt-2 text-sm text-[var(--app-muted)]">
                   Transfer this exact amount before submitting your proof.
                 </p>
               </div>
@@ -345,7 +339,7 @@ export const Payment: React.FC = () => {
                 </div>
 
                 <h2 className="mt-5 text-2xl font-black tracking-[-0.04em]">
-                  Payment proof received.
+                  Receipt submitted
                 </h2>
 
                 <p className="mt-3 max-w-sm text-sm leading-6 text-[var(--app-muted)]">
@@ -356,53 +350,55 @@ export const Payment: React.FC = () => {
                   to="/"
                   className="mt-6 inline-flex items-center gap-2 rounded-xl border border-[var(--app-border)] px-4 py-2.5 text-sm font-bold transition hover:bg-[var(--app-surface-2)]"
                 >
-                  Back to Femix
+                  Back to homepage
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
             ) : (
               <>
                 <div>
-                  <p className="text-sm font-bold">Send payment proof</p>
-                  <p className="mt-1.5 text-xs leading-5 text-[var(--app-muted)]">
+                  <p className="text-lg font-bold">Upload your transfer receipt</p>
+                  <p className="mt-1.5 text-sm leading-6 text-[var(--app-muted)]">
                     Upload your transfer receipt or payment confirmation.
                   </p>
                 </div>
 
-                <label className="mt-5 block cursor-pointer rounded-xl border border-dashed border-[var(--app-border-strong)] bg-[var(--app-surface-2)] p-6 text-center transition hover:border-[var(--app-brand)] hover:bg-[var(--app-brand-soft)]">
-                  <input
-                    type="file"
-                    accept="image/png,image/jpeg,application/pdf"
-                    onChange={(e) =>
-                      setPaymentProofFile(e.target.files?.[0] ?? null)
-                    }
-                    className="sr-only"
-                  />
-
-                  <Upload className="mx-auto h-6 w-6 text-[var(--app-brand)]" />
-
-                  <p className="mt-3 text-sm font-bold">
-                    {paymentProofFile
-                      ? paymentProofFile.name
-                      : 'Choose payment proof'}
-                  </p>
-
-                  <p className="mt-1 text-[11px] text-[var(--app-muted)]">
-                    PNG, JPG or PDF · Maximum 5 MB
-                  </p>
-                </label>
+                <label className="mt-5 flex cursor-pointer flex-col items-center rounded-2xl border-2 border-dashed border-[var(--app-brand)]/50 bg-[var(--app-brand-soft)] p-6 text-center transition hover:border-[var(--app-brand)]">
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,application/pdf"
+                  onChange={(e) =>
+                    setPaymentProofFile(e.target.files?.[0] ?? null)
+                  }
+                  className="sr-only"
+                />
+                <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--app-surface)]">
+                  <Upload className="h-7 w-7 text-[var(--app-brand)]" />
+                </span>
+                <span className="mt-4 text-base font-bold">
+                  {paymentProofFile
+                    ? paymentProofFile.name
+                    : 'Select your payment receipt'}
+                </span>
+                <span className="mt-2 rounded-lg bg-[var(--app-brand)] px-5 py-3 text-sm font-bold text-[var(--app-brand-contrast)]">
+                  Choose file
+                </span>
+                <span className="mt-3 text-sm text-[var(--app-muted)]">
+                  Screenshot or PDF · PNG, JPG · Maximum 5 MB
+                </span>
+              </label>
 
                 <button
                   type="button"
                   onClick={handlePaymentProofUpload}
                   disabled={submitting || !paymentProofFile}
-                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--app-brand)] px-4 py-3.5 text-sm font-bold text-[var(--app-brand-contrast)] shadow-[0_10px_25px_rgba(255,90,54,0.16)] transition duration-200 hover:-translate-y-0.5 hover:bg-[var(--app-brand-hover)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--app-brand)] px-4 py-4 text-base font-bold text-[var(--app-brand-contrast)] shadow-[0_10px_25px_rgba(255,90,54,0.16)] transition duration-200 hover:-translate-y-0.5 hover:bg-[var(--app-brand-hover)] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
                 >
                   {submitting ? 'Submitting...' : 'Submit payment proof'}
                   {!submitting && <ArrowRight className="h-4 w-4" />}
                 </button>
 
-                <p className="mt-3 text-center text-[11px] leading-5 text-[var(--app-muted)]">
+                <p className="mt-3 text-center text-sm leading-6 text-[var(--app-muted)]">
                   Ensure your transfer matches the amount shown above.
                 </p>
               </>
@@ -411,10 +407,10 @@ export const Payment: React.FC = () => {
         </div>
 
         <div className="mt-4 flex items-center justify-between gap-4 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] px-4 py-3">
-          <p className="text-[11px] text-[var(--app-muted)]">
+          <p className="text-sm text-[var(--app-muted)]">
             Order
           </p>
-          <p className="truncate text-xs font-bold">
+          <p className="truncate text-sm font-bold">
             {session.packageName}
           </p>
         </div>

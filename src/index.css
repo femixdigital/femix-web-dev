@@ -1,4 +1,12 @@
 @import "tailwindcss";
+
+@theme {
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.1875rem;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
@@ -8,42 +16,43 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --app-bg: #f0f2f5;
+  --app-bg: #f4f7fb;
   --app-surface: #ffffff;
-  --app-surface-2: #f7f8fa;
-  --app-surface-3: #e4e6eb;
+  --app-surface-2: #f8fafc;
+  --app-surface-3: #edf2f7;
 
-  --app-text: #1c1e21;
-  --app-text-strong: #1c1e21;
-  --app-muted: #65676b;
-  --app-muted-2: #8a8d91;
+  --app-text: #344054;
+  --app-text-strong: #101828;
+  --app-muted: #667085;
+  --app-muted-2: #8493a8;
 
-  --app-border: #dadde1;
-  --app-border-strong: #ccd0d5;
+  --app-border: #e4eaf2;
+  --app-border-strong: #cbd5e1;
 
-  --app-brand: #0866ff;
-  --app-brand-bright: #1877f2;
-  --app-brand-hover: #075ce5;
-  --app-brand-soft: #e7f3ff;
+  --app-brand: #155eef;
+  --app-primary: var(--app-brand);
+  --app-brand-bright: #2870ed;
+  --app-brand-hover: #124fc7;
+  --app-brand-soft: #edf4ff;
   --app-brand-contrast: #ffffff;
 
-  --app-accent: #0866ff;
-  --app-accent-soft: #e7f3ff;
+  --app-accent: #0891b2;
+  --app-accent-soft: #ecfeff;
 
-  --app-brand-glow: rgba(8, 102, 255, 0.12);
-  --app-accent-glow: rgba(8, 102, 255, 0.08);
+  --app-brand-glow: rgba(21, 94, 239, 0.13);
+  --app-accent-glow: rgba(8, 145, 178, 0.10);
 
   --app-success: #31a24c;
   --app-warning: #f7b928;
   --app-danger: #e41e3f;
   --app-info: #1877f2;
 
-  --app-header: rgba(255, 255, 255, 0.96);
+  --app-header: rgba(255, 255, 255, 0.88);
 
-  --app-card-radius: 12px;
-  --app-button-radius: 8px;
-  --app-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-  --app-card-shadow-hover: 0 3px 10px rgba(0, 0, 0, 0.10);
+  --app-card-radius: 20px;
+  --app-button-radius: 12px;
+  --app-card-shadow: 0 3px 10px rgba(16, 24, 40, 0.055), 0 14px 34px rgba(16, 24, 40, 0.075);
+  --app-card-shadow-hover: 0 8px 18px rgba(16, 24, 40, 0.055), 0 20px 44px rgba(16, 24, 40, 0.075);
 
   color: var(--app-text);
   background: var(--app-bg);
@@ -63,8 +72,8 @@ body {
   min-height: 100vh;
   background: var(--app-bg);
   color: var(--app-text);
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 button,
@@ -118,11 +127,11 @@ h6 {
 
 p,
 li {
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 small {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 input,
@@ -196,9 +205,13 @@ button[download] svg {
   box-shadow: var(--app-card-shadow);
 }
 
-[class*="rounded-xl"][class*="border"]:hover,
-[class*="rounded-2xl"][class*="border"]:hover,
-[class*="rounded-3xl"][class*="border"]:hover {
+/* Restrained hover depth for interactive cards only */
+a[class*="rounded-xl"][class*="border"]:hover,
+a[class*="rounded-2xl"][class*="border"]:hover,
+a[class*="rounded-3xl"][class*="border"]:hover,
+button[class*="rounded-xl"][class*="border"]:hover,
+button[class*="rounded-2xl"][class*="border"]:hover,
+button[class*="rounded-3xl"][class*="border"]:hover {
   box-shadow: var(--app-card-shadow-hover);
 }
 
@@ -235,40 +248,40 @@ button[download] svg {
 }
 
 .dark {
-  --app-bg: #18191a;
-  --app-surface: #242526;
-  --app-surface-2: #3a3b3c;
-  --app-surface-3: #4e4f50;
+  --app-bg: #0b1220;
+  --app-surface: #111c2e;
+  --app-surface-2: #172338;
+  --app-surface-3: #22324a;
 
-  --app-text: #e4e6eb;
-  --app-text-strong: #f5f6f7;
-  --app-muted: #b0b3b8;
+  --app-text: #d6deeb;
+  --app-text-strong: #f8fafc;
+  --app-muted: #a7b4c8;
   --app-muted-2: #8a8d91;
 
-  --app-border: #3e4042;
-  --app-border-strong: #606266;
+  --app-border: #26364d;
+  --app-border-strong: #3b506c;
 
-  --app-brand: #2d88ff;
-  --app-brand-bright: #4599ff;
-  --app-brand-hover: #1877f2;
-  --app-brand-soft: #263951;
+  --app-brand: #4d91ff;
+  --app-brand-bright: #70aaff;
+  --app-brand-hover: #347fe8;
+  --app-brand-soft: #172d4b;
   --app-brand-contrast: #ffffff;
 
-  --app-accent: #2d88ff;
-  --app-accent-soft: #263951;
+  --app-accent: #22b8cf;
+  --app-accent-soft: #123541;
 
-  --app-brand-glow: rgba(45, 136, 255, 0.18);
-  --app-accent-glow: rgba(45, 136, 255, 0.12);
+  --app-brand-glow: rgba(77, 145, 255, 0.20);
+  --app-accent-glow: rgba(34, 184, 207, 0.14);
 
   --app-success: #31a24c;
   --app-warning: #f7b928;
   --app-danger: #ff5c75;
   --app-info: #4599ff;
 
-  --app-header: rgba(36, 37, 38, 0.96);
+  --app-header: rgba(17, 28, 46, 0.90);
 
-  --app-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
-  --app-card-shadow-hover: 0 3px 10px rgba(0, 0, 0, 0.28);
+  --app-card-shadow: 0 4px 14px rgba(0, 0, 0, 0.16), 0 16px 36px rgba(0, 0, 0, 0.12);
+  --app-card-shadow-hover: 0 10px 24px rgba(0, 0, 0, 0.22), 0 22px 48px rgba(0, 0, 0, 0.18);
 
   color-scheme: dark;
 }
@@ -294,7 +307,7 @@ button[download] svg {
 
 @media (max-width: 640px) {
   body {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   h1 {
@@ -317,6 +330,59 @@ button[download] svg {
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Consistent responsive button interactions */
+button {
+  min-height: 40px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease,
+    opacity 180ms ease;
+}
+
+button:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--app-brand);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  button:not(:disabled):hover {
+    filter: brightness(0.97);
+  }
+
+  .dark button:not(:disabled):hover {
+    filter: brightness(1.12);
+  }
+}
+
+@media (max-width: 640px) {
+  button {
+    min-height: 42px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button,
+  a {
     transition-duration: 0.01ms !important;
   }
 }
