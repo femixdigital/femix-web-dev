@@ -1,53 +1,63 @@
 @import "tailwindcss";
+
+@theme {
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.1875rem;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --app-bg: #f0f2f5;
-  --app-surface: #ffffff;
-  --app-surface-2: #f7f8fa;
-  --app-surface-3: #e4e6eb;
+  --app-bg: #000000;
+  --app-surface: #1d1e22;
+  --app-surface-2: #24262b;
+  --app-surface-3: #2d3036;
 
-  --app-text: #1c1e21;
-  --app-text-strong: #1c1e21;
-  --app-muted: #65676b;
-  --app-muted-2: #8a8d91;
+  --app-text: #d1d5db;
+  --app-text-strong: #ffffff;
+  --app-muted: #a1a1aa;
+  --app-muted-2: #777d89;
 
-  --app-border: #dadde1;
-  --app-border-strong: #ccd0d5;
+  --app-border: #303239;
+  --app-border-strong: #454953;
 
-  --app-brand: #0866ff;
-  --app-brand-bright: #1877f2;
-  --app-brand-hover: #075ce5;
-  --app-brand-soft: #e7f3ff;
+  --app-brand: #078ef0;
+  --app-primary: var(--app-brand);
+  --app-brand-bright: #26a5ff;
+  --app-brand-hover: #0075d1;
+  --app-brand-soft: rgba(7, 142, 240, 0.13);
   --app-brand-contrast: #ffffff;
 
-  --app-accent: #0866ff;
-  --app-accent-soft: #e7f3ff;
+  --app-accent: #16c8e8;
+  --app-accent-soft: rgba(22, 200, 232, 0.12);
 
-  --app-brand-glow: rgba(8, 102, 255, 0.12);
-  --app-accent-glow: rgba(8, 102, 255, 0.08);
+  --app-brand-glow: rgba(7, 142, 240, 0.22);
+  --app-accent-glow: rgba(22, 200, 232, 0.15);
 
-  --app-success: #31a24c;
-  --app-warning: #f7b928;
-  --app-danger: #e41e3f;
-  --app-info: #1877f2;
+  --app-success: #35c979;
+  --app-warning: #f6bd4b;
+  --app-danger: #ff5364;
+  --app-info: #26a5ff;
 
-  --app-header: rgba(255, 255, 255, 0.96);
+  --app-header: rgba(0, 0, 0, 0.88);
 
-  --app-card-radius: 12px;
-  --app-button-radius: 8px;
-  --app-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-  --app-card-shadow-hover: 0 3px 10px rgba(0, 0, 0, 0.10);
+  --app-card-radius: 20px;
+  --app-button-radius: 12px;
+  --app-card-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+  --app-card-shadow-hover: 0 12px 34px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(7, 142, 240, 0.12);
 
   color: var(--app-text);
   background: var(--app-bg);
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 html {
@@ -63,8 +73,8 @@ body {
   min-height: 100vh;
   background: var(--app-bg);
   color: var(--app-text);
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: 16px;
+  line-height: 1.65;
 }
 
 button,
@@ -87,7 +97,7 @@ button {
 
 button:disabled {
   cursor: not-allowed;
-  opacity: 0.65;
+  opacity: 0.55;
 }
 
 button:focus-visible,
@@ -95,13 +105,13 @@ a:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 2px solid var(--app-brand);
-  outline-offset: 2px;
+  outline: 2px solid var(--app-brand-bright);
+  outline-offset: 3px;
 }
 
 ::selection {
-  background: #cce4ff;
-  color: #1c1e21;
+  background: rgba(7, 142, 240, 0.4);
+  color: #ffffff;
 }
 
 h1,
@@ -111,18 +121,31 @@ h4,
 h5,
 h6 {
   color: var(--app-text-strong);
-  font-weight: 700;
-  letter-spacing: -0.025em;
+  font-weight: 750;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
   text-shadow: none;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
 }
 
 p,
 li {
-  line-height: 1.55;
+  line-height: 1.7;
 }
 
 small {
-  font-size: 12px;
+  font-size: 0.8125rem;
 }
 
 input,
@@ -130,7 +153,7 @@ textarea,
 select {
   color: var(--app-text);
   background: var(--app-surface);
-  border-color: var(--app-border);
+  border: 1px solid var(--app-border);
   border-radius: var(--app-button-radius);
   font-weight: 400;
   box-shadow: none;
@@ -146,15 +169,16 @@ input:focus,
 textarea:focus,
 select:focus {
   border-color: var(--app-brand);
-  box-shadow: 0 0 0 2px var(--app-brand-glow);
+  box-shadow: 0 0 0 3px var(--app-brand-glow);
+  outline: none;
 }
 
 button {
   border-radius: var(--app-button-radius);
-  font-weight: 600;
+  font-weight: 650;
   box-shadow: none;
-  transition: background-color 150ms ease, border-color 150ms ease,
-    box-shadow 150ms ease, transform 150ms ease;
+  transition: background-color 180ms ease, border-color 180ms ease,
+    box-shadow 180ms ease, transform 180ms ease;
 }
 
 button:hover {
@@ -176,7 +200,7 @@ a:hover {
 
 a[download],
 button[download] {
-  min-height: 40px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -189,16 +213,19 @@ button[download] svg {
   height: 18px;
 }
 
-/* Reusable surface and card styling */
+/* Consistent dark cards and surfaces */
 [class*="rounded-xl"][class*="border"],
 [class*="rounded-2xl"][class*="border"],
 [class*="rounded-3xl"][class*="border"] {
   box-shadow: var(--app-card-shadow);
 }
 
-[class*="rounded-xl"][class*="border"]:hover,
-[class*="rounded-2xl"][class*="border"]:hover,
-[class*="rounded-3xl"][class*="border"]:hover {
+a[class*="rounded-xl"][class*="border"]:hover,
+a[class*="rounded-2xl"][class*="border"]:hover,
+a[class*="rounded-3xl"][class*="border"]:hover,
+button[class*="rounded-xl"][class*="border"]:hover,
+button[class*="rounded-2xl"][class*="border"]:hover,
+button[class*="rounded-3xl"][class*="border"]:hover {
   box-shadow: var(--app-card-shadow-hover);
 }
 
@@ -210,10 +237,12 @@ button[download] svg {
 
 .admin-workspace th {
   font-weight: 700;
+  color: var(--app-text-strong);
 }
 
 .admin-workspace td {
   font-weight: 400;
+  color: var(--app-text);
 }
 
 .admin-workspace button,
@@ -226,97 +255,38 @@ button[download] svg {
   border-radius: 8px;
 }
 
-.admin-workspace table tbody tr {
-  transition: background-color 150ms ease;
-}
-
-.admin-workspace table tbody tr:hover {
-  background: var(--app-brand-soft);
-}
-
-.dark {
-  --app-bg: #18191a;
-  --app-surface: #242526;
-  --app-surface-2: #3a3b3c;
-  --app-surface-3: #4e4f50;
-
-  --app-text: #e4e6eb;
-  --app-text-strong: #f5f6f7;
-  --app-muted: #b0b3b8;
-  --app-muted-2: #8a8d91;
-
-  --app-border: #3e4042;
-  --app-border-strong: #606266;
-
-  --app-brand: #2d88ff;
-  --app-brand-bright: #4599ff;
-  --app-brand-hover: #1877f2;
-  --app-brand-soft: #263951;
-  --app-brand-contrast: #ffffff;
-
-  --app-accent: #2d88ff;
-  --app-accent-soft: #263951;
-
-  --app-brand-glow: rgba(45, 136, 255, 0.18);
-  --app-accent-glow: rgba(45, 136, 255, 0.12);
-
-  --app-success: #31a24c;
-  --app-warning: #f7b928;
-  --app-danger: #ff5c75;
-  --app-info: #4599ff;
-
-  --app-header: rgba(36, 37, 38, 0.96);
-
-  --app-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.20);
-  --app-card-shadow-hover: 0 3px 10px rgba(0, 0, 0, 0.28);
-
-  color-scheme: dark;
-}
-
-.dark html,
-.dark body {
-  background: var(--app-bg);
-  color: var(--app-text);
-}
-
-.dark input,
-.dark textarea,
-.dark select {
-  color: var(--app-text);
-  background: var(--app-surface);
-  border-color: var(--app-border);
-}
-
-.dark ::selection {
-  background: #263951;
-  color: #ffffff;
-}
-
-@media (max-width: 640px) {
-  body {
-    font-size: 14px;
-  }
-
-  h1 {
-    letter-spacing: -0.03em;
-  }
-
-  a[download],
-  button[download] {
-    min-height: 42px;
-  }
-}
-
+/* Accessible motion preferences */
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
   *,
   *::before,
   *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
   }
+}
+
+/* Light theme */
+:root.light {
+  --app-bg: #f5f7fb;
+  --app-surface: #ffffff;
+  --app-surface-2: #eef2f7;
+  --app-surface-3: #e4eaf2;
+
+  --app-text: #344054;
+  --app-text-strong: #101828;
+  --app-muted: #667085;
+  --app-muted-2: #98a2b3;
+
+  --app-border: #e4e7ec;
+  --app-border-strong: #d0d5dd;
+
+  --app-header: rgba(255, 255, 255, 0.92);
+
+  --app-card-shadow: 0 8px 28px rgba(16, 24, 40, 0.06);
+  --app-card-shadow-hover: 0 12px 34px rgba(16, 24, 40, 0.10),
+    0 0 0 1px rgba(7, 142, 240, 0.10);
+
+  color-scheme: light;
 }

@@ -12,7 +12,7 @@ import {
   Info,
   Layers3,
   ShieldCheck,
-  Sparkles,
+
   Zap,
 } from 'lucide-react';
 
@@ -42,28 +42,28 @@ const ADDONS = [
   {
     key: 'auth',
     title: 'Authentication & Roles',
-    description: 'User sign-up, authentication and role-based permissions.',
+    description: 'User accounts and access permissions.',
     price: PRICING.authPrice,
     icon: ShieldCheck,
   },
   {
     key: 'database',
     title: 'Database & Storage',
-    description: 'PostgreSQL architecture, tables and custom data queries.',
+    description: 'Store and manage website data.',
     price: PRICING.databasePrice,
     icon: Database,
   },
   {
     key: 'payments',
     title: 'Payment Gateway',
-    description: 'Checkout flows, subscriptions and payment integrations.',
+    description: 'Accept online payments from customers.',
     price: PRICING.paymentsPrice,
     icon: CreditCard,
   },
   {
     key: 'cms',
     title: 'Headless CMS',
-    description: 'Content management tools for easier client editing.',
+    description: 'Update website content without coding.',
     price: PRICING.cmsPrice,
     icon: Zap,
   },
@@ -71,7 +71,7 @@ const ADDONS = [
     key: 'seo',
     title: 'Technical SEO',
     description:
-      'Metadata, sitemap setup and performance-focused optimization.',
+      'Improve search engine setup and visibility.',
     price: PRICING.seoPrice,
     icon: CheckCircle2,
   },
@@ -95,7 +95,7 @@ export const Estimator: React.FC = () => {
   const { showToast } = useToast();
   const navigate = useNavigate();
 
-  const [pages, setPages] = useState<number>(1);
+  const [pages, setPages] = useState<number>(0);
   const [hasAuth, setHasAuth] = useState<boolean>(false);
   const [hasDatabase, setHasDatabase] = useState<boolean>(false);
   const [hasPayments, setHasPayments] = useState<boolean>(false);
@@ -107,49 +107,62 @@ export const Estimator: React.FC = () => {
   const [clientPhone, setClientPhone] = useState<string>('');
   const [submitting, setSubmitting] = useState<boolean>(false);
 
+  const hasSelection =
+    pages > 0 ||
+    hasAuth ||
+    hasDatabase ||
+    hasPayments ||
+    hasCMS ||
+    hasSEO;
+
   const lineItems = useMemo(() => {
-    const items = [
-      {
+    const items: { label: string; cost: number }[] = [];
+
+    if (pages > 0 || hasAuth || hasDatabase || hasPayments || hasCMS || hasSEO) {
+      items.push({
         label: 'Base Project Setup',
         cost: PRICING.basePrice,
-      },
-      {
-        label: `${pages} Custom Pages`,
+      });
+    }
+
+    if (pages > 0) {
+      items.push({
+        label: `${pages} ${pages === 1 ? 'Custom Page' : 'Custom Pages'}`,
         cost: pages * PRICING.perPagePrice,
-      },
-    ];
+      });
+    }
 
     if (hasAuth) {
       items.push({
-        label: 'User Auth & Role Security',
+        label: 'Authentication & Roles',
         cost: PRICING.authPrice,
       });
     }
 
     if (hasDatabase) {
       items.push({
-        label: 'PostgreSQL Database Integration',
+        label: 'Database & Storage',
         cost: PRICING.databasePrice,
       });
     }
 
     if (hasPayments) {
       items.push({
-        label: 'Payment Gateway Integration',
+        label: 'Payment Gateway',
         cost: PRICING.paymentsPrice,
       });
     }
 
     if (hasCMS) {
       items.push({
-        label: 'Headless CMS Integration',
+        label: 'Content Management System',
         cost: PRICING.cmsPrice,
       });
     }
 
     if (hasSEO) {
       items.push({
-        label: 'Technical SEO & Metadata Optimization',
+        label: 'Technical SEO',
         cost: PRICING.seoPrice,
       });
     }
@@ -191,6 +204,15 @@ export const Estimator: React.FC = () => {
   const handleSubmitQuote = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!hasSelection) {
+      showToast(
+        'Select your project requirements',
+        'Choose at least one page or feature before requesting a quote.',
+        'error',
+      );
+      return;
+    }
+
     if (!clientName.trim() || !clientEmail.trim()) {
       showToast(
         'Validation Error',
@@ -207,15 +229,18 @@ export const Estimator: React.FC = () => {
     ).map((addon) => addon.title);
 
     const requirements = [
-      `Estimated pages: ${pages}`,
+      pages > 0
+        ? `Custom pages: ${pages}`
+        : 'Custom pages: Not selected',
       `Selected features: ${
         selectedFeatures.length > 0
           ? selectedFeatures.join(', ')
-          : 'No additional features'
+          : 'None'
       }`,
+      `Base setup fee: ${formatUSD(PRICING.basePrice)}`,
       `Estimated total: ${formatNGN(totalNGN)} (${formatUSD(totalUSD)})`,
-      `Reference conversion used: ₦${USD_TO_NGN.toLocaleString('en-NG')} per $1`,
-      'This is a starting estimate and not a final invoice.',
+      `Reference exchange rate: ₦${USD_TO_NGN.toLocaleString('en-NG')} per $1`,
+      'Estimate only. Final pricing is confirmed after project review.',
     ].join('\n');
 
     try {
@@ -273,13 +298,13 @@ export const Estimator: React.FC = () => {
         <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)] lg:items-end">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--app-muted)]">
+              <div className="inline-flex items-center gap-2 rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--app-muted)]">
                 <Calculator className="h-3.5 w-3.5 text-[var(--app-brand)]" />
                 Project estimator
               </div>
 
               <h1 className="mt-6 max-w-4xl text-4xl font-extrabold leading-[1.03] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
-                Build a project around what you actually need.
+                Get an estimate for your website or application.
               </h1>
 
               <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--app-muted)] sm:text-lg">
@@ -289,22 +314,22 @@ export const Estimator: React.FC = () => {
             </div>
 
             <div className="border-t border-[var(--app-border)] pt-6 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--app-muted)]">
-                How it works
+              <p className="text-base font-bold uppercase tracking-[0.18em] text-[var(--app-muted)]">
+                How to get your estimate
               </p>
 
-              <div className="mt-5 space-y-4">
+              <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {[
-                  'Choose the number of pages',
-                  'Add the features your project needs',
-                  'Review the live estimate',
-                  'Submit your details for an official quote',
+                  'Select the number of pages',
+                  'Choose the features you need',
+                  'View your estimated cost',
+                  'Request a final quote',
                 ].map((item, index) => (
-                  <div key={item} className="flex items-start gap-3">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[var(--app-brand-soft)] text-[10px] font-extrabold text-[var(--app-brand)]">
+                  <div key={item} className="flex min-h-16 items-center gap-3 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--app-brand)] hover:shadow-md">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--app-brand-soft)] text-base font-extrabold text-[var(--app-brand)]">
                       {index + 1}
                     </span>
-                    <p className="text-sm leading-6 text-[var(--app-text)]">
+                    <p className="text-base font-semibold leading-6 text-[var(--app-text)]">
                       {item}
                     </p>
                   </div>
@@ -323,14 +348,13 @@ export const Estimator: React.FC = () => {
                 <div className="border-b border-[var(--app-border)] p-6 sm:p-7">
                   <div className="flex items-start justify-between gap-5">
                     <div>
-                      <div className="flex items-center gap-2 text-sm font-bold">
+                      <div className="flex items-center gap-2 text-base font-bold">
                         <Layers3 className="h-4 w-4 text-[var(--app-brand)]" />
                         Number of pages
                       </div>
 
-                      <p className="mt-2 max-w-lg text-sm leading-6 text-[var(--app-muted)]">
-                        Start with the core pages your website or application
-                        needs.
+                      <p className="mt-2 max-w-lg text-base leading-6 text-[var(--app-muted)]">
+                        Your base setup includes responsive design, navigation, standard content sections, contact details and social links, plus deployment. Choose the number of pages your website needs below.
                       </p>
                     </div>
 
@@ -339,7 +363,7 @@ export const Estimator: React.FC = () => {
                         {pages}
                       </div>
 
-                      <div className="text-xs text-[var(--app-muted)]">
+                      <div className="text-base text-[var(--app-muted)]">
                         {formatUSD(pages * PRICING.perPagePrice)}
                       </div>
                     </div>
@@ -348,7 +372,7 @@ export const Estimator: React.FC = () => {
                   <div className="mt-8">
                     <input
                       type="range"
-                      min="1"
+                      min="0"
                       max="20"
                       value={pages}
                       onChange={(e) =>
@@ -358,10 +382,10 @@ export const Estimator: React.FC = () => {
                       className="h-2 w-full cursor-pointer appearance-none rounded-full bg-[var(--app-surface-3)] accent-[var(--app-brand)]"
                     />
 
-                    <div className="mt-3 flex justify-between text-[11px] text-[var(--app-muted)]">
-                      <span>1 page</span>
-                      <span>10 pages</span>
-                      <span>20 pages</span>
+                    <div className="mt-3 flex justify-between text-xs text-[var(--app-muted)]">
+                      <span className="font-semibold">0 pages</span>
+                      <span className="font-semibold">10 pages</span>
+                      <span className="font-semibold">20 pages</span>
                     </div>
                   </div>
                 </div>
@@ -370,13 +394,13 @@ export const Estimator: React.FC = () => {
               <section className="overflow-hidden rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)]">
                 <div className="flex items-end justify-between gap-4 border-b border-[var(--app-border)] p-6 sm:p-7">
                   <div>
-                    <p className="text-sm font-bold">Additional features</p>
-                    <p className="mt-2 text-sm leading-6 text-[var(--app-muted)]">
-                      Add functionality when your project calls for it.
+                    <p className="text-lg font-bold">Additional features (optional)</p>
+                    <p className="mt-2 text-base leading-6 text-[var(--app-muted)]">
+                      Only choose these if your project needs them. A standard website does not require these add-ons.
                     </p>
                   </div>
 
-                  <span className="shrink-0 rounded-md border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-1.5 text-xs font-bold text-[var(--app-muted)]">
+                  <span className="shrink-0 rounded-md border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-1.5 text-base font-bold text-[var(--app-muted)]">
                     {selectedAddons} selected
                   </span>
                 </div>
@@ -410,9 +434,9 @@ export const Estimator: React.FC = () => {
                           </div>
 
                           <div className="min-w-0">
-                            <div className="font-bold">{addon.title}</div>
+                            <div className="text-lg font-bold">{addon.title}</div>
 
-                            <div className="mt-1 text-xs leading-5 text-[var(--app-muted)]">
+                            <div className="mt-1 text-base leading-5 text-[var(--app-muted)]">
                               {addon.description}
                             </div>
                           </div>
@@ -420,11 +444,11 @@ export const Estimator: React.FC = () => {
 
                         <div className="flex shrink-0 items-center gap-3">
                           <div className="text-right">
-                            <div className="text-sm font-bold">
+                            <div className="text-base font-bold">
                               {formatUSD(addon.price)}
                             </div>
 
-                            <div className="text-[10px] text-[var(--app-muted)]">
+                            <div className="text-sm font-semibold text-[var(--app-muted)]">
                               {formatNGN(addon.price * USD_TO_NGN)}
                             </div>
                           </div>
@@ -450,11 +474,11 @@ export const Estimator: React.FC = () => {
               <div className="overflow-hidden rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)]">
                 <div className="border-b border-[var(--app-border)] p-6 sm:p-7">
                   <div className="flex items-center justify-between gap-4">
-                    <span className="text-sm font-bold text-[var(--app-muted)]">
-                      Estimated project
+                    <span className="text-base font-bold text-[var(--app-muted)]">
+                      Your estimate
                     </span>
 
-                    <Sparkles className="h-4 w-4 text-[var(--app-brand)]" />
+
                   </div>
 
                   <div className="mt-5">
@@ -462,53 +486,62 @@ export const Estimator: React.FC = () => {
                       {formatNGN(totalNGN)}
                     </div>
 
-                    <div className="mt-2 text-sm font-medium text-[var(--app-muted)]">
+                    <div className="mt-2 text-base font-medium text-[var(--app-muted)]">
                       ≈ {formatUSD(totalUSD)}
                     </div>
 
-                    <div className="mt-3 inline-flex rounded-md border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-1.5 text-[11px] font-bold text-[var(--app-muted)]">
-                      Starting estimate
+                    <div className="mt-3 inline-flex rounded-md border border-[var(--app-border)] bg-[var(--app-surface-2)] px-3 py-1.5 text-xs font-bold text-[var(--app-muted)]">
+                      Live estimate
                     </div>
                   </div>
                 </div>
 
                 <div className="p-6 sm:p-7">
-                  <p className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--app-muted)]">
+                  <p className="text-base font-bold uppercase tracking-[0.14em] text-[var(--app-muted)]">
                     Cost breakdown
                   </p>
 
-                  <div className="mt-5 space-y-3">
-                    {lineItems.map((item) => (
-                      <div
-                        key={item.label}
-                        className="flex items-start justify-between gap-4 text-sm"
-                      >
-                        <span className="text-[var(--app-muted)]">
-                          {item.label}
-                        </span>
-
-                        <span className="shrink-0 text-right font-bold">
-                          <span className="block">
-                            {formatNGN(item.cost * USD_TO_NGN)}
-                          </span>
-
-                          <span className="block text-[11px] font-normal text-[var(--app-muted)]">
-                            {formatUSD(item.cost)}
-                          </span>
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="my-6 border-t border-[var(--app-border)]" />
+                  {hasSelection ? (
+        <div className="mt-5 space-y-3">
+          {lineItems.map((item) => (
+            <div
+              key={item.label}
+              className="flex items-start justify-between gap-4 text-base"
+            >
+              <span className="text-[var(--app-muted)]">
+                {item.label}
+              </span>
+              <span className="shrink-0 text-right font-bold">
+                <span className="block">
+                  {formatNGN(item.cost * USD_TO_NGN)}
+                </span>
+                <span className="block text-xs font-normal text-[var(--app-muted)]">
+                  {formatUSD(item.cost)}
+                </span>
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-5 rounded-lg border border-dashed border-[var(--app-border)] bg-[var(--app-surface-2)] px-4 py-6 text-center">
+          <Calculator className="mx-auto h-6 w-6 text-[var(--app-muted)]" />
+          <p className="mt-3 text-base font-semibold">
+            Your estimate starts at ₦0
+          </p>
+          <p className="mt-1 text-base leading-5 text-[var(--app-muted)]">
+            Select pages or features to calculate your project cost.
+          </p>
+        </div>
+      )}
+      <div className="my-6 border-t border-[var(--app-border)]" />
 
                   <form onSubmit={handleSubmitQuote} className="space-y-3">
                     <div>
-                      <p className="text-sm font-bold">
-                        Ready for an official quote?
+                      <p className="text-base font-bold">
+                        Ready to get started?
                       </p>
 
-                      <p className="mt-1 text-xs leading-5 text-[var(--app-muted)]">
+                      <p className="mt-1 text-base leading-5 text-[var(--app-muted)]">
                         Send your estimate and we&apos;ll follow up with the
                         exact project scope.
                       </p>
@@ -519,7 +552,7 @@ export const Estimator: React.FC = () => {
                       placeholder="Your full name"
                       value={clientName}
                       onChange={(e) => setClientName(e.target.value)}
-                      className="mt-3 w-full rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] px-4 py-3 text-sm outline-none transition placeholder:text-[var(--app-muted)] focus:border-[var(--app-brand)] focus:ring-2 focus:ring-[var(--app-brand)]/10"
+                      className="mt-3 w-full rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] px-4 py-3 text-base outline-none transition placeholder:text-[var(--app-muted)] focus:border-[var(--app-brand)] focus:ring-2 focus:ring-[var(--app-brand)]/10"
                       required
                     />
 
@@ -528,7 +561,7 @@ export const Estimator: React.FC = () => {
                       placeholder="Your email address"
                       value={clientEmail}
                       onChange={(e) => setClientEmail(e.target.value)}
-                      className="w-full rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] px-4 py-3 text-sm outline-none transition placeholder:text-[var(--app-muted)] focus:border-[var(--app-brand)] focus:ring-2 focus:ring-[var(--app-brand)]/10"
+                      className="w-full rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] px-4 py-3 text-base outline-none transition placeholder:text-[var(--app-muted)] focus:border-[var(--app-brand)] focus:ring-2 focus:ring-[var(--app-brand)]/10"
                       required
                     />
 
@@ -537,23 +570,23 @@ export const Estimator: React.FC = () => {
                       placeholder="Phone / WhatsApp (optional)"
                       value={clientPhone}
                       onChange={(e) => setClientPhone(e.target.value)}
-                      className="w-full rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] px-4 py-3 text-sm outline-none transition placeholder:text-[var(--app-muted)] focus:border-[var(--app-brand)] focus:ring-2 focus:ring-[var(--app-brand)]/10"
+                      className="w-full rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] px-4 py-3 text-base outline-none transition placeholder:text-[var(--app-muted)] focus:border-[var(--app-brand)] focus:ring-2 focus:ring-[var(--app-brand)]/10"
                     />
 
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--app-brand)] px-4 py-3.5 text-sm font-bold text-[var(--app-brand-contrast)] transition hover:bg-[var(--app-brand-hover)] disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex w-full items-center justify-center gap-2 rounded-lg bg-[var(--app-brand)] px-4 py-3.5 text-base font-bold text-[var(--app-brand-contrast)] transition hover:bg-[var(--app-brand-hover)] disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {submitting
                         ? 'Submitting...'
-                        : 'Request official quote'}
+                        : 'Request a quote'}
 
                       {!submitting && <ArrowRight className="h-4 w-4" />}
                     </button>
                   </form>
 
-                                    <div className="mt-5 flex items-start gap-3 rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] p-3.5 text-xs leading-5 text-[var(--app-muted)]">
+                                    <div className="mt-5 flex items-start gap-3 rounded-lg border border-[var(--app-border)] bg-[var(--app-surface-2)] p-3.5 text-base leading-5 text-[var(--app-muted)]">
                     <Info className="mt-0.5 h-4 w-4 shrink-0 text-[var(--app-brand)]" />
 
                     <span>
@@ -571,12 +604,12 @@ export const Estimator: React.FC = () => {
             <div className="flex items-center gap-3">
               <Calculator className="h-4 w-4 text-[var(--app-brand)]" />
 
-              <p className="text-sm text-[var(--app-muted)]">
-                Every project is scoped around its actual requirements.
+              <p className="text-base text-[var(--app-muted)]">
+                Final pricing is confirmed after reviewing your requirements.
               </p>
             </div>
 
-            <span className="text-xs font-medium text-[var(--app-muted)]">
+            <span className="text-base font-medium text-[var(--app-muted)]">
               Base {formatUSD(PRICING.basePrice)} +{' '}
               {formatUSD(PRICING.perPagePrice)}/page
             </span>

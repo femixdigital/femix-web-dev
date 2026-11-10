@@ -95,19 +95,23 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onSuccess }) => {
 
   return (
     <main className="min-h-[calc(100vh-72px)] bg-[var(--app-bg)] px-5 py-10 text-[var(--app-text)] sm:px-8 sm:py-14">
-      <div className="mx-auto flex min-h-[calc(100vh-170px)] max-w-md items-center justify-center">
-        <section className="w-full rounded-[2rem] border border-[var(--app-border)] bg-[var(--app-surface)] p-6 shadow-xl shadow-slate-200/50 sm:p-8 dark:shadow-black/20">
+      <div className="mx-auto flex min-h-[calc(100vh-170px)] max-w-lg items-center justify-center">
+        <section className="w-full min-h-[560px] rounded-[2rem] border border-[var(--app-border)] bg-[var(--app-surface)] p-8 shadow-xl shadow-slate-200/50 sm:p-10 dark:shadow-black/20">
           <div className="text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--app-brand-soft)] text-[var(--app-brand)] shadow-sm">
-              <ShieldCheck className="h-7 w-7" />
+            <div className="mx-auto flex h-16 w-16 items-center justify-center">
+              <img
+                src="/femix-logo.png"
+                alt="Femix Web Dev logo"
+                className="h-full w-full object-contain"
+              />
             </div>
 
             <p className="mt-5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--app-brand)]">
               Private workspace
             </p>
 
-            <h1 className="mt-2 text-2xl font-extrabold tracking-[-0.04em] sm:text-3xl">
-              Admin access
+            <h1 className="mt-2 text-sm font-bold tracking-tight sm:text-base">
+              Femix Web Admin
             </h1>
 
             <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-[var(--app-muted)]">

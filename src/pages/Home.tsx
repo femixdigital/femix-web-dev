@@ -1,7 +1,7 @@
-
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
+  ArrowUpRight,
   BarChart3,
   CheckCircle2,
   Code2,
@@ -9,305 +9,348 @@ import {
   Monitor,
   ShoppingBag,
   Sparkles,
+  Database,
+  Globe,
+  Smartphone,
 } from 'lucide-react';
 
 const services = [
   {
-    icon: <Monitor size={21} />,
+    icon: Monitor,
     title: 'Business Websites',
-    description: 'Professional websites for your business.',
-    price: 'From ₦80,000',
-    link: '/services',
+    description:
+      'Websites for businesses that need a clear, useful place to present their services online.',
   },
   {
-    icon: <ShoppingBag size={21} />,
+    icon: ShoppingBag,
     title: 'E-Commerce',
-    description: 'Online stores with secure checkout.',
-    price: 'From ₦250,000',
-    link: '/services',
+    description:
+      'Online shops where customers can browse products and place orders.',
   },
   {
-    icon: <BarChart3 size={21} />,
+    icon: BarChart3,
     title: 'Dashboards & Systems',
-    description: 'Manage operations, data and reports.',
-    price: 'From ₦300,000',
-    link: '/services',
+    description:
+      'Dashboards and internal tools for tracking information and handling everyday tasks.',
   },
   {
-    icon: <Code2 size={21} />,
+    icon: Code2,
     title: 'Web Applications',
-    description: 'Custom tools built around your needs.',
-    price: 'From ₦300,000',
-    link: '/services',
+    description:
+      'Web applications developed to handle the tasks and processes your business requires.',
   },
-];
-
-const websitePackages = [
-  { name: 'Starter Website', price: '₦80,000+' },
-  { name: 'Business Website', price: '₦120,000+' },
-  { name: 'Professional Website', price: '₦150,000+' },
-  { name: 'Premium Website', price: '₦200,000+' },
-  { name: 'Advanced Website', price: '₦250,000+' },
-  { name: 'E-Commerce Website', price: '₦300,000+' },
-];
-
-const platformPackages = [
-  { name: 'Custom Web Application', price: '₦400,000+' },
-  { name: 'Business Management System', price: '₦500,000+' },
-  { name: 'Advanced SaaS Platform', price: '₦800,000+' },
-  { name: 'Enterprise Platform', price: '₦1,000,000+' },
 ];
 
 const projects = [
   {
-    name: 'PulseMetrics',
-    category: 'SaaS Platform',
-    description: 'Analytics, subscriptions and real-time reporting.',
-    icon: <BarChart3 size={24} />,
+    name: 'SAMFEM Cleaning Agency',
+    category: 'Service business website',
+    description:
+      'A cleaning services website with an enquiry form, customer reviews and an admin dashboard.',
+    icon: Layers3,
+    url: 'https://samfemcleaningagency.com.ng',
   },
   {
-    name: 'OmniFlow',
-    category: 'Admin Dashboard',
-    description: 'Business operations and reporting workflows.',
-    icon: <Layers3 size={24} />,
+    name: 'Femix Plumbing Services',
+    category: 'Service business website',
+    description:
+      'A website presenting plumbing services and providing customers with contact options.',
+    icon: Monitor,
+    url: 'https://femixplumbing.name.ng',
   },
   {
-    name: 'Aura',
-    category: 'E-Commerce SPA',
-    description: 'Product browsing, shopping cart and payments.',
-    icon: <ShoppingBag size={24} />,
+    name: 'BPV Website',
+    category: 'Website project',
+    description:
+      'A website project built to present its information in an organised and accessible way.',
+    icon: Code2,
+    url: 'https://femixdigital.github.io/bpv-website/',
   },
 ];
 
-function PackageGroup({
-  title,
-  description,
-  packages,
-}: {
-  title: string;
-  description: string;
-  packages: { name: string; price: string }[];
-}) {
-  return (
-    <details className="group rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)]">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-4 [&::-webkit-details-marker]:hidden">
-        <div className="min-w-0">
-          <h3 className="font-semibold text-[var(--app-text)]">{title}</h3>
-          <p className="mt-1 text-sm text-[var(--app-muted)]">
-            {description}
-          </p>
-        </div>
-        <span className="shrink-0 rounded-lg bg-[var(--app-bg)] px-3 py-2 text-sm font-semibold text-[var(--app-primary)]">
-          {packages.length} plans
-        </span>
-      </summary>
-
-      <div className="border-t border-[var(--app-border)] p-3">
-        {packages.map((item) => (
-          <div
-            key={item.name}
-            className="flex items-center justify-between gap-3 rounded-lg px-3 py-3 hover:bg-[var(--app-bg)]"
-          >
-            <span className="text-sm font-medium text-[var(--app-text)]">
-              {item.name}
-            </span>
-            <span className="shrink-0 text-sm font-semibold text-[var(--app-primary)]">
-              {item.price}
-            </span>
-          </div>
-        ))}
-
-        <Link
-          to="/estimator"
-          className="mt-2 flex items-center justify-center gap-2 rounded-lg bg-[var(--app-bg)] px-4 py-3 text-sm font-semibold text-[var(--app-primary)] transition hover:opacity-80"
-        >
-          Estimate your project <ArrowRight size={16} />
-        </Link>
-      </div>
-    </details>
-  );
-}
+const capabilities = [
+  { icon: Globe, label: 'Websites', detail: 'Websites for businesses and service providers' },
+  { icon: Code2, label: 'Applications', detail: 'Interactive web applications' },
+  { icon: Database, label: 'Business systems', detail: 'Dashboards and business tools' },
+  { icon: ShoppingBag, label: 'E-Commerce', detail: 'Product catalogues and online ordering' },
+];
 
 export function Home() {
   return (
-    <div className="mx-auto w-full max-w-5xl space-y-4 px-3 pb-6 pt-3 sm:px-5 lg:px-6">
-      <section className="overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)]">
-        <div className="p-5 sm:p-8 lg:p-10">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-[var(--app-bg)] px-3 py-2 text-xs font-semibold text-[var(--app-primary)]">
-            <Sparkles size={15} />
-            FEMIX WEB DEV
-          </div>
-
-          <h1 className="max-w-2xl text-3xl font-bold leading-tight tracking-tight text-[var(--app-text)] sm:text-5xl">
-            We build for the web.
-            <span className="mt-1 block text-[var(--app-primary)]">
-              Your vision, brought to life.
-            </span>
-          </h1>
-
-          <p className="mt-4 max-w-xl text-sm leading-6 text-[var(--app-muted)] sm:text-base">
-            Modern websites and web applications that help businesses work
-            smarter, serve customers better and grow online.
-          </p>
-
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Link
-              to="/start-project"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--app-primary)] px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90"
-            >
-              Start a Project <ArrowRight size={17} />
-            </Link>
-            <Link
-              to="/portfolio"
-              className="inline-flex items-center justify-center rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-5 py-3 text-sm font-semibold text-[var(--app-text)] transition hover:bg-[var(--app-bg)]"
-            >
-              View Our Work
-            </Link>
-          </div>
-
-          <div className="mt-7 flex flex-wrap gap-x-5 gap-y-3 border-t border-[var(--app-border)] pt-5">
-            {[
-              'Mobile-friendly',
-              'Business-focused',
-              'Custom-built',
-            ].map((item) => (
-              <span
-                key={item}
-                className="inline-flex items-center gap-2 text-xs font-medium text-[var(--app-muted)] sm:text-sm"
-              >
-                <CheckCircle2 size={16} className="text-[var(--app-primary)]" />
-                {item}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <div className="mb-3 flex items-center justify-between gap-3">
+    <div className="w-full bg-[var(--app-bg)] px-3 py-5 sm:px-5 sm:py-7 lg:px-8">
+      <div className="mx-auto max-w-7xl space-y-5 sm:space-y-6">
+      {/* Hero */}
+      <section className="overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] shadow-sm">
+        <div className="grid items-center gap-10 px-5 py-8 sm:px-8 md:py-10 lg:grid-cols-2 lg:gap-14 lg:px-10 lg:py-12">
           <div>
-            <h2 className="text-xl font-bold text-[var(--app-text)]">
-              What We Build
-            </h2>
-            <p className="mt-1 text-sm text-[var(--app-muted)]">
-              Digital solutions for your business.
-            </p>
-          </div>
-          <Link
-            to="/services"
-            className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-[var(--app-primary)]"
-          >
-            All services <ArrowRight size={15} />
-          </Link>
-        </div>
+            <div className="inline-flex items-center gap-2 rounded-full bg-[var(--app-brand-soft)] px-3 py-1.5 text-xs font-bold tracking-wide text-[var(--app-primary)]">
+              <Sparkles size={14} />
+              FEMIX WEB DEVELOPMENT
+            </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {services.map((service) => (
-            <Link
-              key={service.title}
-              to={service.link}
-              className="group flex gap-4 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-4 transition hover:border-[var(--app-primary)]"
-            >
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--app-bg)] text-[var(--app-primary)]">
-                {service.icon}
-              </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="font-semibold text-[var(--app-text)]">
-                  {service.title}
-                </h3>
-                <p className="mt-1 text-sm leading-5 text-[var(--app-muted)]">
-                  {service.description}
-                </p>
-                <div className="mt-3 flex items-center justify-between gap-2">
-                  <span className="text-sm font-semibold text-[var(--app-primary)]">
-                    {service.price}
-                  </span>
-                  <ArrowRight
-                    size={16}
-                    className="text-[var(--app-muted)] transition group-hover:translate-x-1 group-hover:text-[var(--app-primary)]"
+            <h1 className="mt-5 max-w-2xl text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+              Websites and software
+              <span className="block text-[var(--app-primary)]">
+                For the work you do.
+              </span>
+            </h1>
+
+            <p className="mt-5 max-w-xl text-base leading-7 text-[var(--app-muted)]">
+              We design and develop modern websites, web applications and
+              business systems that help organisations work better and serve
+              their customers online.
+            </p>
+
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                to="/start-project"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--app-primary)] px-5 py-3 text-base font-bold text-white shadow-sm transition hover:opacity-90"
+              >
+                Start a Project <ArrowRight size={17} />
+              </Link>
+
+              <Link
+                to="/portfolio"
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--app-border)] bg-[var(--app-surface)] px-5 py-3 text-base font-semibold text-[var(--app-text)] transition hover:border-[var(--app-primary)] hover:text-[var(--app-primary)]"
+              >
+                Explore Our Work <ArrowUpRight size={16} />
+              </Link>
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-x-5 gap-y-3 border-t border-[var(--app-border)] pt-5">
+              {[
+                'Works on mobile and desktop',
+                'Built for your requirements',
+                'Features chosen for the project',
+              ].map((item) => (
+                <span
+                  key={item}
+                  className="inline-flex items-center gap-2 text-sm font-medium text-[var(--app-muted)]"
+                >
+                  <CheckCircle2
+                    size={15}
+                    className="shrink-0 text-[var(--app-primary)]"
                   />
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Development capabilities panel */}
+          <div className="relative">
+            <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-[var(--app-brand-soft)] opacity-70 blur-3xl" />
+
+            <div className="relative rounded-2xl border border-[var(--app-border)] bg-[var(--app-bg)] p-5 shadow-sm sm:p-7">
+              <div className="flex items-center justify-between border-b border-[var(--app-border)] pb-4">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-[var(--app-primary)]">
+                    What we build
+                  </p>
+                  <h2 className="mt-1 text-lg font-bold">What we build</h2>
+                </div>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--app-brand-soft)] text-[var(--app-primary)]">
+                  <Code2 size={21} />
+                </span>
+              </div>
+
+              <div className="mt-5 grid grid-cols-2 gap-3">
+                {capabilities.map((item) => {
+                  const Icon = item.icon;
+
+                  return (
+                    <div
+                      key={item.label}
+                      className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-4 transition hover:border-[var(--app-primary)]"
+                    >
+                      <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--app-brand-soft)] text-[var(--app-primary)]">
+                        <Icon size={20} />
+                      </span>
+                      <h3 className="mt-4 text-base font-bold">{item.label}</h3>
+                      <p className="mt-1 text-sm leading-6 text-[var(--app-muted)]">
+                        {item.detail}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-4 flex items-center gap-3 rounded-xl bg-[var(--app-brand-soft)] p-4">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--app-primary)] text-white">
+                  <Smartphone size={19} />
+                </span>
+                <div>
+                  <p className="text-base font-bold">Mobile-friendly layouts</p>
+                  <p className="mt-0.5 text-sm text-[var(--app-muted)]">
+                    Works on mobile and desktop across devices.
+                  </p>
                 </div>
               </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section>
-        <div className="mb-3">
-          <h2 className="text-xl font-bold text-[var(--app-text)]">
-            Website Packages
-          </h2>
-          <p className="mt-1 text-sm text-[var(--app-muted)]">
-            Clear starting prices. Final costs depend on your requirements.
-          </p>
-        </div>
-
-        <div className="space-y-3">
-          <PackageGroup
-            title="Websites & Online Stores"
-            description="From simple business sites to full online shops."
-            packages={websitePackages}
-          />
-          <PackageGroup
-            title="Applications & Business Platforms"
-            description="Custom systems, dashboards and scalable platforms."
-            packages={platformPackages}
-          />
-        </div>
-
-        <Link
-          to="/estimator"
-          className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-4 text-sm font-semibold text-[var(--app-primary)] transition hover:bg-[var(--app-bg)]"
-        >
-          Calculate Your Project Cost <ArrowRight size={17} />
-        </Link>
-      </section>
-
-      <section>
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <div>
-            <h2 className="text-xl font-bold text-[var(--app-text)]">
-              Selected Work
-            </h2>
-            <p className="mt-1 text-sm text-[var(--app-muted)]">
-              A look at what we create.
-            </p>
+            </div>
           </div>
-          <Link
-            to="/portfolio"
-            className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-[var(--app-primary)]"
-          >
-            View all <ArrowRight size={15} />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          {projects.map((project) => (
-            <Link
-              key={project.name}
-              to="/portfolio"
-              className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-4 transition hover:border-[var(--app-primary)]"
-            >
-              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--app-bg)] text-[var(--app-primary)]">
-                {project.icon}
-              </div>
-              <p className="text-xs font-medium text-[var(--app-muted)]">
-                {project.category}
-              </p>
-              <h3 className="mt-1 font-semibold text-[var(--app-text)]">
-                {project.name}
-              </h3>
-              <p className="mt-2 text-sm leading-5 text-[var(--app-muted)]">
-                {project.description}
-              </p>
-            </Link>
-          ))}
         </div>
       </section>
 
+      {/* Services */}
+      <section className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] px-5 py-8 shadow-sm sm:px-8 md:py-10 lg:px-10">
+        <div className="mx-auto">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-[var(--app-primary)]">
+                WHAT WE DO
+              </p>
+              <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
+                Web development services
+              </h2>
+              <p className="mt-2 max-w-xl text-base leading-7 text-[var(--app-muted)]">
+                From a business website to a custom digital platform, explore
+                solutions for your next step.
+              </p>
+            </div>
 
+            <Link
+              to="/services"
+              className="inline-flex shrink-0 items-center gap-1 text-base font-bold text-[var(--app-primary)] hover:gap-2"
+            >
+              All services <ArrowRight size={15} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {services.map((service, index) => {
+              const Icon = service.icon;
+
+              return (
+                <Link
+                  key={service.title}
+                  to="/services"
+                  className="group rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-5 transition duration-300 hover:-translate-y-1 hover:border-[var(--app-primary)] hover:shadow-[var(--app-card-shadow-hover)]"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--app-brand-soft)] text-[var(--app-primary)] transition group-hover:bg-[var(--app-primary)] group-hover:text-white">
+                      <Icon size={21} />
+                    </span>
+                    <span className="text-xs font-semibold text-[var(--app-muted-2)]">
+                      0{index + 1}
+                    </span>
+                  </div>
+
+                  <h3 className="mt-5 text-base font-bold">{service.title}</h3>
+                  <p className="mt-2 min-h-12 text-base leading-7 text-[var(--app-muted)]">
+                    {service.description}
+                  </p>
+
+                  <span className="mt-4 inline-flex items-center gap-2 text-base font-bold text-[var(--app-primary)]">
+                    Explore service
+                    <ArrowRight
+                      size={15}
+                      className="transition group-hover:translate-x-1"
+                    />
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Selected projects */}
+      <section className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] px-5 py-8 shadow-sm sm:px-8 md:py-10 lg:px-10">
+        <div className="mx-auto">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-[var(--app-primary)]">
+                SELECTED WORK
+              </p>
+              <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
+                Website projects
+              </h2>
+              <p className="mt-2 text-base text-[var(--app-muted)]">
+                Visit the websites below to see examples of our work.
+              </p>
+            </div>
+
+            <Link
+              to="/portfolio"
+              className="inline-flex shrink-0 items-center gap-1 text-base font-bold text-[var(--app-primary)] hover:gap-2"
+            >
+              View portfolio <ArrowRight size={15} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {projects.map((project) => {
+              const Icon = project.icon;
+
+              return (
+                <a
+                  key={project.name}
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-5 transition duration-300 hover:-translate-y-1 hover:border-[var(--app-primary)] hover:shadow-[var(--app-card-shadow-hover)]"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--app-brand-soft)] text-[var(--app-primary)]">
+                      <Icon size={21} />
+                    </span>
+                    <ArrowUpRight
+                      size={19}
+                      className="text-[var(--app-muted)] transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[var(--app-primary)]"
+                    />
+                  </div>
+
+                  <p className="mt-5 text-xs font-semibold text-[var(--app-muted)]">
+                    {project.category}
+                  </p>
+                  <h3 className="mt-1 text-base font-bold">{project.name}</h3>
+                  <p className="mt-2 text-base leading-7 text-[var(--app-muted)]">
+                    {project.description}
+                  </p>
+
+                  <span className="mt-5 inline-flex items-center gap-2 text-base font-bold text-[var(--app-primary)]">
+                    Visit website <ArrowUpRight size={15} />
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Final call to action */}
+      <section className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] px-5 py-8 shadow-sm sm:px-8 md:py-10 lg:px-10">
+        <div className="mx-auto">
+          <div className="relative overflow-hidden rounded-xl bg-[var(--app-bg)] p-5 sm:p-7 md:p-8">
+            <div className="absolute -right-10 -top-16 h-56 w-56 rounded-full bg-[var(--app-brand-soft)] opacity-70 blur-3xl" />
+
+            <div className="relative flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
+              <div className="max-w-xl">
+                <p className="text-xs font-bold uppercase tracking-wider text-[var(--app-primary)]">
+                  START A PROJECT
+                </p>
+                <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
+                  What would you like your website to do?
+                </h2>
+                <p className="mt-2 text-base leading-7 text-[var(--app-muted)]">
+                  Tell us what you're planning. We'll help you identify the
+                  right digital solution and the next steps.
+                </p>
+              </div>
+
+              <div className="relative flex shrink-0 flex-wrap gap-3">
+                <Link
+                  to="/start-project"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--app-primary)] px-5 py-3 text-base font-bold text-white transition hover:opacity-90"
+                >
+                  Start a Project <ArrowRight size={17} />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      </div>
     </div>
   );
 }
-

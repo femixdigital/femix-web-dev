@@ -27,20 +27,20 @@ export const Hero: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
           <a
             href="#pricing"
-            className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-8 py-3.5 rounded-2xl shadow-lg shadow-cyan-500/20 transition-all duration-200 text-sm"
+            className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-8 py-3.5 rounded-2xl shadow-lg shadow-cyan-500/20 transition-all duration-200 text-base"
           >
             <span>Explore Packages</span>
             <ArrowRight className="w-4 h-4" />
           </a>
           <a
             href="#contact"
-            className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold px-8 py-3.5 rounded-2xl border border-slate-800 transition-all duration-200 text-sm"
+            className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-slate-900 hover:bg-slate-800 text-slate-200 font-semibold px-8 py-3.5 rounded-2xl border border-slate-800 transition-all duration-200 text-base"
           >
             <span>Get Free Quote</span>
           </a>
         </div>
 
-        <div className="pt-10 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400 border-t border-slate-800/60 max-w-2xl mx-auto">
+        <div className="pt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-slate-400 border-t border-slate-800/60 max-w-2xl mx-auto">
           <div className="flex items-center space-x-2">
             <Zap className="w-4 h-4 text-cyan-400" />
             <span>Sub-second Load Times</span>
