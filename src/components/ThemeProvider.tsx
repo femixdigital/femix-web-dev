@@ -26,14 +26,16 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     if (saved === 'dark') return 'dark';
     if (saved === 'light') return 'light';
 
-    // Migrate old "system" or invalid preferences to Light.
-    localStorage.setItem(STORAGE_KEY, 'light');
-    return 'light';
+    // Use Dark as the default when no valid preference exists.
+    localStorage.setItem(STORAGE_KEY, 'dark');
+    return 'dark';
   });
 
   useEffect(() => {
     const root = document.documentElement;
+
     root.classList.toggle('dark', theme === 'dark');
+    root.classList.toggle('light', theme === 'light');
     root.style.colorScheme = theme;
   }, [theme]);
 

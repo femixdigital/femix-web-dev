@@ -1,13 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Phone, ShieldCheck } from 'lucide-react';
+import {
+  ArrowUpRight,
+  Phone,
+  ShieldCheck,
+} from 'lucide-react';
 
 const navigation = [
   { label: 'Home', to: '/' },
   { label: 'About', to: '/about' },
-  { label: 'Contact', to: '/contact' },
-  { label: 'Portfolio', to: '/portfolio' },
   { label: 'Services', to: '/services' },
+  { label: 'Portfolio', to: '/portfolio' },
+  { label: 'Contact', to: '/contact' },
 ];
 
 const socialLinks = [
@@ -30,134 +34,137 @@ const socialLinks = [
 
 export const Footer: React.FC = () => {
   return (
-    <>
-      <footer className="bg-[#071426] text-white">
-        <div className="mx-auto max-w-6xl px-5 py-10 sm:px-6 sm:py-12 lg:px-8">
-          <div className="grid gap-9 border-b border-white/10 pb-8 md:grid-cols-[1.2fr_1fr_0.9fr] md:gap-10">
+    <footer className="border-t border-[var(--app-border)] bg-[var(--app-bg)] text-[var(--app-text)] transition-colors duration-300">
+      <div className="mx-auto max-w-6xl px-5 py-7 sm:px-6 lg:px-8">
 
-            {/* Brand */}
-            <div>
-              <Link
-                to="/"
-                className="inline-flex items-center gap-3 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-300"
-              >
-                <img
-                  src="/femix-logo.png"
-                  alt="Femix Web Dev logo"
-                  className="h-12 w-12 rounded-xl object-contain"
-                />
-                <span>
-                  <span className="block text-base font-extrabold tracking-tight">
-                    Femix Web Dev
-                  </span>
-                  <span className="block text-sm font-medium text-slate-400">
-                    Websites & applications
-                  </span>
+        <div className="grid gap-7 border-b border-[var(--app-border)] pb-6 sm:grid-cols-2 lg:grid-cols-3">
+
+          {/* Brand */}
+          <div>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-3"
+            >
+              <img
+                src="/femix-logo.png"
+                alt="Femix Web Dev logo"
+                className="h-11 w-11 object-contain"
+              />
+
+              <span>
+                <span className="block text-lg font-bold text-[var(--app-text-strong)]">
+                  Femix Web Dev
                 </span>
-              </Link>
+                <span className="block text-xs text-[var(--app-muted)]">
+                  Your Vision, My Code.
+                </span>
+              </span>
+            </Link>
 
-              <p className="mt-4 max-w-sm text-base leading-7 text-slate-300">
-                Websites, applications and digital solutions built for real
-                business needs.
-              </p>
+            <p className="mt-4 max-w-sm text-sm leading-6 text-[var(--app-muted)]">
+              Building professional websites and digital experiences
+              that help businesses move forward.
+            </p>
 
-              <Link
-                to="/start-project"
-                className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#0866ff] px-5 py-2.5 text-base font-bold text-white shadow-lg shadow-blue-950/30 transition hover:bg-[#0757db] hover:shadow-blue-500/20 active:scale-95"
-              >
-                Discuss a project
-                <ArrowUpRight className="h-4 w-4" />
-              </Link>
+            <div className="mt-5 flex items-center gap-3">
+              {socialLinks.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={item.label}
+                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--app-border)] text-[var(--app-muted)] transition-colors hover:border-blue-500 hover:text-blue-500"
+                >
+                  <svg
+                    className="h-4 w-4"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d={item.path} />
+                  </svg>
+                </a>
+              ))}
             </div>
+          </div>
 
-            {/* Navigation card */}
-            <nav aria-label="Footer navigation" className="flex flex-col items-start gap-3">
+          {/* Navigation */}
+          <nav aria-label="Footer navigation">
+            <h3 className="mb-4 text-sm font-bold text-[var(--app-text-strong)]">
+              Quick Links
+            </h3>
 
-              <div className="flex flex-wrap gap-x-5 gap-y-3">
-                {navigation.map((item) => (
+            <ul className="space-y-3">
+              {navigation.map((item) => (
+                <li key={item.to}>
                   <Link
-                    key={item.to}
                     to={item.to}
-                    className="text-base font-medium text-slate-300 transition-colors hover:text-cyan-300"
+                    className="text-sm text-[var(--app-muted)] transition-colors hover:text-blue-500"
                   >
                     {item.label}
                   </Link>
-                ))}
-              </div>
-            </nav>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-            {/* Contact actions */}
-            <div>
+          {/* Contact */}
+          <div>
+            <h3 className="mb-4 text-sm font-bold text-[var(--app-text-strong)]">
+              Contact Us
+            </h3>
 
-              <div className="flex flex-col gap-3">
-                <a
-                  href="tel:+2349057108822"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-cyan-300/30 bg-cyan-400/10 px-4 py-2.5 text-base font-bold text-cyan-300 transition hover:bg-cyan-400/20 active:scale-95"
-                >
-                  <Phone className="h-4 w-4" />
-                  Call Us
-                </a>
+            <div className="flex flex-col items-start gap-3">
+              <a
+                href="tel:+2349057108822"
+                className="inline-flex items-center gap-2 text-sm text-[var(--app-muted)] transition-colors hover:text-blue-500"
+              >
+                <Phone className="h-4 w-4" />
+                +234 905 710 8822
+              </a>
 
-                <a
-                  href="https://wa.me/2349057108822?text=Hello%20Femix%20Web%20Dev%2C%20I%20would%20like%20to%20make%20an%20enquiry."
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Chat with Femix Web Dev on WhatsApp"
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-green-400/30 bg-green-500/10 px-4 py-2.5 text-base font-bold text-green-300 transition hover:bg-green-500/20 active:scale-95"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-5 w-5 fill-current"
-                    aria-hidden="true"
-                  >
-                    <path d="M20.52 3.48A11.87 11.87 0 0 0 12.06 0C5.46 0 .09 5.36.08 11.96c0 2.11.55 4.17 1.6 5.99L0 24l6.22-1.63a11.96 11.96 0 0 0 5.83 1.48h.01c6.6 0 11.97-5.37 11.97-11.97 0-3.2-1.25-6.21-3.51-8.4ZM12.06 21.8h-.01a9.9 9.9 0 0 1-5.04-1.38l-.36-.21-3.69.97.99-3.6-.23-.37a9.91 9.91 0 0 1-1.52-5.25c0-5.46 4.45-9.9 9.91-9.9a9.83 9.83 0 0 1 7.01 2.9 9.83 9.83 0 0 1 2.9 7.01c0 5.46-4.45 9.9-9.96 9.9Zm5.44-7.42c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.96 1.17-.18.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.8-1.49-1.78-1.66-2.08-.18-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.68-1.63-.93-2.23-.25-.59-.5-.51-.68-.52h-.58c-.2 0-.53.07-.8.37-.28.3-1.05 1.02-1.05 2.49 0 1.47 1.07 2.89 1.22 3.09.15.2 2.1 3.2 5.08 4.49.71.3 1.26.48 1.69.61.71.23 1.36.2 1.87.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.18-1.42-.08-.13-.28-.2-.58-.35Z" />
-                  </svg>
-                  WhatsApp Us
-                </a>
-              </div>
+              <a
+                href="https://wa.me/2349057108822?text=Hello%20Femix%20Web%20Dev%2C%20I%20would%20like%20to%20make%20an%20enquiry."
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-[var(--app-muted)] transition-colors hover:text-blue-500"
+              >
+                WhatsApp Us
+                <ArrowUpRight className="h-4 w-4" />
+              </a>
 
-              <div className="mt-5 flex items-center gap-3">
-                {socialLinks.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={item.label}
-                    className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 transition hover:border-cyan-300/50 hover:bg-cyan-300/10 hover:text-cyan-300 active:scale-95"
-                  >
-                    <svg
-                      className="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path d={item.path} />
-                    </svg>
-                  </a>
-                ))}
-              </div>
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 text-sm text-[var(--app-muted)] transition-colors hover:text-blue-500"
+              >
+                Send an enquiry
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
-
-          <div className="flex justify-center pt-6">
-            <Link
-              to="/admin"
-              className="group inline-flex min-h-10 items-center justify-center gap-3 rounded-lg border border-cyan-300/20 bg-white/[0.06] px-5 py-2 text-sm font-extrabold text-white transition hover:border-cyan-300/50 hover:bg-cyan-300/10 active:scale-[0.98]"
-            >
-              <ShieldCheck className="h-4 w-4 text-cyan-300" />
-              Admin Login
-              <ArrowUpRight className="h-4 w-4 text-cyan-300 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </Link>
-          </div>
-
-          <div className="pt-4 text-center text-sm text-slate-400">
-            © 2026 Femix Web Dev. All rights reserved.
-          </div>
         </div>
-      </footer>
 
-    </>
+        {/* Bottom bar */}
+        <div className="flex flex-col items-center gap-3 pt-4">
+          <p className="text-center text-xs text-[var(--app-muted)]">
+            © {new Date().getFullYear()} Femix Web Dev. All rights reserved.
+          </p>
+
+          <p className="text-center text-xs text-[var(--app-muted)]">
+            Your Vision, My Code.
+          </p>
+
+          <Link
+            to="/admin"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-[var(--app-border)] px-5 py-2.5 text-xs font-medium text-[var(--app-muted)] transition-colors hover:border-blue-500 hover:text-blue-500"
+          >
+            <ShieldCheck className="h-4 w-4" />
+            Admin Login
+          </Link>
+        </div>
+      </div>
+    </footer>
   );
 };
 
