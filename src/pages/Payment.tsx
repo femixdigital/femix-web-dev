@@ -27,6 +27,11 @@ const formatNGN = (amount: number) =>
     maximumFractionDigits: 0,
   }).format(amount);
 
+const formatFileSize = (bytes: number) =>
+  bytes < 1024 * 1024
+    ? `${(bytes / 1024).toFixed(1)} KB`
+    : `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+
 export const Payment: React.FC = () => {
   const { showToast } = useToast();
   const [session, setSession] = useState<PaymentSession | null>(null);
@@ -333,22 +338,60 @@ export const Payment: React.FC = () => {
 
           <section className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-[0_18px_50px_rgba(0,0,0,0.06)] sm:p-6">
             {submitted ? (
-              <div className="flex min-h-[300px] flex-col items-center justify-center text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--app-brand-soft)]">
-                  <CheckCircle2 className="h-7 w-7 text-[var(--app-brand)]" />
+              <div className="flex min-h-[360px] flex-col items-center justify-center text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--app-brand-soft)]">
+                  <CheckCircle2 className="h-8 w-8 text-[var(--app-brand)]" />
                 </div>
 
-                <h2 className="mt-5 text-2xl font-black tracking-[-0.04em]">
-                  Receipt submitted
+                <span className="mt-5 rounded-full border border-[var(--app-brand)]/20 bg-[var(--app-brand-soft)] px-3 py-1.5 text-xs font-bold text-[var(--app-brand)]">
+                  Receipt received
+                </span>
+
+                <h2 className="mt-4 text-2xl font-black tracking-[-0.04em]">
+                  Submission successful
                 </h2>
 
                 <p className="mt-3 max-w-sm text-sm leading-6 text-[var(--app-muted)]">
-                  We will verify your payment and contact you with the next step.
+                  Your payment proof has been received successfully. Our team
+                  will review your submission and contact you with the next step.
+                </p>
+
+                <div className="mt-6 w-full rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] p-4 text-left">
+                  <div className="flex items-center justify-between gap-3 py-2">
+                    <span className="text-sm text-[var(--app-muted)]">
+                      Package
+                    </span>
+                    <span className="text-right text-sm font-bold">
+                      {session.packageName}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-3 border-t border-[var(--app-border)] py-3">
+                    <span className="text-sm text-[var(--app-muted)]">
+                      Amount submitted
+                    </span>
+                    <span className="text-right text-base font-black text-[var(--app-brand)]">
+                      {formatNGN(session.amount)}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-3 border-t border-[var(--app-border)] pt-3">
+                    <span className="text-sm text-[var(--app-muted)]">
+                      Payment status
+                    </span>
+                    <span className="text-sm font-bold">
+                      Pending verification
+                    </span>
+                  </div>
+                </div>
+
+                <p className="mt-4 text-xs leading-5 text-[var(--app-muted)]">
+                  Please keep your transfer record until verification is complete.
                 </p>
 
                 <Link
                   to="/"
-                  className="mt-6 inline-flex items-center gap-2 rounded-xl border border-[var(--app-border)] px-4 py-2.5 text-sm font-bold transition hover:bg-[var(--app-surface-2)]"
+                  className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--app-brand)] px-5 py-3.5 text-sm font-bold text-[var(--app-brand-contrast)] transition hover:bg-[var(--app-brand-hover)]"
                 >
                   Back to homepage
                   <ArrowRight className="h-4 w-4" />
@@ -367,19 +410,56 @@ export const Payment: React.FC = () => {
                 <input
                   type="file"
                   accept="image/png,image/jpeg,application/pdf"
-                  onChange={(e) =>
-                    setPaymentProofFile(e.target.files?.[0] ?? null)
-                  }
+                  onChange={(e) => {
+                    const file = e.target.files?.[0] ?? null;
+                    if (!file) return;
+
+                    const allowedTypes = [
+                      'image/png',
+                      'image/jpeg',
+                      'application/pdf',
+                    ];
+
+                    if (!allowedTypes.includes(file.type)) {
+                      setPaymentProofFile(null);
+                      e.currentTarget.value = '';
+                      showToast(
+                        'Unsupported file',
+                        'Please select a PNG, JPG, or PDF file.',
+                        'error',
+                      );
+                      return;
+                    }
+
+                    if (file.size > 5 * 1024 * 1024) {
+                      setPaymentProofFile(null);
+                      e.currentTarget.value = '';
+                      showToast(
+                        'File too large',
+                        'Payment proof must be 5 MB or smaller.',
+                        'error',
+                      );
+                      return;
+                    }
+
+                    setPaymentProofFile(file);
+                  }}
                   className="sr-only"
                 />
                 <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--app-surface)]">
                   <Upload className="h-7 w-7 text-[var(--app-brand)]" />
                 </span>
-                <span className="mt-4 text-base font-bold">
+                <span className="mt-4 max-w-full break-all text-base font-bold">
                   {paymentProofFile
                     ? paymentProofFile.name
                     : 'Select your payment receipt'}
                 </span>
+
+                {paymentProofFile && (
+                  <span className="mt-2 text-xs font-medium text-[var(--app-muted)]">
+                    {formatFileSize(paymentProofFile.size)} · Ready to upload
+                  </span>
+                )}
                 <span className="mt-2 rounded-lg bg-[var(--app-brand)] px-5 py-3 text-sm font-bold text-[var(--app-brand-contrast)]">
                   Choose file
                 </span>
