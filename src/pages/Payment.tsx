@@ -130,10 +130,17 @@ export const Payment: React.FC = () => {
         'success',
       );
     } catch (err: unknown) {
+      console.error('Payment proof submission failed:', err);
+
       const message =
-        err instanceof Error
+        typeof err === 'object' &&
+        err !== null &&
+        'message' in err &&
+        typeof err.message === 'string'
           ? err.message
-          : 'Could not submit your payment proof.';
+          : err instanceof Error
+            ? err.message
+            : 'Could not submit your payment proof. Check the browser console for details.';
 
       showToast('Payment proof failed', message, 'error');
     } finally {
