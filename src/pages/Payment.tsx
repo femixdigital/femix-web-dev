@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -34,6 +34,7 @@ const formatFileSize = (bytes: number) =>
 
 export const Payment: React.FC = () => {
   const { showToast } = useToast();
+  const paymentProofInputRef = useRef<HTMLInputElement>(null);
   const [session, setSession] = useState<PaymentSession | null>(null);
   const [paymentProofFile, setPaymentProofFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -234,10 +235,10 @@ export const Payment: React.FC = () => {
 
 
                 <Link
-                  to="/contact"
+                  to="/estimator"
                   className="inline-flex items-center justify-center rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] px-5 py-3.5 text-sm font-bold transition hover:border-[var(--app-border-strong)] hover:bg-[var(--app-surface-3)]"
                 >
-                  Contact Femix
+                  Get Project Estimate
                 </Link>
               </div>
             </div>
@@ -275,16 +276,16 @@ export const Payment: React.FC = () => {
         </div>
 
         <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_0.82fr]">
-          <section className="overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] shadow-[0_18px_50px_rgba(0,0,0,0.06)]">
-            <div className="border-b border-[var(--app-border)] bg-gradient-to-br from-[var(--app-surface)] to-[var(--app-surface-2)] p-4 sm:p-5">
+          <section className="overflow-hidden rounded-2xl border border-slate-800 bg-[var(--app-surface)] shadow-[0_20px_55px_rgba(0,0,0,0.12)]">
+            <div className="relative overflow-hidden border-b border-slate-800 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 p-5 text-white sm:p-6">
               <div className="flex items-center gap-3">
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--app-brand-soft)]">
-                  <Wallet className="h-5 w-5 text-[var(--app-brand)]" />
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/15 bg-white/10">
+                  <Wallet className="h-5 w-5 text-white" />
                 </span>
                 <div>
                   <p className="text-base font-bold">Transfer to OPay</p>
-                  <p className="text-sm text-[var(--app-muted)]">
-                    Use the details below
+                  <p className="text-sm text-slate-300">
+                    Femix Web Dev · OPay
                   </p>
                 </div>
               </div>
@@ -313,7 +314,7 @@ export const Payment: React.FC = () => {
                   <button
                     type="button"
                     onClick={copyAccountNumber}
-                    className="inline-flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-extrabold tracking-wide transition hover:bg-[var(--app-surface-2)]"
+                    className="inline-flex items-center gap-2 rounded-xl border border-[var(--app-brand)]/25 bg-[var(--app-brand-soft)] px-3 py-2 text-sm font-extrabold tracking-wide transition hover:border-[var(--app-brand)]/50 hover:opacity-80"
                     title="Copy account number"
                   >
                     611 585 7333
@@ -408,6 +409,7 @@ export const Payment: React.FC = () => {
 
                 <label className="mt-5 flex cursor-pointer flex-col items-center rounded-2xl border-2 border-dashed border-[var(--app-brand)]/50 bg-[var(--app-brand-soft)] p-6 text-center transition hover:border-[var(--app-brand)]">
                 <input
+                  ref={paymentProofInputRef}
                   type="file"
                   accept="image/png,image/jpeg,application/pdf"
                   onChange={(e) => {

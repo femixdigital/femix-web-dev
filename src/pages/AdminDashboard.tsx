@@ -12,6 +12,7 @@ import {
   RefreshCw,
   Shield,
   ShoppingBag,
+  Star,
   Trash2,
   TrendingUp,
   Users,
@@ -56,7 +57,18 @@ interface Order {
   updated_at: string;
 }
 
-type Tab = 'leads' | 'orders';
+interface Review {
+  id: string;
+  name: string;
+  role: string | null;
+  company: string | null;
+  rating: number;
+  content: string;
+  status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
+}
+
+type Tab = 'leads' | 'orders' | 'reviews';
 
 export const AdminDashboard: React.FC = () => {
   const { showToast } = useToast();
@@ -73,6 +85,7 @@ export const AdminDashboard: React.FC = () => {
   >(null);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [loadingData, setLoadingData] = useState(false);
 
   useEffect(() => {
@@ -126,38 +139,45 @@ export const AdminDashboard: React.FC = () => {
     };
   }, []);
 
-  const fetchData = async () => {
-    if (!session || !isAdmin) return;
 
-    setLoadingData(true);
+const fetchData = async () => {
+  if (!session || !isAdmin) return;
 
-    try {
-      const [leadsRes, ordersRes] = await Promise.all([
-        supabase
-          .from('leads')
-          .select('*')
-          .order('created_at', { ascending: false }),
-        supabase
-          .from('orders')
-          .select('*')
-          .order('created_at', { ascending: false }),
-      ]);
+  setLoadingData(true);
 
-      if (leadsRes.error) throw leadsRes.error;
-      if (ordersRes.error) throw ordersRes.error;
+  try {
+    const [leadsRes, ordersRes] = await Promise.all([
+      supabase.from('leads').select('*').order('created_at', { ascending: false }),
+      supabase.from('orders').select('*').order('created_at', { ascending: false }),
+    ]);
 
-      setLeads((leadsRes.data || []) as Lead[]);
-      setOrders((ordersRes.data || []) as Order[]);
+    if (leadsRes.error) throw leadsRes.error;
+    if (ordersRes.error) throw ordersRes.error;
 
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : 'Failed to fetch admin data.';
+    setLeads((leadsRes.data || []) as Lead[]);
+    setOrders((ordersRes.data || []) as Order[]);
 
-      showToast('Sync error', message, 'error');
-    } finally {
-      setLoadingData(false);
+    // Fetch testimonials separately.
+    const { data: reviewsData, error: reviewsError } = await supabase
+      .from('testimonials')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (reviewsError) {
+      setReviews([]);
+      showToast('Reviews unavailable', reviewsError.message, 'error');
+    } else {
+      setReviews((reviewsData || []) as Review[]);
     }
-  };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : 'Failed to fetch admin data.';
+
+    showToast('Sync error', message, 'error');
+  } finally {
+    setLoadingData(false);
+  }
+};
 
   useEffect(() => {
     if (isAdmin) {
@@ -257,6 +277,67 @@ export const AdminDashboard: React.FC = () => {
         order.id === id ? (data as Order) : order,
       ),
     );
+  };
+
+  const updateReviewStatus = async (
+    id: string,
+    status: 'approved' | 'rejected',
+  ) => {
+    try {
+      const { data, error } = await supabase
+        .from('testimonials')
+        .update({ status })
+        .eq('id', id)
+        .select('*')
+        .single();
+
+      if (error) throw error;
+
+      setReviews((current) =>
+        current.map((review) =>
+          review.id === id ? (data as Review) : review,
+        ),
+      );
+
+      showToast(
+        status === 'approved' ? 'Review approved' : 'Review rejected',
+        status === 'approved'
+          ? 'This review is now visible on your website.'
+          : 'This review has been rejected.',
+        'success',
+      );
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : 'Failed to update review.';
+      showToast('Update failed', message, 'error');
+    }
+  };
+
+  const deleteReview = async (id: string) => {
+    if (!window.confirm('Delete this review permanently?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('testimonials')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      setReviews((current) =>
+        current.filter((review) => review.id !== id),
+      );
+
+      showToast(
+        'Review deleted',
+        'The review was permanently removed.',
+        'success',
+      );
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : 'Failed to delete review.';
+      showToast('Delete failed', message, 'error');
+    }
   };
 
   const viewPaymentProof = async (order: Order) => {
@@ -409,7 +490,11 @@ export const AdminDashboard: React.FC = () => {
         )
       : orders;
   const activeCount =
-    activeTab === 'leads' ? leads.length : visibleOrders.length;
+    activeTab === 'leads'
+      ? leads.length
+      : activeTab === 'orders'
+        ? visibleOrders.length
+        : reviews.length
 
   if (authLoading || adminLoading) {
     return (
@@ -626,7 +711,7 @@ export const AdminDashboard: React.FC = () => {
                   Business Activities
                 </span>
                 <span className="mt-1 block text-xs text-[var(--app-muted)]">
-                  {recordsOpen ? 'Tap to collapse records' : 'Tap to view leads and orders'}
+                  {recordsOpen ? 'Tap to collapse records' : 'Tap to view leads, orders and reviews'}
                 </span>
               </span>
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] text-[var(--app-brand)]">
@@ -657,8 +742,16 @@ export const AdminDashboard: React.FC = () => {
                     label="Orders"
                     count={orders.length}
                   />
+                  <TabButton
+                    active={activeTab === 'reviews'}
+                    onClick={() => setActiveTab('reviews')}
+                    icon={<Star className="h-3.5 w-3.5" />}
+                    label="Reviews"
+                    count={reviews.length}
+                  />
                 </div>
-                <button
+                {activeTab !== 'reviews' && (
+<button
                   onClick={activeTab === 'leads' ? exportLeadsCSV : exportOrdersCSV}
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--app-border)] px-4 py-2.5 text-xs font-extrabold shadow-sm transition hover:border-[var(--app-brand)] hover:text-[var(--app-brand)]"
                 >
@@ -666,6 +759,7 @@ export const AdminDashboard: React.FC = () => {
                   Export {activeTab}
                   <ArrowUpRight className="h-3 w-3" />
                 </button>
+)}
               </div>
             )}
           </div>
@@ -673,16 +767,22 @@ export const AdminDashboard: React.FC = () => {
           {recordsOpen && (
             <div id="business-activity-records">
               {activeTab === 'leads' ? (
-                <LeadTable leads={leads} onDelete={deleteLead} />
-              ) : (
-                <OrderTable
-                  orders={visibleOrders}
-                  onDelete={deleteOrder}
-                  onUpdate={updateOrder}
-                  onViewProof={viewPaymentProof}
-                />
-              )}
-              <div className="border-t border-[var(--app-border)] px-4 py-3 text-xs text-[var(--app-muted)]">
+          <LeadTable leads={leads} onDelete={deleteLead} />
+        ) : activeTab === 'orders' ? (
+          <OrderTable
+            orders={visibleOrders}
+            onDelete={deleteOrder}
+            onUpdate={updateOrder}
+            onViewProof={viewPaymentProof}
+          />
+        ) : (
+          <ReviewTable
+            reviews={reviews}
+            onUpdateStatus={updateReviewStatus}
+            onDelete={deleteReview}
+          />
+        )}
+                <div className="border-t border-[var(--app-border)] px-4 py-3 text-xs text-[var(--app-muted)]">
                 Showing {activeCount} {activeTab} record{activeCount === 1 ? '' : 's'}.
               </div>
             </div>
@@ -1015,6 +1115,93 @@ const OrderTable: React.FC<{
 
           <div className="mt-auto flex justify-end pt-5">
             <DeleteButton onClick={() => onDelete(order.id)} />
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+};
+
+const ReviewTable: React.FC<{
+  reviews: Review[];
+  onUpdateStatus: (id: string, status: 'approved' | 'rejected') => void;
+  onDelete: (id: string) => void;
+}> = ({ reviews, onUpdateStatus, onDelete }) => {
+  if (reviews.length === 0) {
+    return (
+      <EmptyState
+        icon={<Star className="h-7 w-7" />}
+        title="No customer reviews yet"
+        description="Customer reviews will appear here when submitted through your website."
+      />
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 sm:p-5 xl:grid-cols-3">
+      {reviews.map((review) => (
+        <article
+          key={review.id}
+          className="flex min-w-0 flex-col rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] p-5 shadow-sm transition-all duration-200 hover:border-[var(--app-brand)]/40 hover:shadow-lg"
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <h3 className="break-words text-sm font-extrabold text-[var(--app-text)]">
+                {review.name}
+              </h3>
+              {(review.role || review.company) && (
+                <p className="mt-1 break-words text-xs text-[var(--app-muted)]">
+                  {[review.role, review.company].filter(Boolean).join(' · ')}
+                </p>
+              )}
+            </div>
+            <StatusBadge status={review.status} />
+          </div>
+
+          <div className="mt-4 flex items-center gap-1 text-amber-500">
+            {Array.from({ length: 5 }, (_, index) => (
+              <Star
+                key={index}
+                className={`h-4 w-4 ${index < review.rating ? 'fill-current' : 'opacity-30'}`}
+              />
+            ))}
+            <span className="ml-1 text-xs font-bold text-[var(--app-muted)]">
+              {review.rating}/5
+            </span>
+          </div>
+
+          <blockquote className="mt-4 flex-1 whitespace-pre-wrap break-words rounded-xl bg-[var(--app-surface-2)] p-4 text-xs leading-6 text-[var(--app-text)]">
+            {review.content}
+          </blockquote>
+
+          <p className="mt-4 text-[11px] text-[var(--app-muted)]">
+            Submitted {formatDate(review.created_at)}
+          </p>
+
+          <div className="mt-4 flex flex-wrap gap-2 border-t border-[var(--app-border)] pt-4">
+            {review.status !== 'approved' && (
+              <button
+                onClick={() => onUpdateStatus(review.id, 'approved')}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--app-brand)] px-3 py-2 text-[11px] font-extrabold text-white transition hover:opacity-90"
+              >
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                Approve
+              </button>
+            )}
+
+            {review.status !== 'rejected' && (
+              <button
+                onClick={() => onUpdateStatus(review.id, 'rejected')}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-rose-400/40 px-3 py-2 text-[11px] font-extrabold text-rose-600 transition hover:bg-rose-500/10"
+              >
+                <XCircle className="h-3.5 w-3.5" />
+                Reject
+              </button>
+            )}
+
+            <div className="ml-auto">
+              <DeleteButton onClick={() => onDelete(review.id)} />
+            </div>
           </div>
         </article>
       ))}

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import Testimonials from '../components/Testimonials';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -69,10 +70,10 @@ const projects = [
 ];
 
 const capabilities = [
-  { icon: Globe, label: 'Websites', detail: 'Websites for businesses and service providers' },
-  { icon: Code2, label: 'Applications', detail: 'Interactive web applications' },
-  { icon: Database, label: 'Business systems', detail: 'Dashboards and business tools' },
-  { icon: ShoppingBag, label: 'E-Commerce', detail: 'Product catalogues and online ordering' },
+  { icon: Globe, label: 'Websites', detail: 'Websites for businesses and service providers', to: '/services/web-development' },
+  { icon: Code2, label: 'Applications', detail: 'Interactive web applications', to: '/services/web-applications' },
+  { icon: Database, label: 'Business systems', detail: 'Dashboards and business tools', to: '/services/business-systems' },
+  { icon: ShoppingBag, label: 'E-Commerce', detail: 'Product catalogues and online ordering', to: '/services/ecommerce' },
 ];
 
 export function Home() {
@@ -159,18 +160,24 @@ export function Home() {
                   const Icon = item.icon;
 
                   return (
-                    <div
+                    <Link
                       key={item.label}
-                      className="rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-4 transition hover:border-[var(--app-primary)]"
+                      to={item.to}
+                      className="group rounded-xl border border-[var(--app-border)] bg-[var(--app-surface)] p-4 transition-all duration-200 hover:-translate-y-1 hover:border-[var(--app-primary)] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--app-primary)] focus-visible:ring-offset-2"
                     >
-                      <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--app-brand-soft)] text-[var(--app-primary)]">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--app-brand-soft)] text-[var(--app-primary)] transition-colors group-hover:bg-[var(--app-primary)] group-hover:text-white">
                         <Icon size={20} />
                       </span>
-                      <h3 className="mt-4 text-base font-bold">{item.label}</h3>
+                      <h3 className="mt-4 text-base font-bold text-[var(--app-text)]">
+                        {item.label}
+                      </h3>
                       <p className="mt-1 text-sm leading-6 text-[var(--app-muted)]">
                         {item.detail}
                       </p>
-                    </div>
+                      <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-[var(--app-primary)]">
+                        Explore <ArrowUpRight size={15} />
+                      </span>
+                    </Link>
                   );
                 })}
               </div>
@@ -317,6 +324,8 @@ export function Home() {
           </div>
         </div>
       </section>
+
+      <Testimonials />
 
       {/* Final call to action */}
       <section className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-surface)] px-5 py-8 shadow-sm sm:px-8 md:py-10 lg:px-10">
