@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   Copy,
   Upload,
+  X,
   Wallet,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -476,6 +477,38 @@ export const Payment: React.FC = () => {
                   Screenshot or PDF · PNG, JPG · Maximum 5 MB
                 </span>
               </label>
+
+                {paymentProofFile && (
+                  <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-[var(--app-border)] bg-[var(--app-surface-2)] p-3">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--app-brand-soft)]">
+                        <CheckCircle2 className="h-5 w-5 text-[var(--app-brand)]" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-bold">
+                          {paymentProofFile.name}
+                        </p>
+                        <p className="text-xs text-[var(--app-muted)]">
+                          {formatFileSize(paymentProofFile.size)} · Ready to submit
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPaymentProofFile(null);
+                        if (paymentProofInputRef.current) {
+                          paymentProofInputRef.current.value = '';
+                        }
+                      }}
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[var(--app-muted)] transition hover:bg-red-500/10 hover:text-red-500"
+                      aria-label="Remove selected receipt"
+                      title="Remove selected receipt"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
 
                 <button
                   type="button"
